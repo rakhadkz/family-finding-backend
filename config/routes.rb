@@ -14,8 +14,12 @@ Rails.application.routes.draw do
       resources :users do
         collection do
           get 'me' => 'users#show'
+          put '' => 'users#update'
+          delete '' => 'users#destroy'
         end
       end
+
+      resources :organizations
 
       namespace :admin do
         resources :users

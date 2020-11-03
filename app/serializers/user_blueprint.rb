@@ -4,6 +4,7 @@ class UserBlueprint < Blueprinter::Base
   fields :id,
          :email,
          :first_name,
+         :phone,
          :last_name
 
   view :auth do
