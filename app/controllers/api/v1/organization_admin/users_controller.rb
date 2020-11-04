@@ -1,4 +1,4 @@
-class Api::V1::Admin::UsersController < ApplicationController
+class Api::V1::OrganizationAdmin::UsersController < ApplicationController
   include Filterable
   include Searchable
   include Sortable

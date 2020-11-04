@@ -41,8 +41,33 @@ class ApplicationController < ActionController::API
   end
 
   def require_admin
-    if current_user && !current_user.role === 'admin'
+    if @current_user && !@current_user.role === 'organization_admin'
       raise ApiException::Unauthorized
     end
   end
+
+  def require_super_admin
+    if @current_user && !@current_user.role === 'super_admin'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def require_organization_admin
+    if @current_user && !@current_user.role === 'organization_admin'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def require_organization_manager
+    if @current_user && !@current_user.role === 'organization_manager'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def require_organization_user
+    if @current_user && !@current_user.role === 'organization_user'
+      raise ApiException::Unauthorized
+    end
+  end
+
 end
