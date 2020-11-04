@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
       resources :organizations
 
+      resources :contacts
+
       namespace :admin do
         resources :users
       end
