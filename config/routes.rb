@@ -19,13 +19,21 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :organizations
+      resources :children
 
       resources :contacts
+      
+      resources :comments
 
-      namespace :admin do
+      namespace :super_admin do
+        resources :organizations
+        resources :organization_admins
+      end
+
+      namespace :organization_admin do
         resources :users
       end
+
     end
   end
 end

@@ -5,7 +5,7 @@ class OrganizationBlueprint < Blueprinter::Base
          :name,
          :address,
          :phone,
-         :logoUrl,
+         :logo,
          :website
 
 end

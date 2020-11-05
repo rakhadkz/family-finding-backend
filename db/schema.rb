@@ -26,18 +26,43 @@ ActiveRecord::Schema.define(version: 2020_11_04_195719) do
     t.string "email"
     t.string "phone"
     t.string "zip"
+
+    create_table "attachments", force: :cascade do |t|
+    t.bigint "child_id"
+    t.string "filename"
+    t.string "filetype"
+    t.text "filelocation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_attachments_on_child_id"
+  end
+
+  create_table "children", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "birthday"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "title"
+    t.text "body"
+    t.bigint "in_reply_to"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
     t.string "phone"
-    t.text "logoUrl"
     t.text "website"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "logo"
   end
 
   create_table "users", force: :cascade do |t|
@@ -63,4 +88,6 @@ ActiveRecord::Schema.define(version: 2020_11_04_195719) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "attachments", "children"
+  add_foreign_key "comments", "users"
 end
