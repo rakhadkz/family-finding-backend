@@ -1,4 +1,6 @@
 class Api::V1::ChildrenController < ApplicationController
+  before_action :authenticate_request!
+  before_action :require_organization_user
 
   before_action :set_child, only: [:show, :update, :destroy]
 
