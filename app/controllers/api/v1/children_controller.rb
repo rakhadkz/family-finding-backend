@@ -1,11 +1,8 @@
 class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
-=begin
   before_action :require_organization_user
-=end
 
-  before_action :set_child, only: [:show, :update, :destroy, :get_siblings, :add_sibling, :remove_sibling]
-  before_action :set_siblings, only: [:get_siblings]
+  before_action :set_child, only: [:show, :update, :destroy]
 
   # GET /children
   def index
@@ -30,25 +27,6 @@ class Api::V1::ChildrenController < ApplicationController
     end
   end
 
-  def add_sibling
-    @siblingship = @child.siblingships.build(:sibling_id => params[:sibling_id])
-    if @siblingship.save
-      render status: :ok
-    else
-      render status: :unprocessable_entity
-    end
-  end
-
-  def remove_sibling
-    @siblingship = @child.siblingships.find(params[:sibling_id])
-    @siblingship.destroy
-    render status: :ok
-  end
-
-  def get_siblings
-    render json: @siblings
-  end
-
   # PATCH/PUT /children/1
   def update
     if @child.update(child_params)
@@ -67,11 +45,6 @@ class Api::V1::ChildrenController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_child
       @child = Child.find(params[:id])
-    end
-
-  private
-    def set_siblings
-      @siblings = @child.inverse_siblings + @child.siblings
     end
 
   private
