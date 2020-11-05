@@ -10,24 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_04_195719) do
+ActiveRecord::Schema.define(version: 2020_11_05_153325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "contacts", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.datetime "birthday"
-    t.string "address"
-    t.string "address_2"
-    t.string "city"
-    t.string "state"
-    t.string "email"
-    t.string "phone"
-    t.string "zip"
-
-    create_table "attachments", force: :cascade do |t|
+  create_table "attachments", force: :cascade do |t|
     t.bigint "child_id"
     t.string "filename"
     t.string "filetype"
@@ -55,14 +43,37 @@ ActiveRecord::Schema.define(version: 2020_11_04_195719) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "birthday"
+    t.string "address"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "email"
+    t.string "phone"
+    t.string "zip"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
     t.string "phone"
+    t.text "logoUrl"
     t.text "website"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "logo"
+  end
+
+  create_table "search_vectors", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "in_continuous_search"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
