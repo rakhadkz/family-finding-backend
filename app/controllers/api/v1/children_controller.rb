@@ -1,8 +1,11 @@
 class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
+=begin
   before_action :require_organization_user
+=end
 
-  before_action :set_child, only: [:show, :update, :destroy]
+  before_action :set_child, only: [:show, :update, :destroy, :get_siblings, :add_sibling, :remove_sibling]
+  before_action :set_siblings, only: [:get_siblings]
 
   # GET /children
   def index
@@ -21,10 +24,29 @@ class Api::V1::ChildrenController < ApplicationController
     @child = Child.new(child_params)
 
     if @child.save
-      render json: @child, status: :created, location: @child
+      render json: @child, status: :created
     else
       render json: @child.errors, status: :unprocessable_entity
     end
+  end
+
+  def add_sibling
+    @siblingship = @child.siblingships.build(:sibling_id => params[:sibling_id])
+    if @siblingship.save
+      render status: :ok
+    else
+      render status: :unprocessable_entity
+    end
+  end
+
+  def remove_sibling
+    @siblingship = @child.siblingships.find(params[:sibling_id])
+    @siblingship.destroy
+    render status: :ok
+  end
+
+  def get_siblings
+    render json: @siblings
   end
 
   # PATCH/PUT /children/1
@@ -47,6 +69,12 @@ class Api::V1::ChildrenController < ApplicationController
       @child = Child.find(params[:id])
     end
 
+  private
+    def set_siblings
+      @siblings = @child.inverse_siblings + @child.siblings
+    end
+
+  private
     # Only allow a trusted parameter "white list" through.
     def child_params
       params.require(:child).permit(:first_name, :last_name, :birthday)
