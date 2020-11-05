@@ -40,12 +40,6 @@ class ApplicationController < ActionController::API
     header.gsub(pattern, '') if header&.match(pattern)
   end
 
-  def require_admin
-    if @current_user && !@current_user.role === 'organization_admin'
-      raise ApiException::Unauthorized
-    end
-  end
-
   def require_super_admin
     if @current_user && !@current_user.role === 'super_admin'
       raise ApiException::Unauthorized

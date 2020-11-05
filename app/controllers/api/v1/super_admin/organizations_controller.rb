@@ -5,13 +5,6 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   before_action :authenticate_request!
   before_action :require_super_admin
-  before_action :load_organization, only: %i[
-    show
-    update
-    destroy
-  ]
-
-
   before_action :set_organization, only: [:show, :update, :destroy]
 
   # GET /organizations
@@ -30,30 +23,6 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
-
-=begin
-  def index
-    @organizations = Organization.all
-
-    render json: OrganizationBlueprint.render(@organizations)
-  end
-=end
-
-  # GET /organizations/1
-
-
-  # POST /organizations
-=begin
-  def create
-    @organization = Organization.new(organization_params)
-
-    if @organization.save
-      render json: OrganizationBlueprint.render(@organization, root: :data), status: :created
-    else
-      render json: @organization.errors, status: :unprocessable_entity
-    end
-  end
-=end
 
   # PATCH/PUT /organizations/1
   def update
@@ -80,11 +49,6 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
     def organization_params
       params.require(:organization).permit(:name, :address, :phone, :logo, :website)
     end
-
-  def load_organization
-    @organization = Organization.find(params[:id])
-  end
-
 
   def organizations_scope
     Organization.all
