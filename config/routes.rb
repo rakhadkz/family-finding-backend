@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
       resources :children
 
+      resources :contacts
+      
       resources :comments
 
       namespace :super_admin do
