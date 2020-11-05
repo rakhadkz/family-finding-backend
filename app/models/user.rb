@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+
+  has_many :comments
+
+  scope :filter_by_role, -> (role) { where role: role}
+
   include PgSearch::Model
 
   pg_search_scope :search,
@@ -16,8 +21,13 @@ class User < ApplicationRecord
          :trackable, :validatable, :lockable
 
   enum role: {
-    admin: 'admin',
+    admin: 'organization_admin',
     user: 'user',
+
+    super_admin: 'super_admin',
+    organization_admin: 'organization_admin',
+    organization_manager: 'organization_manager',
+    organization_user: 'organization_user'
   }
 
   def token

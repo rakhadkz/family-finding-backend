@@ -1,10 +1,10 @@
-class Api::V1::Admin::UsersController < ApplicationController
+class Api::V1::OrganizationAdmin::UsersController < ApplicationController
   include Filterable
   include Searchable
   include Sortable
 
   before_action :authenticate_request!
-  before_action :require_admin
+  before_action :require_organization_admin
   before_action :load_user, only: %i[
     show
     update
