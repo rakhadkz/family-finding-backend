@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
       namespace :organization_admin do
         resources :users
+        resources :search_vectors
       end
 
     end

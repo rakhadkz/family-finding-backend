@@ -1,0 +1,2 @@
+class SearchVector < ApplicationRecord
+end
