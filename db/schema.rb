@@ -69,10 +69,18 @@ ActiveRecord::Schema.define(version: 2020_11_05_180639) do
     t.string "name"
     t.text "address"
     t.string "phone"
+    t.text "logoUrl"
     t.text "website"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "logo"
+  end
+
+  create_table "search_vectors", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "in_continuous_search"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "siblingships", force: :cascade do |t|
