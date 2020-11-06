@@ -58,6 +58,13 @@ ActiveRecord::Schema.define(version: 2020_11_05_153325) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "contacts_children", id: false, force: :cascade do |t|
+    t.bigint "contact_id"
+    t.bigint "child_id"
+    t.index ["child_id"], name: "index_contacts_children_on_child_id"
+    t.index ["contact_id"], name: "index_contacts_children_on_contact_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
