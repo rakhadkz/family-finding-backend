@@ -1,6 +1,6 @@
 class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
-  before_action :require_organization_user
+  before_action :require_user
 
   before_action :set_child, only: [:show, :update, :destroy]
 
@@ -8,12 +8,12 @@ class Api::V1::ChildrenController < ApplicationController
   def index
     @children = Child.all
 
-    render json: @children
+    render json: ChildBlueprint.render(@children, root: :data)
   end
 
   # GET /children/1
   def show
-    render json: @child
+    render json: ChildBlueprint.render(@child, root: :data)
   end
 
   # POST /children
@@ -21,7 +21,7 @@ class Api::V1::ChildrenController < ApplicationController
     @child = Child.new(child_params)
 
     if @child.save
-      render json: @child, status: :created
+      render json: ChildBlueprint.render(@child, root: :data), status: :created
     else
       render json: @child.errors, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class Api::V1::ChildrenController < ApplicationController
   # PATCH/PUT /children/1
   def update
     if @child.update(child_params)
-      render json: @child
+      render json: ChildBlueprint.render(@child, root: :data)
     else
       render json: @child.errors, status: :unprocessable_entity
     end
@@ -46,8 +46,6 @@ class Api::V1::ChildrenController < ApplicationController
     def set_child
       @child = Child.find(params[:id])
     end
-
-  private
     # Only allow a trusted parameter "white list" through.
     def child_params
       params.require(:child).permit(:first_name, :last_name, :birthday)
