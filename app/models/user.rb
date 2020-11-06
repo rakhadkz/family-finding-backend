@@ -25,7 +25,7 @@ class User < ApplicationRecord
     user: 'user',
 
     super_admin: 'super_admin',
-    organization_admin: 'organization_admin',
+    organization_admin: 'admin',
     organization_manager: 'organization_manager',
     organization_user: 'organization_user'
   }

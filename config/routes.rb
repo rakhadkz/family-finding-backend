@@ -35,10 +35,10 @@ Rails.application.routes.draw do
 
       namespace :super_admin do
         resources :organizations
-        resources :organization_admins
+        resources :admins
       end
 
-      namespace :organization_admin do
+      namespace :admin do
         resources :users
       end
 
