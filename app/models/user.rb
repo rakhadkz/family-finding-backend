@@ -21,13 +21,10 @@ class User < ApplicationRecord
          :trackable, :validatable, :lockable
 
   enum role: {
-    admin: 'organization_admin',
-    user: 'user',
-
     super_admin: 'super_admin',
-    organization_admin: 'admin',
-    organization_manager: 'organization_manager',
-    organization_user: 'organization_user'
+    admin: 'admin',
+    manager: 'manager',
+    user: 'user'
   }
 
   def token
