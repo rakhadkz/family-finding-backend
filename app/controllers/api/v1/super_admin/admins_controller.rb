@@ -48,7 +48,10 @@ class Api::V1::SuperAdmin::AdminsController < ApplicationController
         .permit([
                     :email,
                     :first_name,
-                    :last_name
+                    :last_name,
+                    :organization_id,
+                    :role,
+                    :phone
                 ])
   end
 

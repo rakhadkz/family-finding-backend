@@ -64,4 +64,8 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def set_view
+    params[:view] ? @view = :short : @view = :extended
+  end
+
 end

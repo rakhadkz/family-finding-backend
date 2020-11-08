@@ -4,7 +4,10 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   include Sortable
 
   before_action :authenticate_request!
+  before_action :set_view, only: [:index]
+=begin
   before_action :require_super_admin
+=end
   before_action :set_organization, only: [:show, :update, :destroy]
 
   # GET /organizations
@@ -12,7 +15,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   def index
     results = sort(search(filter(organizations_scope)))
     organizations = results.page(params[:page]).per(per_page)
-    render json: OrganizationBlueprint.render(organizations, root: :data, meta: page_info(organizations))
+    render json: OrganizationBlueprint.render(organizations, view: @view, root: :data,  meta: page_info(organizations))
   end
 
   def show

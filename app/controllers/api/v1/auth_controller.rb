@@ -35,8 +35,12 @@ class Api::V1::AuthController < ApplicationController
     params
       .require(:user)
       .permit(
-        :name,
+        :first_name,
+        :last_name,
         :email,
+        :organization_id,
+        :phone,
+        :role,
         :password,
         :password_confirmation
       )
