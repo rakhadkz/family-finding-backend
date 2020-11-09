@@ -20,7 +20,7 @@ class User < ApplicationRecord
                   }
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
-         :trackable, :lockable
+         :trackable, :validatable, :lockable
 
   enum role: {
     super_admin: 'super_admin',

@@ -4,7 +4,10 @@ class UserBlueprint < Blueprinter::Base
   fields :id
 
   view :sidebar_profile do
-    fields :first_name, :last_name, :ava
+    field :ava
+    field :name do |user|
+      "#{user.first_name} #{user.last_name}"
+    end
   end
 
   view :extended do

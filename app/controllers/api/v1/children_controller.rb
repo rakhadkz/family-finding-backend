@@ -7,13 +7,18 @@ class Api::V1::ChildrenController < ApplicationController
   # GET /children
   def index
     @children = Child.all
-
     render json: ChildBlueprint.render(@children, root: :data)
   end
 
   # GET /children/1
   def show
-    render json: ChildBlueprint.render(@child, root: :data)
+    # render json: ChildBlueprint.render(@child, root: :data)
+    render json: {
+        data: {
+            child: @child,
+            siblings: @child.siblings + @child.inverse_siblings
+        }
+    }
   end
 
   # POST /children
