@@ -10,6 +10,9 @@ class OrganizationBlueprint < Blueprinter::Base
   view :extended do
     include_view :short
     fields :address,
+           :state,
+           :city,
+           :zip,
         :phone,
         :logo,
         :website

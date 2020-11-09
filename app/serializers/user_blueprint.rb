@@ -1,20 +1,21 @@
 class UserBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :id,
-         :email,
-         :first_name,
-         :phone,
-         :last_name,
-          :organization_id,
-          :role
+  fields :id
 
-  view :short do
-
+  view :sidebar_profile do
+    fields :first_name, :last_name, :ava
   end
 
   view :extended do
-    association :organization, blueprint: OrganizationBlueprint
+    field :organization_id, default: "N/A"
+    fields :id,
+           :email,
+           :first_name,
+           :phone,
+           :last_name,
+           :role
+    association :organization, blueprint: OrganizationBlueprint, default: "N/A"
   end
 
   view :auth do

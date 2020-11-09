@@ -65,7 +65,14 @@ class ApplicationController < ActionController::API
   end
 
   def set_view
-    params[:view] ? @view = :short : @view = :extended
+    case params[:view]
+    when 'short'
+      @view = :short
+    when 'sidebar_profile'
+      @view = :sidebar_profile
+    else
+      @view = :extended
+    end
   end
 
 end
