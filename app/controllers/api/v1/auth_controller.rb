@@ -1,6 +1,7 @@
 class Api::V1::AuthController < ApplicationController
   require 'sendgrid-ruby'
   include SendGrid
+  before_action :twilio_client, only: [:signup]
 
   def login
     user = User.find_for_database_authentication(email: user_params[:email])
@@ -12,6 +13,8 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def signup
+    params[:user].each { |key, value| value.strip! if value.is_a? String }
+    params[:user][:phone] = @client.lookups.phone_numbers(user_params[:phone]).fetch(type: ["carrier"]).phone_number
     user = User.create!(user_params)
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end
