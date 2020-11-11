@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
   include ApiException
-
   MAX_PER_PAGE = 20
 
   def authenticate_request!
@@ -73,6 +72,10 @@ class ApplicationController < ActionController::API
     else
       @view = :extended
     end
+  end
+
+  def twilio_client
+    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
   end
 
 end
