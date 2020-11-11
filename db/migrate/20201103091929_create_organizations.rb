@@ -4,8 +4,11 @@ class CreateOrganizations < ActiveRecord::Migration[6.0]
       t.string :name
       t.text :address
       t.string :phone
-      t.text :logoUrl
+      t.text :logo
       t.text :website
+      t.string :state
+      t.string :zip
+      t.string :city
 
       t.timestamps
     end
