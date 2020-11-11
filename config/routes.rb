@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   namespace :api do
     namespace :v1 do
       
@@ -14,12 +16,35 @@ Rails.application.routes.draw do
       resources :users do
         collection do
           get 'me' => 'users#show'
+          put '' => 'users#update'
+          delete '' => 'users#destroy'
         end
+      end
+
+      resources :children
+
+      resources :siblings do
+        collection do
+          post 'my' => 'siblings#get_siblings'
+          post '' => 'siblings#create'
+          delete ':id' => 'siblings#delete'
+        end
+      end
+
+      resources :contacts
+      
+      resources :comments
+
+      namespace :super_admin do
+        resources :organizations
+        resources :admins
       end
 
       namespace :admin do
         resources :users
+        resources :search_vectors
       end
+
     end
   end
 end

@@ -26,7 +26,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string  :first_name
       t.string  :last_name
       t.string  :role, null: false, default: 'user'
-
+      t.text :ava
+      t.text :phone
       t.timestamps
     end
 

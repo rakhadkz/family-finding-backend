@@ -40,9 +40,39 @@ class ApplicationController < ActionController::API
     header.gsub(pattern, '') if header&.match(pattern)
   end
 
-  def require_admin
-    if current_user && !current_user.role === 'admin'
+  def require_super_admin
+    if @current_user && !@current_user.role === 'super_admin'
       raise ApiException::Unauthorized
     end
   end
+
+  def require_admin
+    if @current_user && !@current_user.role === 'admin'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def require_manager
+    if @current_user && !@current_user.role === 'manager'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def require_user
+    if @current_user && !@current_user.role === 'user'
+      raise ApiException::Unauthorized
+    end
+  end
+
+  def set_view
+    case params[:view]
+    when 'short'
+      @view = :short
+    when 'sidebar_profile'
+      @view = :sidebar_profile
+    else
+      @view = :extended
+    end
+  end
+
 end
