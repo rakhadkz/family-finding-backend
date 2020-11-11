@@ -15,7 +15,6 @@ gem 'dotenv-rails'
 gem 'kaminari'
 gem 'nokogiri'
 gem 'pg_search'
-gem 'phony'
 gem 'rack-cors'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'sendgrid-ruby'
