@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_180639) do
+ActiveRecord::Schema.define(version: 2020_11_07_163340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,8 +69,11 @@ ActiveRecord::Schema.define(version: 2020_11_05_180639) do
     t.string "name"
     t.text "address"
     t.string "phone"
-    t.text "logoUrl"
+    t.text "logo"
     t.text "website"
+    t.string "state"
+    t.string "zip"
+    t.string "city"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -106,13 +109,17 @@ ActiveRecord::Schema.define(version: 2020_11_05_180639) do
     t.string "first_name"
     t.string "last_name"
     t.string "role", default: "user", null: false
+    t.text "ava"
+    t.text "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "phone"
+    t.bigint "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "attachments", "children"
   add_foreign_key "comments", "users"
+  add_foreign_key "users", "organizations"
 end

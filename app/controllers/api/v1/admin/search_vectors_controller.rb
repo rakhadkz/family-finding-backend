@@ -4,7 +4,7 @@ class Api::V1::OrganizationAdmin::SearchVectorsController < ApplicationControlle
     include Sortable
   
     before_action :authenticate_request!
-    before_action :require_organization_admin
+    before_action :require_admin
     before_action :set_search_vector, only: [:show, :update, :destroy]
   
     # GET /search_vector

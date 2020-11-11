@@ -6,4 +6,8 @@ class ChildBlueprint < Blueprinter::Base
          :last_name,
          :birthday
 
+  view :siblings do
+    association :siblings, blueprint: SiblingshipBlueprint
+  end
+
 end
