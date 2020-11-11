@@ -5,9 +5,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   before_action :authenticate_request!
   before_action :set_view, only: [:index]
-=begin
   before_action :require_super_admin
-=end
   before_action :set_organization, only: [:show, :update, :destroy]
 
   # GET /organizations
