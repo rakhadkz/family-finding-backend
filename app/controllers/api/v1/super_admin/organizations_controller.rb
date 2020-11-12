@@ -23,7 +23,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   def create
     params[:organization].each { |key, value| value.strip! if value.is_a? String }
-    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number
+    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
@@ -31,7 +31,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   def update
     params[:organization].each { |key, value| value.strip! if value.is_a? String }
-    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number
+    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
     if @organization.update(organization_params)
       render json: OrganizationBlueprint.render(@organization, root: :data)
     else
