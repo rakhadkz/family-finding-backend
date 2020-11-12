@@ -20,6 +20,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'sendgrid-ruby'
 gem 'pry', '~> 0.13.1'
 gem 'twilio-ruby'
+gem 'rswag'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
