@@ -1,6 +1,6 @@
 class CommentBlueprint < Blueprinter::Base
   identifier :id
-  fields :user_id, :title, :body, :in_reply_to
+  fields :user_id, :title, :body
 
   view :short do
     fields :created_at, :updated_at
@@ -8,7 +8,7 @@ class CommentBlueprint < Blueprinter::Base
 
   view :extended do
     include_view :short
-    association :user, blueprint: UserBlueprint
-    association :in_reply_to, blueprint:  CommentBlueprint
+    association :parent, blueprint:  CommentBlueprint, name: :in_reply_to
+    association :replies, blueprint:  CommentBlueprint
   end
 end

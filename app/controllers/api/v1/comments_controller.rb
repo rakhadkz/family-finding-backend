@@ -4,11 +4,16 @@ class Api::V1::CommentsController < ApplicationController
   before_action :my_comment, only: [:update, :destroy]
 
   def show
+    render json: CommentBlueprint.render(@comment, view: :extended, root: :data)
+=begin
+
     render json: {
         data: {
-        in_reply_to: @comment, comment: @comment, replies: @comment.children
+        in_reply_to: @comment.in_reply_to, comment: @comment, replies: @comment.replies
         }
     }
+=end
+
   end
 
   def create
