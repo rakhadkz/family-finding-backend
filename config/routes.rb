@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       
       resources :comments
 
+      resources :findings
+
       namespace :super_admin do
         resources :organizations
         resources :admins

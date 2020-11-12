@@ -4,7 +4,11 @@ class Api::V1::CommentsController < ApplicationController
   before_action :my_comment, only: [:update, :destroy]
 
   def show
-    render json: {in_reply_to: @comment, comment: @comment, replies: @comment.children}
+    render json: {
+        data: {
+        in_reply_to: @comment, comment: @comment, replies: @comment.children
+        }
+    }
   end
 
   def create

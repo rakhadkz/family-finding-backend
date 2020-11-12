@@ -1,5 +1,8 @@
 class Child < ApplicationRecord
   has_many :attachments
+  has_many :findings
+  has_many :search_vectors, through: :findings
+
   has_and_belongs_to_many :contacts
 
   has_many :siblingships

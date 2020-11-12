@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_07_163340) do
+ActiveRecord::Schema.define(version: 2020_11_12_140859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,17 +65,29 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
     t.index ["contact_id"], name: "index_contacts_children_on_contact_id"
   end
 
+  create_table "findings", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "search_vector_id"
+    t.bigint "user_id"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_findings_on_child_id"
+    t.index ["search_vector_id"], name: "index_findings_on_search_vector_id"
+    t.index ["user_id"], name: "index_findings_on_user_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
     t.string "phone"
-    t.text "logo"
     t.text "website"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "logo"
     t.string "state"
     t.string "zip"
     t.string "city"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "search_vectors", force: :cascade do |t|
@@ -106,14 +118,14 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.string "first_name"
-    t.string "last_name"
     t.string "role", default: "user", null: false
-    t.text "ava"
-    t.text "phone"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "phone"
     t.bigint "organization_id"
+    t.string "last_name"
+    t.string "first_name"
+    t.text "ava"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -121,5 +133,8 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
 
   add_foreign_key "attachments", "children"
   add_foreign_key "comments", "users"
+  add_foreign_key "findings", "children"
+  add_foreign_key "findings", "search_vectors"
+  add_foreign_key "findings", "users"
   add_foreign_key "users", "organizations"
 end
