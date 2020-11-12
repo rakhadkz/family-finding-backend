@@ -48,7 +48,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def organization_params
-      params.require(:organization).permit(:name, :address, :phone, :logo, :website)
+      params.require(:organization).permit(:name, :address, :phone, :logo, :website, :state, :zip, :city)
     end
 
   def organizations_scope
