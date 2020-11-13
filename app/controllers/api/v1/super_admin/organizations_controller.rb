@@ -7,6 +7,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   before_action :set_view, only: [:index]
   before_action :require_super_admin
   before_action :set_organization, only: [:show, :update, :destroy]
+  before_action :twilio_client, only: [:create, :update]
 
   # GET /organizations
 
@@ -21,12 +22,16 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def create
+    params[:organization].each { |key, value| value.strip! if value.is_a? String }
+    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
 
   # PATCH/PUT /organizations/1
   def update
+    params[:organization].each { |key, value| value.strip! if value.is_a? String }
+    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
     if @organization.update(organization_params)
       render json: OrganizationBlueprint.render(@organization, root: :data)
     else
@@ -48,7 +53,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def organization_params
-      params.require(:organization).permit(:name, :address, :phone, :logo, :website)
+      params.require(:organization).permit(:name, :address, :phone, :logo, :website, :state, :zip, :city)
     end
 
   def organizations_scope
