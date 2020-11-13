@@ -1,4 +1,4 @@
-class Api::V1::OrganizationAdmin::SearchVectorsController < ApplicationController
+class Api::V1::Admin::SearchVectorsController < ApplicationController
     include Filterable
     include Searchable
     include Sortable
