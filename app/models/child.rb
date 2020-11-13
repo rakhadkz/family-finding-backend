@@ -4,6 +4,7 @@ class Child < ApplicationRecord
   has_many :search_vectors, through: :findings
 
   has_and_belongs_to_many :contacts
+  has_and_belongs_to_many :attachments
 
   has_many :siblingships
   has_many :siblings, :through => :siblingships

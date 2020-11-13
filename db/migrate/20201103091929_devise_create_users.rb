@@ -28,6 +28,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[6.0]
       t.string  :role, null: false, default: 'user'
       t.text :ava
       t.text :phone
+
+      t.references :organization, foreign_key: true
+
       t.timestamps
     end
 

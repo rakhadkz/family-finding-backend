@@ -1,4 +1,5 @@
 class Attachment < ApplicationRecord
-  belongs_to :child
-  belongs_to :finding
+  has_and_belongs_to_many :children
+  has_and_belongs_to_many :comments
+  has_and_belongs_to_many :findings
 end

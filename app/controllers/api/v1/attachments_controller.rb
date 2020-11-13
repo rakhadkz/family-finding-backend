@@ -1,17 +1,14 @@
 class Api::V1::AttachmentsController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_att, only: [:show, :update, :destroy]
+  before_action :set_attachment, only: [:show, :update, :destroy]
 
   def show
-    render json: @attachment
+    render json: AttachmentBlueprint.render(@attachment, root: :data)
   end
 
   def update
-    if @attachment.update(attachment_params)
-      render json: @attachment
-    else
-      render json: @attachment.errors, status: :unprocessable_entity
-    end
+    @attachment.update!(attachment_params)
+    render json: AttachmentBlueprint.render(@attachment, root: :data)
   end
 
   def destroy
@@ -21,17 +18,18 @@ class Api::V1::AttachmentsController < ApplicationController
 
   private
 
-  def set_att
+  def set_attachment
     @attachment = Attachment.find(params[:id])
   end
 
   def attachment_params
     params.require(:attachment)
         .permit([
-                    :child_id,
-                    :filename,
-                    :filetype,
-                    :filelocation
+                    :file_name,
+                    :file_type,
+                    :file_url,
+                    :file_size,
+                    :user_id
                 ])
   end
 
