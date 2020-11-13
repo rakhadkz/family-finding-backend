@@ -1,4 +1,11 @@
 class User < ApplicationRecord
+
+  has_many :comments
+
+  belongs_to :organization
+
+  scope :filter_by_role, -> (role) { where role: role}
+
   include PgSearch::Model
 
   pg_search_scope :search,
@@ -13,11 +20,13 @@ class User < ApplicationRecord
                   }
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
-         :trackable, :validatable, :lockable
+         :trackable, :lockable
 
   enum role: {
+    super_admin: 'super_admin',
     admin: 'admin',
-    user: 'user',
+    manager: 'manager',
+    user: 'user'
   }
 
   def token
