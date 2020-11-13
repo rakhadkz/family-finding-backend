@@ -2,16 +2,18 @@ class Api::V1::AttachmentsController < ApplicationController
   before_action :authenticate_request!
   before_action :set_att, only: [:show, :update, :destroy]
 
+  def create
+    attachment = Attachment.create!(attachment_params)
+    render json: AttachmentBlueprint.render(attachment, root: :data)
+  end
+
   def show
-    render json: @attachment
+    render json: AttachmentBlueprint.render(@attachment, root: :data)
   end
 
   def update
-    if @attachment.update(attachment_params)
-      render json: @attachment
-    else
-      render json: @attachment.errors, status: :unprocessable_entity
-    end
+    @attachment.update!(attachment_params)
+    render json: AttachmentBlueprint.render(@attachment, root: :data)
   end
 
   def destroy

@@ -29,7 +29,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def update
-    @user.update(user_params)
+    @user.update!(user_params)
     render json: UserBlueprint.render(@user, root: :data)
   end
 

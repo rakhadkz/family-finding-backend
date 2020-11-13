@@ -5,7 +5,7 @@ class Api::V1::SiblingsController < ApplicationController
   before_action :set_siblings, only: [:get_siblings]
 
   def get_siblings
-    render json: @siblings
+    render json: SiblingshipBlueprint.render(@siblings, root: :data)
   end
 
   def create
@@ -18,7 +18,9 @@ class Api::V1::SiblingsController < ApplicationController
   end
 
   def delete
-    @siblingship = Siblingship.where('sibling_id = ? or child_id = ?', params[:child_id], params[:child_id]).find(params[:id])
+    @siblingship = Siblingship
+      .where('sibling_id = ? or child_id = ?', params[:child_id], params[:child_id])
+        .find(params[:id])
     @siblingship.destroy
     render status: :ok
   end

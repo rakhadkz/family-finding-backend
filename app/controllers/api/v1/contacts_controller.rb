@@ -4,7 +4,6 @@ class Api::V1::ContactsController < ApplicationController
 
     def index
         contacts = Contact.all
-    
         render json: ContactBlueprint.render(contacts)
     end
   
@@ -18,11 +17,8 @@ class Api::V1::ContactsController < ApplicationController
     end
   
     def update
-      if @contact.update(contact_params)
-        render json: ContactBlueprint.render(@contact, root: :data)
-      else
-        render json: @contact.errors, status: :unprocessable_entity
-      end
+      @contact.update!(contact_params)
+      render json: ContactBlueprint.render(@contact, root: :data)
     end
   
     def destroy
