@@ -3,8 +3,11 @@ class Child < ApplicationRecord
   has_many :findings
   has_many :search_vectors, through: :findings
 
-  has_and_belongs_to_many :contacts
-  has_and_belongs_to_many :attachments
+  has_many :contact_children
+  has_many :contacts, :through => :contact_children
+
+  has_many :child_attachments
+  has_many :attachments, :through => :child_attachments
 
   has_many :siblingships
   has_many :siblings, :through => :siblingships
