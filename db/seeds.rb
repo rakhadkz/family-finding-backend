@@ -24,3 +24,18 @@ end
   ].sample
   User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.cell_phone_in_e164, organization_id: random_organization_id, role: role, ava: ava)
 end
+
+20.times do
+  Child.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
+end
+
+10.times do
+  SearchVector.create!(name: Faker::Company.name, in_continuous_search: false)
+end
+
+10.times do
+  random_child_id = Child.find(Child.pluck(:id).sample).id
+  random_search_vector_id = SearchVector.find(SearchVector.pluck(:id).sample).id
+  random_user_id = User.find(User.pluck(:id).sample).id
+  Finding.create!(child_id: random_child_id, search_vector_id: random_search_vector_id, user_id: random_user_id)
+end

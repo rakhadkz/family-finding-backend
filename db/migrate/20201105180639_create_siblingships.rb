@@ -3,6 +3,8 @@ class CreateSiblingships < ActiveRecord::Migration[6.0]
     create_table :siblingships do |t|
       t.references :child, null: false,  foreign_key: { to_table: :children }
       t.references :sibling, null: false, foreign_key: { to_table: :children }
+
+      t.timestamps
     end
 
     add_index(:siblingships, [:child_id, :sibling_id], :unique => true)

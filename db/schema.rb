@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_14_110604) do
+ActiveRecord::Schema.define(version: 2020_11_14_165603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2020_11_14_110604) do
     t.index ["attachment_id"], name: "index_child_attachments_on_attachment_id"
     t.index ["child_id", "attachment_id"], name: "index_child_attachments_on_child_id_and_attachment_id", unique: true
     t.index ["child_id"], name: "index_child_attachments_on_child_id"
+  end
+
+  create_table "child_contacts", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "contact_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
+    t.index ["child_id"], name: "index_child_contacts_on_child_id"
+    t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
   end
 
   create_table "children", force: :cascade do |t|
@@ -78,14 +88,6 @@ ActiveRecord::Schema.define(version: 2020_11_14_110604) do
     t.string "zip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "contacts_children", force: :cascade do |t|
-    t.bigint "contact_id"
-    t.bigint "child_id"
-    t.index ["child_id"], name: "index_contacts_children_on_child_id"
-    t.index ["contact_id", "child_id"], name: "index_contacts_children_on_contact_id_and_child_id", unique: true
-    t.index ["contact_id"], name: "index_contacts_children_on_contact_id"
   end
 
   create_table "finding_attachments", force: :cascade do |t|
