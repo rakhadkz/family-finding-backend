@@ -10,5 +10,14 @@ class CommentBlueprint < Blueprinter::Base
     include_view :short
     association :parent, blueprint:  CommentBlueprint, name: :in_reply_to
     association :replies, blueprint:  CommentBlueprint
+    association :attachment, blueprint: AttachmentBlueprint, name: :attachments
   end
+
+  view :attachments do
+    excludes :user_id, :title, :body
+    association :attachments,
+                blueprint: AttachmentBlueprint,
+                name: :attachments
+  end
+
 end

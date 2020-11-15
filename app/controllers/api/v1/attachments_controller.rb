@@ -1,9 +1,15 @@
 class Api::V1::AttachmentsController < ApplicationController
   before_action :authenticate_request!
   before_action :set_attachment, only: [:show, :update, :destroy]
+  before_action :set_view, only: [:show]
 
   def show
-    render json: AttachmentBlueprint.render(@attachment, root: :data)
+    render json: AttachmentBlueprint.render(@attachment, view: @view, root: :data)
+  end
+
+  def create
+    attachment = Attachment.create!(attachment_params)
+    render json: AttachmentBlueprint.render(attachment, root: :data)
   end
 
   def update
@@ -19,7 +25,7 @@ class Api::V1::AttachmentsController < ApplicationController
   private
 
   def set_attachment
-    @attachment = Attachment.find(params[:id])
+    @attachment = Attachment.includes(:user).find(params[:id])
   end
 
   def attachment_params

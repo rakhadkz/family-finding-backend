@@ -1,4 +1,5 @@
 class AttachmentBlueprint < Blueprinter::Base
+
   identifier :id
 
   fields :file_name,
@@ -6,4 +7,8 @@ class AttachmentBlueprint < Blueprinter::Base
          :file_url,
          :file_size,
          :user_id
+
+  view :extended do
+    association :user, blueprint: UserBlueprint
+  end
 end

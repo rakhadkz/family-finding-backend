@@ -1,4 +1,4 @@
 class Contact < ApplicationRecord
-  has_many :contact_children
-  has_many :children, :through => :contact_children
+  has_many :child_contacts
+  has_many :children, :through => :child_contacts
 end

@@ -1,9 +1,20 @@
 class UserBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :id
+  fields :id,
+         :email,
+         :first_name,
+         :phone,
+         :last_name,
+         :role
 
   view :sidebar_profile do
+    excludes :id,
+           :email,
+           :first_name,
+           :phone,
+           :last_name,
+           :role
     field :ava
     field :name do |user|
       "#{user.first_name} #{user.last_name}"
@@ -12,12 +23,6 @@ class UserBlueprint < Blueprinter::Base
 
   view :extended do
     field :organization_id, default: "N/A"
-    fields :id,
-           :email,
-           :first_name,
-           :phone,
-           :last_name,
-           :role
     association :organization, blueprint: OrganizationBlueprint, default: "N/A"
   end
 

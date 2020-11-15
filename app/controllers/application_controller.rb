@@ -69,6 +69,12 @@ class ApplicationController < ActionController::API
       @view = :short
     when 'sidebar_profile'
       @view = :sidebar_profile
+    when 'attachments'
+      @view = :attachments
+    when 'siblings'
+      @view = :siblings
+    when 'contacts'
+      @view = :contacts
     else
       @view = :extended
     end
