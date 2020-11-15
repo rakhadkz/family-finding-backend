@@ -1,4 +1,4 @@
-class Api::V1::ChildAttachmentsController < ApplicationController
+class Api::V1::CommentAttachmentsController < ApplicationController
   before_action :authenticate_request!
   before_action :set_comment_attachment, only: [:show, :destroy]
   before_action :set_view, only: [:show]
