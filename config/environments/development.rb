@@ -48,19 +48,19 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.action_controller.action_on_unpermitted_parameters = :raise
-
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default charset: 'utf-8'
-  config.action_mailer.default_url_options = { host: 'lorem-ipsum.io', protocol: 'https' }
+  config.action_mailer.default_url_options = { :host => 'https://family-finding-webapp.herokuapp.com' }
+
   ActionMailer::Base.smtp_settings = {
-    :address              => ENV['SMTP_ADDRESS'],
-    :port                 => 587,
-    :domain               => ENV['SMTP_DOMAIN'],
-    :user_name            => ENV['SMTP_USERNAME'],
-    :password             => ENV['SMTP_PASSWORD'],
-    :authentication       => "plain",
+    :user_name => 'apikey',
+    :password =>  ENV['SENDGRID_API_KEY'],
+    :domain => 'https://family-finding-webapp.herokuapp.com/',
+    :address => 'smtp.sendgrid.net',
+    :port => 587,
+    :authentication => :plain,
     :enable_starttls_auto => true
-  }
+  } 
 end
