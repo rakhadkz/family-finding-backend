@@ -14,12 +14,12 @@ class Api::V1::CommentAttachmentsController < ApplicationController
 
   def create
     comment_attachment = CommentAttachment.create!(child_attachment_params)
-    render json: CommentAttachmentBlueprint.render(comment_attachment, view: @view, root: :data)
+    render json: CommentAttachmentBlueprint.render(comment_attachment, root: :data)
   end
 
   def update
     comment_attachment = CommentAttachment.update!(child_attachment_params)
-    render json: CommentAttachmentBlueprint.render(comment_attachment, view: @view, root: :data)
+    render json: CommentAttachmentBlueprint.render(comment_attachment, root: :data)
   end
 
   def destroy

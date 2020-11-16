@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+=begin
 20.times do
   Organization.create!(name: Faker::Company.name, address: Faker::Address.street_address, city: Faker::Address.city, state: Faker::Address.state, zip: Faker::Address.zip, phone: Faker::PhoneNumber.cell_phone_in_e164)
 end
@@ -38,4 +39,9 @@ end
   random_search_vector_id = SearchVector.find(SearchVector.pluck(:id).sample).id
   random_user_id = User.find(User.pluck(:id).sample).id
   Finding.create!(child_id: random_child_id, search_vector_id: random_search_vector_id, user_id: random_user_id)
+end
+=end
+
+10.times do
+  Contact.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
 end
