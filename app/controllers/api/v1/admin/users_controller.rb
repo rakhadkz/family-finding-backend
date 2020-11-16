@@ -4,9 +4,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   include Sortable
 
   before_action :authenticate_request!
-=begin
   before_action :require_admin
-=end
   before_action :load_user, only: %i[
     show
     update
