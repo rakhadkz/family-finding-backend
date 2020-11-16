@@ -7,4 +7,6 @@ class Attachment < ApplicationRecord
 
   has_many :child_attachments
   has_many :children, :through => :child_attachments
+
+  belongs_to :user
 end

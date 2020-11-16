@@ -4,29 +4,21 @@ class Api::V1::FindingsController < ApplicationController
   before_action :set_view, only: [:show]
 
   def create
-    @finding = Finding.new(finding_params)
-
-    if @finding.save
-      render json: FindingBlueprint.render(@finding, root: :data), status: :created
-    else
-      render json: @finding.errors, status: :unprocessable_entity
-    end
+    @finding = Finding.create!(finding_params)
+    render json: FindingBlueprint.render(@finding, root: :data)
   end
 
   def show
-    render json: FindingBlueprint.render(@finding, view: @view, root: :data), status: :ok
+    render json: FindingBlueprint.render(@finding, view: @view, root: :data)
   end
 
   def update
-    if @finding.update(finding_params)
-      render json: FindingBlueprint.render(@finding, root: :data), status: :ok
-    else
-      render json: @finding.errors, status: :unprocessable_entity
-    end
+    @finding.update!(finding_params)
+    render json: FindingBlueprint.render(@finding, root: :data)
   end
 
   def destroy
-    @child.destroy
+    @finding.destroy
     render status: :ok
   end
 
@@ -43,7 +35,7 @@ class Api::V1::FindingsController < ApplicationController
   end
 
   def set_finding
-    @finding = Finding.find(params[:id])
+    @finding = Finding.includes(:attachments, :user, :child, :search_vector).find(params[:id])
   end
 
 end
