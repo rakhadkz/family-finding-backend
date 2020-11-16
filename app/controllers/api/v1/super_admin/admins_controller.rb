@@ -22,11 +22,8 @@ class Api::V1::SuperAdmin::AdminsController < ApplicationController
   def create
     admin = User.create!(admin_params)
     admin.role = 'admin'
-    if organization_admin.save
-      render json: UserBlueprint.render(admin, root: :data)
-    else
-      render json: organization_admin.errors, status: :unprocessable_entity
-    end
+    admin.save!
+    render json: UserBlueprint.render(admin, root: :data)
   end
 
   def update
