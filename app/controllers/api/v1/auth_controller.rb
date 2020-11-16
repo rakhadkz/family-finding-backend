@@ -1,6 +1,4 @@
 class Api::V1::AuthController < ApplicationController
-  require 'sendgrid-ruby'
-  include SendGrid
   before_action :twilio_client, only: [:signup]
 
   def login

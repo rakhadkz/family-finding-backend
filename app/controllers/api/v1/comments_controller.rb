@@ -12,7 +12,7 @@ class Api::V1::CommentsController < ApplicationController
 
   def update
     comment.update!(comment_params)
-    render json: SearchVectorBlueprint.render(comment, root: :data)
+    render json: CommentBlueprint.render(comment, root: :data)
   end
 
   def destroy
@@ -28,10 +28,11 @@ class Api::V1::CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment)
-        .permit([
-                    :title,
-                    :body,
-                    :in_reply_to
-                ])
+      .permit(
+        [
+          :title,
+          :body,
+          :in_reply_to
+        ])
   end
 end
