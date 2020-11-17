@@ -43,6 +43,8 @@ Rails.application.routes.draw do
         resources :search_vectors
       end
 
+      devise_for :users
+
     end
   end
 end
