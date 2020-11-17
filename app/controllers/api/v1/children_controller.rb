@@ -32,7 +32,7 @@
   end
 
   def destroy
-    @child.destroy
+    @child.destroy!
     head :ok
   end
 

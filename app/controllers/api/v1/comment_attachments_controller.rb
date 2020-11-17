@@ -23,7 +23,7 @@ class Api::V1::CommentAttachmentsController < ApplicationController
   end
 
   def destroy
-    @comment_attachment.destroy
+    @comment_attachment.destroy!
     head :ok
   end
 

@@ -22,7 +22,7 @@ class Api::V1::ContactsController < ApplicationController
     end
   
     def destroy
-      @contact.destroy
+      @contact.destroy!
       render status: :ok
     end
   

@@ -28,7 +28,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
     end
   
     def destroy
-      @search_vector.destroy
+      @search_vector.destroy!
       render status: :ok
     end
   

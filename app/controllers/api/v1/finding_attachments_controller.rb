@@ -23,7 +23,7 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   end
 
   def destroy
-    @finding_attachment.destroy
+    @finding_attachment.destroy!
     head :ok
 
   end

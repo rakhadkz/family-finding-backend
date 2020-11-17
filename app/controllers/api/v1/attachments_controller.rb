@@ -18,7 +18,7 @@ class Api::V1::AttachmentsController < ApplicationController
   end
 
   def destroy
-    @attachment.destroy
+    @attachment.destroy!
     render json: :ok
   end
 
