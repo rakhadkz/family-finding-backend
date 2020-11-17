@@ -1,7 +1,5 @@
 class Api::V1::FindingAttachmentsController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_finding_attachment, only: [:show, :destroy]
-  before_action :set_view, only: [:show]
 
   def index
     finding_attachments = FindingAttachment.all
@@ -9,7 +7,7 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   end
 
   def show
-    render json: FindingAttachmentBlueprint.render(@finding_attachment, view: @view, root: :data)
+    render json: FindingAttachmentBlueprint.render(finding_attachment, view: view, root: :data)
   end
 
   def create
@@ -23,15 +21,15 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   end
 
   def destroy
-    @finding_attachment.destroy!
+    finding_attachment.destroy!
     head :ok
 
   end
 
   private
 
-  def set_finding_attachment
-    @finding_attachment = FindingAttachment.includes(:attachment).find(params[:id])
+  def finding_attachment
+    @finding_attachment ||= FindingAttachment.includes(:attachment).find(params[:id])
   end
 
   def finding_attachment_params

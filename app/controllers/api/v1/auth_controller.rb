@@ -1,6 +1,4 @@
 class Api::V1::AuthController < ApplicationController
-  require 'sendgrid-ruby'
-  include SendGrid
 
   def login
     user = User.find_for_database_authentication(email: user_params[:email])

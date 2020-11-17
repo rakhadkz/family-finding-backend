@@ -24,4 +24,8 @@ class ChildBlueprint < Blueprinter::Base
                 name: :contacts
   end
 
+  view :extended do
+
+  end
+
 end

@@ -1,7 +1,5 @@
 class Api::V1::ChildAttachmentsController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_child_attachment, only: [:show, :destroy]
-  before_action :set_view, only: [:show]
 
   def index
     child_attachments = ChildAttachment.all
@@ -9,7 +7,7 @@ class Api::V1::ChildAttachmentsController < ApplicationController
   end
 
   def show
-    render json: ChildAttachmentBlueprint.render(@child_attachment, view: @view, root: :data)
+    render json: ChildAttachmentBlueprint.render(child_attachment, view: view, root: :data)
   end
 
   def create
@@ -23,14 +21,14 @@ class Api::V1::ChildAttachmentsController < ApplicationController
   end
 
   def destroy
-    @child_attachment.destroy!
+    child_attachment.destroy!
     head :ok
   end
 
   private
 
-  def set_child_attachment
-    @child_attachment = ChildAttachment.includes(:attachment).find(params[:id])
+  def child_attachment
+    @child_attachment ||= ChildAttachment.includes(:attachment).find(params[:id])
   end
 
   def child_attachment_params

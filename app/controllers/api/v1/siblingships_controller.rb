@@ -1,8 +1,6 @@
 class Api::V1::SiblingshipsController < ApplicationController
 
   before_action :authenticate_request!
-  before_action :set_siblingship, only: [:show, :destroy]
-  before_action :set_view, only: [:show]
 
   def index
     siblingships = Siblingship.all
@@ -10,7 +8,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def show
-    render json: SiblingshipBlueprint.render(@siblingship, view: @view, root: :data)
+    render json: SiblingshipBlueprint.render(siblingship, view: view, root: :data)
   end
 
   def create
@@ -19,14 +17,14 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def destroy
-    @siblingship.destroy!
+    siblingship.destroy!
     head :ok
   end
 
   private
 
-  def set_siblingship
-    @siblingship = Siblingship.includes(:child, :sibling).find(params[:id])
+  def siblingship
+    @siblingship ||= Siblingship.includes(:child, :sibling).find(params[:id])
   end
 
   def siblingship_params

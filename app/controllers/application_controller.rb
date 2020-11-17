@@ -63,10 +63,10 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def set_view
+  def view
     case params[:view]
     when 'short'
-      @view = :short
+      @view ||= :short
     when 'sidebar_profile'
       @view = :sidebar_profile
     when 'attachments'
@@ -76,7 +76,7 @@ class ApplicationController < ActionController::API
     when 'contacts'
       @view = :contacts
     else
-      @view = :extended
+      @view ||= :extended
     end
   end
 

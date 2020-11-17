@@ -1,5 +1,4 @@
 class AttachmentBlueprint < Blueprinter::Base
-
   identifier :id
 
   fields :file_name,

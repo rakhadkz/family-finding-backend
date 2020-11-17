@@ -1,9 +1,8 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_view, only: [:show]
 
   def show
-    render json: CommentBlueprint.render(@comment, view: @view, root: :data)
+    render json: CommentBlueprint.render(comment, view: view, root: :data)
   end
 
   def create
@@ -29,10 +28,11 @@ class Api::V1::CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment)
-        .permit([
-                    :title,
-                    :body,
-                    :in_reply_to
-                ])
+      .permit(
+        [
+          :title,
+          :body,
+          :in_reply_to
+        ])
   end
 end

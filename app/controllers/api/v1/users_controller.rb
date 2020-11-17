@@ -1,9 +1,8 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_request!
-  before_action :set_view, only: [:show]
 
   def show
-    render json: UserBlueprint.render(@current_user, view: @view, root: :data)
+    render json: UserBlueprint.render(@current_user, view: view, root: :data)
   end
 
   def update
@@ -18,15 +17,15 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params
-        .require(:user)
-        .permit(
-            [
-                :email,
-                :role,
-                :first_name,
-                :last_name,
-                :phone
-            ])
+      .require(:user)
+      .permit(
+        [
+          :email,
+          :role,
+          :first_name,
+          :last_name,
+          :phone
+        ])
   end
 
 end
