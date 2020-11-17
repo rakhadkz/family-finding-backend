@@ -21,17 +21,21 @@ Rails.application.routes.draw do
 
       resources :children
 
+      resources :child_attachments
+
+      resources :child_contacts
+
       resources :siblingships
 
       resources :contacts
       
       resources :comments
 
+      resources :comment_attachments
+
       resources :findings
 
       resources :finding_attachments
-      resources :child_attachments
-      resources :comment_attachments
 
       namespace :super_admin do
         resources :organizations

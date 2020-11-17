@@ -16,7 +16,7 @@ class Api::V1::CommentAttachmentsController < ApplicationController
   end
 
   def update
-    comment_attachment = CommentAttachment.update!(child_attachment_params)
+    comment_attachment.update!(child_attachment_params)
     render json: CommentAttachmentBlueprint.render(comment_attachment, root: :data)
   end
 
