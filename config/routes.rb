@@ -21,17 +21,17 @@ Rails.application.routes.draw do
 
       resources :children
 
-      resources :siblings do
-        collection do
-          post 'my' => 'siblings#get_siblings'
-          post '' => 'siblings#create'
-          delete ':id' => 'siblings#delete'
-        end
-      end
+      resources :siblingships
 
       resources :contacts
       
       resources :comments
+
+      resources :findings
+
+      resources :finding_attachments
+      resources :child_attachments
+      resources :comment_attachments
 
       namespace :super_admin do
         resources :organizations

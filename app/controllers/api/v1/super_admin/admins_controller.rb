@@ -16,7 +16,7 @@ class Api::V1::SuperAdmin::AdminsController < ApplicationController
     admin = User.create!(admin_params)
     admin.role = 'admin'
     admin.save!
-    render json: UserBlueprint.render(admin, root: :data, view: :extended)
+    render json: UserBlueprint.render(admin, root: :data)
   end
 
   def update

@@ -7,7 +7,7 @@ class Api::V1::ContactsController < ApplicationController
     end
   
     def show
-      render json: ContactBlueprint.render(contact, root: :data)
+      render json: ContactBlueprint.render(contact, view: view, root: :data)
     end
   
     def create
@@ -19,9 +19,9 @@ class Api::V1::ContactsController < ApplicationController
       contact.update!(contact_params)
       render json: ContactBlueprint.render(contact, root: :data)
     end
-  
+
     def destroy
-      contact.destroy
+      contact.destroy!
       head :ok
     end
   
@@ -30,7 +30,7 @@ class Api::V1::ContactsController < ApplicationController
     def contact
       @contact ||= Contact.find(params[:id])
     end
-  
+
     def contact_params
       params.require(:contact)
         .permit(

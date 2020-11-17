@@ -68,14 +68,16 @@ class ApplicationController < ActionController::API
     when 'short'
       @view ||= :short
     when 'sidebar_profile'
-      @view ||= :sidebar_profile
+      @view = :sidebar_profile
+    when 'attachments'
+      @view = :attachments
+    when 'siblings'
+      @view = :siblings
+    when 'contacts'
+      @view = :contacts
     else
       @view ||= :extended
     end
-  end
-
-  def twilio_client
-    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
   end
 
 end

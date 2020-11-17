@@ -5,7 +5,6 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   before_action :authenticate_request!
   before_action :require_super_admin
-  before_action :twilio_client, only: [:create, :update]
 
   def index
     results = sort(search(filter(organizations_scope)))
@@ -19,14 +18,14 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   def create
     params[:organization].each { |key, value| value.strip! if value.is_a? String }
-    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
+    params[:organization][:phone] = TwilioPhone.new(organization_params).call
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
 
   def update
     params[:organization].each { |key, value| value.strip! if value.is_a? String }
-    params[:organization][:phone] = @client.lookups.phone_numbers(organization_params[:phone]).fetch(type: ["carrier"]).phone_number if params[:phone]
+    params[:organization][:phone] = TwilioPhone.new(organization_params).format
     organization.update!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end

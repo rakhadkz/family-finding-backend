@@ -10,27 +10,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_07_163340) do
+ActiveRecord::Schema.define(version: 2020_11_14_165603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "attachments", force: :cascade do |t|
-    t.bigint "child_id"
-    t.string "filename"
-    t.string "filetype"
-    t.text "filelocation"
+    t.string "file_name"
+    t.string "file_type"
+    t.string "file_url"
+    t.integer "file_size"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["child_id"], name: "index_attachments_on_child_id"
+    t.index ["user_id"], name: "index_attachments_on_user_id"
+  end
+
+  create_table "child_attachments", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachment_id"], name: "index_child_attachments_on_attachment_id"
+    t.index ["child_id", "attachment_id"], name: "index_child_attachments_on_child_id_and_attachment_id", unique: true
+    t.index ["child_id"], name: "index_child_attachments_on_child_id"
+  end
+
+  create_table "child_contacts", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "contact_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
+    t.index ["child_id"], name: "index_child_contacts_on_child_id"
+    t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
   end
 
   create_table "children", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
+    t.string "permanency_goal"
     t.datetime "birthday"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "comment_attachments", force: :cascade do |t|
+    t.bigint "comment_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachment_id"], name: "index_comment_attachments_on_attachment_id"
+    t.index ["comment_id", "attachment_id"], name: "index_comment_attachments_on_comment_id_and_attachment_id", unique: true
+    t.index ["comment_id"], name: "index_comment_attachments_on_comment_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -58,11 +90,26 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "contacts_children", id: false, force: :cascade do |t|
-    t.bigint "contact_id"
+  create_table "finding_attachments", force: :cascade do |t|
+    t.bigint "finding_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachment_id"], name: "index_finding_attachments_on_attachment_id"
+    t.index ["finding_id", "attachment_id"], name: "index_finding_attachments_on_finding_id_and_attachment_id", unique: true
+    t.index ["finding_id"], name: "index_finding_attachments_on_finding_id"
+  end
+
+  create_table "findings", force: :cascade do |t|
     t.bigint "child_id"
-    t.index ["child_id"], name: "index_contacts_children_on_child_id"
-    t.index ["contact_id"], name: "index_contacts_children_on_contact_id"
+    t.bigint "search_vector_id"
+    t.bigint "user_id"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_findings_on_child_id"
+    t.index ["search_vector_id"], name: "index_findings_on_search_vector_id"
+    t.index ["user_id"], name: "index_findings_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -87,10 +134,12 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
   end
 
   create_table "siblingships", force: :cascade do |t|
-    t.integer "child_id"
-    t.integer "sibling_id"
+    t.bigint "child_id", null: false
+    t.bigint "sibling_id", null: false
     t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
+    t.index ["child_id"], name: "index_siblingships_on_child_id"
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
+    t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -111,15 +160,20 @@ ActiveRecord::Schema.define(version: 2020_11_07_163340) do
     t.string "role", default: "user", null: false
     t.text "ava"
     t.text "phone"
+    t.bigint "organization_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "attachments", "children"
+  add_foreign_key "attachments", "users"
   add_foreign_key "comments", "users"
+  add_foreign_key "findings", "children"
+  add_foreign_key "findings", "search_vectors"
+  add_foreign_key "findings", "users"
+  add_foreign_key "siblingships", "children"
+  add_foreign_key "siblingships", "children", column: "sibling_id"
   add_foreign_key "users", "organizations"
 end

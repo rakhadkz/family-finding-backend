@@ -2,7 +2,7 @@ class Api::V1::CommentsController < ApplicationController
   before_action :authenticate_request!
 
   def show
-    render json: CommentBlueprint.render(comment, root: :data)
+    render json: CommentBlueprint.render(comment, view: view, root: :data)
   end
 
   def create
@@ -23,7 +23,7 @@ class Api::V1::CommentsController < ApplicationController
   private
 
   def comment
-    @comment ||= Comment.find(params[:id])
+    @comment ||= Comment.includes(:attachments, :parent, :replies).find(params[:id])
   end
 
   def comment_params

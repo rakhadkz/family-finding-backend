@@ -1,13 +1,17 @@
-class Api::V1::ChildrenController < ApplicationController
+  class Api::V1::ChildrenController < ApplicationController
+  include Filterable
+  include Searchable
+  include Sortable
+
   before_action :authenticate_request!
 
   def index
     children = Child.all
-    render json: ChildBlueprint.render(@children, root: :data)
+    render json: ChildBlueprint.render(children, view: view, root: :data)
   end
 
   def show
-    render json: ChildBlueprint.render(child, root: :data)
+    render json: ChildBlueprint.render(child, view: view, root: :data)
   end
 
   def create
@@ -32,7 +36,7 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:child).permit(:first_name, :last_name, :birthday)
+    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal)
   end
 
 end

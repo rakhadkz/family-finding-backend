@@ -1,4 +1,5 @@
 class Api::V1::Admin::SearchVectorsController < ApplicationController
+
     before_action :authenticate_request!
     before_action :require_admin
     
@@ -20,7 +21,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
       search_vector.update!(search_vector_params)
       render json: SearchVectorBlueprint.render(search_vector, root: :data)
     end
-  
+
     def destroy
       search_vector.destroy!
       render status: :ok

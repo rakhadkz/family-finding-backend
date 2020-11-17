@@ -1,12 +1,12 @@
 class Api::V1::AttachmentsController < ApplicationController
   before_action :authenticate_request!
 
-  def create
-    attachment = Attachment.create!(attachment_params)
-    render json: AttachmentBlueprint.render(attachment, root: :data)
+  def show
+    render json: AttachmentBlueprint.render(attachment, view: view, root: :data)
   end
 
-  def show
+  def create
+    attachment = Attachment.create!(attachment_params)
     render json: AttachmentBlueprint.render(attachment, root: :data)
   end
 
@@ -28,13 +28,14 @@ class Api::V1::AttachmentsController < ApplicationController
 
   def attachment_params
     params.require(:attachment)
-      .permit(
-        [
-          :child_id,
-          :filename,
-          :filetype,
-          :filelocation
-        ])
+        .permit(
+    [
+            :file_name,
+            :file_type,
+            :file_url,
+            :file_size,
+            :user_id
+          ])
   end
 
 end

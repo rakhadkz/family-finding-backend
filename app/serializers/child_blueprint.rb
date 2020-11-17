@@ -7,7 +7,25 @@ class ChildBlueprint < Blueprinter::Base
          :birthday
 
   view :siblings do
-    association :siblings, blueprint: SiblingshipBlueprint
+    field :siblings do |child|
+      (child.siblings + child.inverse_siblings).as_json
+    end
+  end
+
+  view :attachments do
+    association :attachments,
+                blueprint: AttachmentBlueprint,
+                name: :attachments
+  end
+
+  view :contacts do
+    association :contacts,
+                blueprint: ContactBlueprint,
+                name: :contacts
+  end
+
+  view :extended do
+
   end
 
 end

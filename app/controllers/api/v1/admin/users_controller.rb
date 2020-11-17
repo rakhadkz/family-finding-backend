@@ -4,10 +4,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   include Sortable
 
   before_action :authenticate_request!
-=begin
   before_action :require_admin
-=end
-  #before_action :view, only: [:index]
 
   filterable_by 'users.role'
   sortable_by 'users.first_name', 'users.last_name', 'users.role'
