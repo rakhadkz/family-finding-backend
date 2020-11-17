@@ -7,7 +7,7 @@ class Api::V1::ContactsController < ApplicationController
     end
   
     def show
-      render json: ContactBlueprint.render(contact, view: view, root: :data)
+      render json: ContactBlueprint.render(contact, root: :data)
     end
   
     def create
