@@ -36,7 +36,7 @@ class Api::V1::SuperAdmin::AdminsController < ApplicationController
   end
 
   def destroy
-    @admin.destroy
+    @admin.destroy!
     render status: :ok
   end
 

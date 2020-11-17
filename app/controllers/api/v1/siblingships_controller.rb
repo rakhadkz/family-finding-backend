@@ -19,7 +19,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def destroy
-    @siblingship.destroy
+    @siblingship.destroy!
     head :ok
   end
 

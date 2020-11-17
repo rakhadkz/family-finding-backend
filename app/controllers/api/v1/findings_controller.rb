@@ -18,7 +18,7 @@ class Api::V1::FindingsController < ApplicationController
   end
 
   def destroy
-    @finding.destroy
+    @finding.destroy!
     render status: :ok
   end
 

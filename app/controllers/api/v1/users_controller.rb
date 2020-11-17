@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def destroy
-    @current_user.destroy
+    @current_user.destroy!
     head :ok
   end
 

@@ -33,7 +33,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def destroy
-    @organization.destroy
+    @organization.destroy!
     render status: :ok
   end
 

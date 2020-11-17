@@ -23,7 +23,7 @@ class Api::V1::ChildAttachmentsController < ApplicationController
   end
 
   def destroy
-    @child_attachment.destroy
+    @child_attachment.destroy!
     head :ok
   end
 
