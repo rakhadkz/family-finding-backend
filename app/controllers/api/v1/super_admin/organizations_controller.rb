@@ -18,7 +18,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
 
   def create
     params[:organization].each { |key, value| value.strip! if value.is_a? String }
-    params[:organization][:phone] = TwilioPhone.new(organization_params).call
+    params[:organization][:phone] = TwilioPhone.new(organization_params).format
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
