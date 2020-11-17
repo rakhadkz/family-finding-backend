@@ -16,7 +16,7 @@ class Api::V1::ChildAttachmentsController < ApplicationController
   end
 
   def update
-    child_attachment = ChildAttachment.update!(child_attachment_params)
+    child_attachment.update!(child_attachment_params)
     render json: ChildAttachmentBlueprint.render(child_attachment, root: :data)
   end
 

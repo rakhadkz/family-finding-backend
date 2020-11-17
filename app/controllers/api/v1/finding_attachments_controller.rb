@@ -16,7 +16,7 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   end
 
   def update
-    finding_attachment = FindingAttachment.update!(finding_attachment_params)
+    finding_attachment.update!(finding_attachment_params)
     render json: FindingAttachmentBlueprint.render(finding_attachment, root: :data)
   end
 
