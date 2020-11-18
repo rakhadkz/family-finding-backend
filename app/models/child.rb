@@ -14,4 +14,8 @@ class Child < ApplicationRecord
 
   has_many :inverse_siblingships, :class_name => 'Siblingship', :foreign_key => 'sibling_id'
   has_many :inverse_siblings, :through => :inverse_siblingships, :source => :child
+
+  def all_siblings
+    self.siblings + self.inverse_siblings
+  end
 end

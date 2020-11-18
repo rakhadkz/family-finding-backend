@@ -31,11 +31,10 @@ class Api::V1::CommentAttachmentsController < ApplicationController
   end
 
   def comment_attachment_params
-    params
-        .require(:comment_attachment)
-        .permit([
-                    :comment_id,
-                    :attachment_id
-                ])
+    params.require(:comment_attachment)
+      .permit([
+        :comment_id,
+        :attachment_id
+      ])
   end
 end

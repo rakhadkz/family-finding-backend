@@ -28,14 +28,14 @@ class Api::V1::AttachmentsController < ApplicationController
 
   def attachment_params
     params.require(:attachment)
-        .permit(
-    [
-            :file_name,
-            :file_type,
-            :file_url,
-            :file_size,
-            :user_id
-          ])
+      .permit(
+      [
+        :file_name,
+        :file_type,
+        :file_url,
+        :file_size,
+        :user_id
+      ])
   end
 
 end

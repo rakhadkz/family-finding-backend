@@ -23,7 +23,6 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   def destroy
     finding_attachment.destroy!
     head :ok
-
   end
 
   private
@@ -33,13 +32,11 @@ class Api::V1::FindingAttachmentsController < ApplicationController
   end
 
   def finding_attachment_params
-    params
-        .require(:finding_attachment)
-        .permit([
-                    :finding_id,
-                    :attachment_id
-                ])
+    params.require(:finding_attachment)
+      .permit([
+        :finding_id,
+        :attachment_id
+      ])
   end
-
 
 end

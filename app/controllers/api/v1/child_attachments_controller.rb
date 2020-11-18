@@ -32,11 +32,10 @@ class Api::V1::ChildAttachmentsController < ApplicationController
   end
 
   def child_attachment_params
-    params
-        .require(:child_attachment)
-        .permit([
-                    :child_id,
-                    :attachment_id
-                ])
+    params.require(:child_attachment)
+      .permit([
+        :child_id,
+        :attachment_id
+      ])
   end
 end

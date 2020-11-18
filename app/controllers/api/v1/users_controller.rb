@@ -18,14 +18,13 @@ class Api::V1::UsersController < ApplicationController
   def user_params
     params
       .require(:user)
-      .permit(
-        [
-          :email,
-          :role,
-          :first_name,
-          :last_name,
-          :phone
-        ])
+      .permit([
+        :email,
+        :role,
+        :first_name,
+        :last_name,
+        :phone
+      ])
   end
 
 end

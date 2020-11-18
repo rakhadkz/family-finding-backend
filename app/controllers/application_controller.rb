@@ -64,20 +64,7 @@ class ApplicationController < ActionController::API
   end
 
   def view
-    case params[:view]
-    when 'short'
-      @view ||= :short
-    when 'sidebar_profile'
-      @view = :sidebar_profile
-    when 'attachments'
-      @view = :attachments
-    when 'siblings'
-      @view = :siblings
-    when 'contacts'
-      @view = :contacts
-    else
-      @view ||= :extended
-    end
+    params[:view].to_sym unless params[:view].blank?
   end
 
 end

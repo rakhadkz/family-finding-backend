@@ -1,13 +1,14 @@
 class Api::V1::SuperAdmin::AdminsController < ApplicationController
-  include Filterable
   include Searchable
   include Sortable
 
   before_action :authenticate_request!
   before_action :require_super_admin
 
+  sortable_by 'users.first_name', 'users.last_name'
+
   def index
-    results = sort(search(filter(admins_scope)))
+    results = sort(search(admins_scope))
     admins = results.page(params[:page]).per(per_page)
     render json: UserBlueprint.render(admins, root: :data, view: :extended, meta: page_info(admins))
   end
@@ -49,16 +50,11 @@ class Api::V1::SuperAdmin::AdminsController < ApplicationController
   end
 
   def admins_scope
-    User.filter_by_role('admin')
+    User.filter_by_role(:admin)
   end
 
   def admin
-    @admin ||= User.find(params[:id])
-    if !@admin.role === 'admin'
-      raise ApiException::Unauthorized
-    end
-    @admin
+    @admin ||= User.admin.find(params[:id])
   end
-
 
 end

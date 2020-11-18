@@ -1,6 +1,5 @@
 class SiblingshipBlueprint < Blueprinter::Base
   identifier :id
-
   fields :id, :child_id, :sibling_id
 
   view :extended do
@@ -8,6 +7,5 @@ class SiblingshipBlueprint < Blueprinter::Base
     association :child, blueprint: ChildBlueprint
     association :sibling, blueprint: ChildBlueprint
   end
-
 end
 

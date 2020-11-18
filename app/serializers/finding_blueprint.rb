@@ -1,15 +1,6 @@
 class FindingBlueprint < Blueprinter::Base
   identifier :id
-
-  fields :id,
-         :child_id,
-         :search_vector_id,
-         :user_id,
-         :description
-
-  view :short do
-
-  end
+  fields :id, :child_id, :search_vector_id, :user_id, :description
 
   view :extended do
     excludes :search_vector_id, :user_id, :child_id
@@ -20,8 +11,6 @@ class FindingBlueprint < Blueprinter::Base
   end
 
   view :attachments do
-    association :attachments,
-                blueprint: AttachmentBlueprint,
-                name: :attachments
+    association :attachments, blueprint: AttachmentBlueprint, name: :attachments
   end
 end

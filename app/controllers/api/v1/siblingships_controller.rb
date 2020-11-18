@@ -1,5 +1,4 @@
 class Api::V1::SiblingshipsController < ApplicationController
-
   before_action :authenticate_request!
 
   def index
@@ -28,12 +27,11 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def siblingship_params
-    params
-        .require(:siblingship)
-        .permit([
-                    :child_id,
-                    :sibling_id
-                ])
+    params.require(:siblingship)
+      .permit([
+        :child_id,
+        :sibling_id
+      ])
   end
 
 end

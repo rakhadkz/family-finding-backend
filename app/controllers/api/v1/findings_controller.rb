@@ -21,15 +21,15 @@ class Api::V1::FindingsController < ApplicationController
   end
 
   private
+  
   def finding_params
-    params
-        .require(:finding)
-        .permit([
-                    :child_id,
-                    :search_vector_id,
-                    :user_id,
-                    :description
-                ])
+    params.require(:finding)
+      .permit([
+        :child_id,
+        :search_vector_id,
+        :user_id,
+        :description
+      ])
   end
 
   def finding
