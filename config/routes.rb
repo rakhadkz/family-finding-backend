@@ -18,7 +18,9 @@ Rails.application.routes.draw do
           delete '' => 'users#destroy'
         end
       end
-      
+
+      resources :action_items
+
       resources :attachments
 
       resources :children
