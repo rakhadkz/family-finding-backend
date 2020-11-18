@@ -12,12 +12,12 @@ class Api::V1::ActionItemsController < ApplicationController
 
   def create
     action_item = ActionItem.create!(action_item_params)
-    render json: ActionItem.render(action_item, root: :data)
+    render json: ActionItemBlueprint.render(action_item, root: :data)
   end
 
   def update
     action_item.update!(action_item_params)
-    render json: ActionItem.render(action_item, root: :data)
+    render json: ActionItemBlueprint.render(action_item, root: :data)
   end
 
   def destroy
@@ -28,7 +28,7 @@ class Api::V1::ActionItemsController < ApplicationController
   private
 
   def action_item
-    @action_item ||= ActionItem.include(:user, :child).find(params[:id])
+    @action_item ||= ActionItem.includes(:user, :child).find(params[:id])
   end
 
   def action_item_params

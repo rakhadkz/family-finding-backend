@@ -1,3 +1,5 @@
 class ActionItem < ApplicationRecord
-  enum status: { open: "Open", closed: "Closed"}
+  belongs_to :user
+  belongs_to :child
+  enum status: { Open: "Open", Closed: "Closed"}
 end
