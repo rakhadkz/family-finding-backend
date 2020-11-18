@@ -10,8 +10,7 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def signup
-    params[:user].each { |key, value| value.strip! if value.is_a? String }
-    params[:user][:phone] = TwilioPhone.new(user_params).format
+    params[:user][:phone] = TwilioPhone.format(user_params)
     user = User.create!(user_params)
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end

@@ -15,9 +15,7 @@ class CommentBlueprint < Blueprinter::Base
 
   view :attachments do
     excludes :user_id, :title, :body
-    association :attachments,
-                blueprint: AttachmentBlueprint,
-                name: :attachments
+    association :attachments, blueprint: AttachmentBlueprint, name: :attachments
   end
 
 end

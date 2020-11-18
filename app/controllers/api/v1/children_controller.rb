@@ -1,8 +1,4 @@
-  class Api::V1::ChildrenController < ApplicationController
-  include Filterable
-  include Searchable
-  include Sortable
-
+class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
 
   def index
