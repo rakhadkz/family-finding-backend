@@ -2,6 +2,7 @@ class User < ApplicationRecord
 
   has_many :comments
   has_many :findings
+  has_many :action_items
 
   belongs_to :organization
 
