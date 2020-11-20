@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
       resources :finding_attachments
 
+      resources :user_organizations
+
       namespace :super_admin do
         resources :organizations
         resources :admins

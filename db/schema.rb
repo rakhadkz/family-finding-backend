@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_154221) do
+ActiveRecord::Schema.define(version: 2020_11_20_120843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,15 @@ ActiveRecord::Schema.define(version: 2020_11_19_154221) do
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
   end
 
+  create_table "user_organizations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "organization_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_user_organizations_on_organization_id"
+    t.index ["user_id"], name: "index_user_organizations_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -187,5 +196,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_154221) do
   add_foreign_key "findings", "users"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
+  add_foreign_key "user_organizations", "organizations"
+  add_foreign_key "user_organizations", "users"
   add_foreign_key "users", "organizations"
 end
