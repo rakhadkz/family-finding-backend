@@ -1,6 +1,6 @@
 class UserBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :email, :first_name, :phone, :last_name, :role
+  fields :id, :email, :first_name, :phone, :last_name, :role, :organization_id
 
   view :sidebar_profile do
     excludes :id, :email, :first_name, :phone, :last_name, :role
