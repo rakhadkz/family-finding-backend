@@ -8,7 +8,8 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def show
-    render json: OrganizationBlueprint.render(organization, root: :data)
+    render json: {days_in_system: (Time.now - organization.created_at)/86400, created: organization.created_at}
+    #render json: OrganizationBlueprint.render(organization, root: :data)
   end
 
   def create

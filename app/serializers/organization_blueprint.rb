@@ -1,8 +1,8 @@
 class OrganizationBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :name
+  fields :id, :name, :address, :state, :city, :zip, :phone, :logo, :website
 
-  view :extended do
-    fields :address, :state, :city, :zip, :phone, :logo, :website
+  view :short do
+    excludes :address, :state, :city, :zip, :phone, :logo, :website
   end
 end
