@@ -12,6 +12,9 @@ class Api::V1::AuthController < ApplicationController
   def signup
     params[:user][:phone] = TwilioPhone.format(user_params)
     user = User.create!(user_params)
+    params[:organizations].map do |id|
+      user.user_organizations.create!(organization_id: id)
+    end if params[:organizations]
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end
 
@@ -40,7 +43,6 @@ class Api::V1::AuthController < ApplicationController
         :first_name,
         :last_name,
         :email,
-        :organization_id,
         :phone,
         :role,
         :password,
