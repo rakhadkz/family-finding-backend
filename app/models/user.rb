@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :action_items
 
   has_many :user_organizations
-  has_many :organizations, :through => :user_organizations
+  has_many :organizations, through: :user_organizations
 
   scope :filter_by_role, -> (role) { where role: role}
 
