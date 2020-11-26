@@ -12,6 +12,7 @@ class Api::V1::AuthController < ApplicationController
   def signup
     params[:user][:phone] = TwilioPhone.format(user_params)
     user = User.create!(user_params)
+    user.send_reset_password_instructions
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end
 
