@@ -23,7 +23,7 @@ class Api::V1::CommentsController < ApplicationController
   private
 
   def comment
-    @comment ||= Comment.includes(:attachments, :parent, :replies).find(params[:id])
+    @comment ||= Comment.includes(:attachments, :parent, :replies, :user).find(params[:id])
   end
 
   def comment_params
@@ -32,7 +32,9 @@ class Api::V1::CommentsController < ApplicationController
         [
           :title,
           :body,
-          :in_reply_to
+          :in_reply_to,
+          :child_id,
+          :user_id
         ])
   end
 end

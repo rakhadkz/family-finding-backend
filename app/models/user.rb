@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :user_organizations
   has_many :organizations, through: :user_organizations
 
+  has_many :attachments, dependent: :destroy
+
   scope :filter_by_role, -> (role) { where role: role}
 
   include PgSearch::Model

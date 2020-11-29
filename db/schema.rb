@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_181234) do
+ActiveRecord::Schema.define(version: 2020_11_29_135236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,8 @@ ActiveRecord::Schema.define(version: 2020_11_20_181234) do
     t.bigint "in_reply_to"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_id"
+    t.index ["child_id"], name: "index_comments_on_child_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -191,6 +193,7 @@ ActiveRecord::Schema.define(version: 2020_11_20_181234) do
   end
 
   add_foreign_key "attachments", "users"
+  add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"

@@ -6,4 +6,8 @@ class UserOrganizationBlueprint < Blueprinter::Base
     association :user, blueprint: UserBlueprint
     association :organization, blueprint: OrganizationBlueprint
   end
+
+  view :short do
+    association :organization, blueprint: OrganizationBlueprint, view: :short
+  end
 end

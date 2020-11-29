@@ -7,7 +7,7 @@ class ChildBlueprint < Blueprinter::Base
   end
   
   view :attachments do
-    association :attachments, blueprint: AttachmentBlueprint, name: :attachments
+    association :attachments, blueprint: AttachmentBlueprint, view: :extended,     name: :attachments
   end
 
   view :contacts do
@@ -29,5 +29,10 @@ class ChildBlueprint < Blueprinter::Base
     field :matches do |child|
       child.findings.count
     end
+  end
+
+  view :comments do
+    excludes :birthday, :continuous_search, :first_name, :last_name, :permanency_goal
+    association :comments, blueprint: CommentBlueprint, view: :extended
   end
 end

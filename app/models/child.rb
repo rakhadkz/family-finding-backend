@@ -17,6 +17,8 @@ class Child < ApplicationRecord
 
   has_many :action_items
 
+  has_many :comments
+
   enum continuous_search: { Yes: "Yes", No: "No"}
 
   def all_siblings
