@@ -11,7 +11,8 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :contacts do
-    association :contacts, blueprint: ContactBlueprint, name: :contacts
+    excludes :first_name, :last_name, :birthday, :permanency_goal, :continuous_search
+    association :child_contacts, blueprint: ChildContactBlueprint, view: :extended, name: :contacts
   end
 
   view :table do

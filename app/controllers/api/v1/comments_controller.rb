@@ -33,8 +33,7 @@ class Api::V1::CommentsController < ApplicationController
           :title,
           :body,
           :in_reply_to,
-          :child_id,
-          :user_id
+          :child_id
         ])
   end
 end
