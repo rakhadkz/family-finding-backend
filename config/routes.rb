@@ -18,7 +18,9 @@ Rails.application.routes.draw do
           delete '' => 'users#destroy'
         end
       end
-      
+
+      resources :action_items
+
       resources :attachments
 
       resources :children
@@ -38,6 +40,8 @@ Rails.application.routes.draw do
       resources :findings
 
       resources :finding_attachments
+
+      resources :user_organizations
 
       namespace :super_admin do
         resources :organizations

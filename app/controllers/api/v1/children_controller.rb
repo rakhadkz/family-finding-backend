@@ -28,7 +28,7 @@ class Api::V1::ChildrenController < ApplicationController
   private
 
   def child
-    @child ||= Child.find(params[:id])
+    @child ||= Child.includes(:child_contacts, :contacts).find(params[:id])
   end
 
   def child_params
