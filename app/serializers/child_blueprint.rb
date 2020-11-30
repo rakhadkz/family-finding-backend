@@ -7,11 +7,11 @@ class ChildBlueprint < Blueprinter::Base
   end
   
   view :attachments do
-    association :attachments, blueprint: AttachmentBlueprint, view: :extended,     name: :attachments
+    association :attachments, blueprint: AttachmentBlueprint, view: :extended, name: :attachments
   end
 
   view :contacts do
-    excludes :first_name, :last_name, :birthday, :permanency_goal, :continuous_search
+
     association :child_contacts, blueprint: ChildContactBlueprint, view: :extended, name: :contacts
   end
 
@@ -33,7 +33,25 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :comments do
-    excludes :birthday, :continuous_search, :first_name, :last_name, :permanency_goal
+
     association :comments, blueprint: CommentBlueprint, view: :extended
+  end
+
+  view :extended do
+    include_view :contacts
+    include_view :comments
+    include_view :attachments
+    field :birthday do
+      "14/10/2001"
+    end
+    field :gender do
+      "Male"
+    end
+    field :race do
+      "White"
+    end
+    field :system_status do
+      "In searching"
+    end
   end
 end
