@@ -1,17 +1,13 @@
 class CreateSiblingships < ActiveRecord::Migration[6.0]
-  def self.up
+  def change
     create_table :siblingships do |t|
-      t.integer :child_id
-      t.integer :sibling_id
+      t.references :child, null: false,  foreign_key: { to_table: :children }
+      t.references :sibling, null: false, foreign_key: { to_table: :children }
+
+      t.timestamps
     end
 
     add_index(:siblingships, [:child_id, :sibling_id], :unique => true)
     add_index(:siblingships, [:sibling_id, :child_id], :unique => true)
-  end
-
-  def self.down
-    remove_index(:siblingships, [:sibling_id, :child_id])
-    remove_index(:siblingships, [:child_id, :sibling_id])
-    drop_table :siblingships
   end
 end

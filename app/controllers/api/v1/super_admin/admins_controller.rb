@@ -1,70 +1,60 @@
 class Api::V1::SuperAdmin::AdminsController < ApplicationController
-
-  include Filterable
   include Searchable
   include Sortable
 
   before_action :authenticate_request!
   before_action :require_super_admin
-  before_action :load_admin, only: %i[
-    show
-    update
-    destroy
-  ]
 
+  sortable_by 'users.first_name', 'users.last_name'
 
   def index
-    results = sort(search(filter(admins_scope)))
+    results = sort(search(admins_scope))
     admins = results.page(params[:page]).per(per_page)
-    render json: UserBlueprint.render(admins, root: :data, meta: page_info(admins))
+    render json: UserBlueprint.render(admins, root: :data, view: :extended, meta: page_info(admins))
   end
 
   def create
     admin = User.create!(admin_params)
     admin.role = 'admin'
-    if organization_admin.save
-      render json: UserBlueprint.render(admin, root: :data)
-    else
-      render json: organization_admin.errors, status: :unprocessable_entity
-    end
+    admin.save!
+    render json: UserBlueprint.render(admin, root: :data)
   end
 
   def update
-    @admin.update(admin_params)
-    render json: UserBlueprint.render(@admin, root: :data)
+    admin.update!(admin_params)
+    render json: UserBlueprint.render(admin, root: :data, view: :extended)
   end
 
   def show
-    render json: UserBlueprint.render(@admin, root: :data)
+    render json: UserBlueprint.render(admin, root: :data, view: :extended)
   end
 
   def destroy
-    @admin.destroy
-    render status: :ok
+    admin.destroy!
+    head :ok
   end
+
+  private
 
   def admin_params
     params.require(:admin)
-        .permit([
-                    :email,
-                    :first_name,
-                    :last_name,
-                    :organization_id,
-                    :role,
-                    :phone
-                ])
+      .permit(
+        [
+          :email,
+          :first_name,
+          :last_name,
+          :organization_id,
+          :role,
+          :phone
+        ])
   end
 
   def admins_scope
-    User.filter_by_role('admin')
+    User.filter_by_role(:admin)
   end
 
-  def load_admin
-    @admin = User.find(params[:id])
-    if !@admin.role === 'admin'
-      raise ApiException::Unauthorized
-    end
+  def admin
+    @admin ||= User.admin.find(params[:id])
   end
-
 
 end

@@ -63,19 +63,8 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def set_view
-    case params[:view]
-    when 'short'
-      @view = :short
-    when 'sidebar_profile'
-      @view = :sidebar_profile
-    else
-      @view = :extended
-    end
-  end
-
-  def twilio_client
-    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
+  def view
+    params[:view].to_sym unless params[:view].blank?
   end
 
 end

@@ -1,58 +1,38 @@
 class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
-  before_action :require_user
 
-  before_action :set_child, only: [:show, :update, :destroy]
-
-  # GET /children
   def index
-    @children = Child.all
-    render json: ChildBlueprint.render(@children, root: :data)
+    children = Child.all
+    render json: ChildBlueprint.render(children, view: view, root: :data)
   end
 
-  # GET /children/1
   def show
-    # render json: ChildBlueprint.render(@child, root: :data)
-    render json: {
-        data: {
-            child: @child,
-            siblings: @child.siblings + @child.inverse_siblings
-        }
-    }
+    render json: ChildBlueprint.render(child, view: view, root: :data)
   end
 
-  # POST /children
   def create
-    @child = Child.new(child_params)
-
-    if @child.save
-      render json: ChildBlueprint.render(@child, root: :data), status: :created
-    else
-      render json: @child.errors, status: :unprocessable_entity
-    end
+    child = Child.create!(child_params)
+    render json: ChildBlueprint.render(child, root: :data)
   end
 
-  # PATCH/PUT /children/1
   def update
-    if @child.update(child_params)
-      render json: ChildBlueprint.render(@child, root: :data)
-    else
-      render json: @child.errors, status: :unprocessable_entity
-    end
+    child.update!(child_params)
+    render json: ChildBlueprint.render(child, root: :data)
   end
 
-  # DELETE /children/1
   def destroy
-    @child.destroy
+    child.destroy!
+    head :ok
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_child
-      @child = Child.find(params[:id])
-    end
-    # Only allow a trusted parameter "white list" through.
-    def child_params
-      params.require(:child).permit(:first_name, :last_name, :birthday)
-    end
+
+  def child
+    @child ||= Child.includes(:child_contacts, :contacts).find(params[:id])
+  end
+
+  def child_params
+    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal)
+  end
+
 end

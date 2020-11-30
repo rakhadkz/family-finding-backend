@@ -19,19 +19,29 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :action_items
+
+      resources :attachments
+
       resources :children
 
-      resources :siblings do
-        collection do
-          post 'my' => 'siblings#get_siblings'
-          post '' => 'siblings#create'
-          delete ':id' => 'siblings#delete'
-        end
-      end
+      resources :child_attachments
+
+      resources :child_contacts
+
+      resources :siblingships
 
       resources :contacts
       
       resources :comments
+
+      resources :comment_attachments
+
+      resources :findings
+
+      resources :finding_attachments
+
+      resources :user_organizations
 
       namespace :super_admin do
         resources :organizations
@@ -42,6 +52,8 @@ Rails.application.routes.draw do
         resources :users
         resources :search_vectors
       end
+
+      devise_for :users
 
     end
   end
