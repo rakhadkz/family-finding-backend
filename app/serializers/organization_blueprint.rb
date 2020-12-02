@@ -5,4 +5,6 @@ class OrganizationBlueprint < Blueprinter::Base
   view :short do
     excludes :address, :state, :city, :zip, :phone, :logo, :website
   end
+
+  association :users, blueprint: UserBlueprint
 end
