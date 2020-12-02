@@ -15,6 +15,7 @@ class Api::V1::AuthController < ApplicationController
     params[:organizations].map do |organization|
       user.user_organizations.create!(organization_id: organization[:id], role: organization[:role])
     end if params[:organizations]
+    user.send_reset_password_instructions
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end
 
