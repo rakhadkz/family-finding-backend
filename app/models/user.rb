@@ -1,10 +1,10 @@
 class User < ApplicationRecord
 
-  has_many :comments
-  has_many :findings
-  has_many :action_items
+  has_many :comments, dependent: :destroy
+  has_many :findings, dependent: :destroy
+  has_many :action_items, dependent: :destroy
 
-  has_many :user_organizations
+  has_many :user_organizations, dependent: :destroy
   has_many :organizations, through: :user_organizations
 
   has_many :attachments, dependent: :destroy
