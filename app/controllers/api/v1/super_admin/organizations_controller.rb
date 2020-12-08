@@ -1,10 +1,15 @@
 class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
+  include Filterable
+  include Searchablew
+  include Sortable
+
   before_action :authenticate_request!
   before_action :require_super_admin
 
   def index
-    organizations = Organization.all
-    render json: OrganizationBlueprint.render(organizations, view: view, root: :data)
+    results = sort(search(filter(Organization.all)))
+    organizations = results.page(params[:page]).per(per_page)
+    render json: OrganizationBlueprint.render(organizations, root: :data, view: view, meta: page_info(organizations))
   end
 
   def show
@@ -12,7 +17,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def create
-    params[:organization][:phone] = TwilioPhone.format(organization_params)
+    params[:organization][:phone] = TwilioPhone.format(organization_params) if params[:organization][:phone]
     organization = Organization.create!(organization_params)
     render json: OrganizationBlueprint.render(organization, root: :data)
   end
