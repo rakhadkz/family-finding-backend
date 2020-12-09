@@ -1,6 +1,6 @@
 class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   include Filterable
-  include Searchablew
+  include Searchable
   include Sortable
 
   before_action :authenticate_request!
