@@ -1,9 +1,14 @@
 class Api::V1::ActionItemsController < ApplicationController
+  include Filterable
+  include Searchable
+  include Sortable
+
   before_action :authenticate_request!
 
   def index
-    action_items = ActionItem.all
-    render json: ActionItemBlueprint.render(action_items, view: view, root: :data)
+    results = sort(search(filter(ActionItem.all)))
+    action_items = results.page(params[:page]).per(per_page)
+    render json: ActionItemBlueprint.render(action_items, root: :data, view: view, meta: page_info(action_items))
   end
 
   def show
