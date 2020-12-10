@@ -29,7 +29,8 @@ class Api::V1::ChildContactsController < ApplicationController
     params.require(:child_contact)
       .permit([
         :child_id,
-        :contact_id
+        :contact_id,
+        :relationship
       ])
   end
 
