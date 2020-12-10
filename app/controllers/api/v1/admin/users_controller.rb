@@ -12,7 +12,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   def index
     results = sort(search(filter(users_scope)))
     users = results.page(params[:page]).per(per_page)
-    render json: UserBlueprint.render(users, root: :data, view: view, meta: page_info(users))
+    render json: UserBlueprint.render(users, root: :data, view: view, organization_id: organization, meta: page_info(users))
   end
 
   def create
@@ -37,7 +37,21 @@ class Api::V1::Admin::UsersController < ApplicationController
   private
 
   def users_scope
-    User.all
+    if role == "super_admin"
+      User.all
+    elsif role == "admin"
+      Organization.find(organization).users
+    else
+      nil
+    end
+  end
+
+  def organization
+    UserOrganization.filter_by_user_id(@current_user.id).first.organization_id if role == "admin"
+  end
+
+  def role
+    UserOrganization.filter_by_user_id(@current_user).first.role
   end
 
   def user
