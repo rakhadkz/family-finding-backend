@@ -30,7 +30,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def destroy
-    user.destroy!
+    delete_user
     head :ok
   end
 
@@ -41,6 +41,16 @@ class Api::V1::Admin::UsersController < ApplicationController
       User.all
     elsif role == "admin"
       Organization.find(organization).users
+    else
+      nil
+    end
+  end
+
+  def delete_user
+    if role == "super_admin"
+      user.user_organizations.destroy_all
+    elsif role == "admin"
+      user.user_organizations.find_by(organization_id: organization).destroy!
     else
       nil
     end
