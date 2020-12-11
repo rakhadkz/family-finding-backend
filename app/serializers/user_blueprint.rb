@@ -11,7 +11,7 @@ class UserBlueprint < Blueprinter::Base
   end
 
   view :extended do
-    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short do |user, options|
+    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: [] do |user, options|
       if options[:organization_id]
         user.user_organizations.filter_by_organization_id(options[:organization_id]).order(id: :asc)
       else

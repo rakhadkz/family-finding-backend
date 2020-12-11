@@ -47,11 +47,11 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def organization
-    UserOrganization.filter_by_user_id(@current_user.id).first.organization_id if role == "admin"
+    UserOrganization.filter_by_user_id(@current_user.id).first!.organization_id if role == "admin"
   end
 
   def role
-    UserOrganization.filter_by_user_id(@current_user).first.role
+    UserOrganization.filter_by_user_id(@current_user).first!.role
   end
 
   def user
