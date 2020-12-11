@@ -30,7 +30,8 @@ class Api::V1::ChildContactsController < ApplicationController
       .permit([
         :child_id,
         :contact_id,
-        :relationship
+        :relationship,
+        :parent_id
       ])
   end
 
