@@ -11,7 +11,6 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :contacts do
-
     association :child_contacts, blueprint: ChildContactBlueprint, view: :extended, name: :contacts
   end
 
