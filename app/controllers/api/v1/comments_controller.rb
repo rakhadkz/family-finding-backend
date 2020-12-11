@@ -7,6 +7,7 @@ class Api::V1::CommentsController < ApplicationController
 
   def create
     comment = @current_user.comments.create!(comment_params)
+    UserMailer.comment_reply(comment).deliver unless comment.in_reply_to.blank? || comment.child_id.blank? || comment.in_reply_to==0
     render json: CommentBlueprint.render(comment, root: :data)
   end
 
