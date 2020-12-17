@@ -35,13 +35,13 @@ class Api::V1::CommentsController < ApplicationController
       ) unless replied_comment.user_id == @current_user.id
     end
     if comment.mentions.present?
-      mentions.each do |id|
+      comment.mentions.each do |id|
         ActionItem.create!(
           user_id: id, 
           child_id: comment.child_id, 
           description: comment.body,
           title: "New Comment"
-        )
+        ) 
       end
     end
   end
