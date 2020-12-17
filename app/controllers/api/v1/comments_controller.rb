@@ -25,7 +25,7 @@ class Api::V1::CommentsController < ApplicationController
   def sendMentionEmails(comment)
     UserMailer.comment_reply(comment).deliver_later unless comment.in_reply_to.blank? || comment.child_id.blank? || comment.in_reply_to==0
     UserMailer.comment_mentions(comment) if comment.mentions.present?
-    if(comment.in_reply_to.present?)
+    if(comment.in_reply_to.present? && comment.in_reply_to != 0)
       replied_comment = Comment.find_by_id(comment.in_reply_to)
       ActionItem.create!(
         user_id: replied_comment.user_id, 
