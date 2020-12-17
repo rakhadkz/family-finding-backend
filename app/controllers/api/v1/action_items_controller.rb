@@ -6,12 +6,14 @@ class Api::V1::ActionItemsController < ApplicationController
   before_action :authenticate_request!
 
   def index
-    results = sort(search(filter(ActionItem.all)))
+    results = sort(search(filter(@current_user.action_items.active)))
     action_items = results.page(params[:page]).per(per_page)
     render json: ActionItemBlueprint.render(action_items, root: :data, view: view, meta: page_info(action_items))
   end
 
   def show
+    user = User.find_by_id(params[:user_id])
+    action_item = user.action_items.active.find_by_id(params[:id])
     render json: ActionItemBlueprint.render(action_item, view: view, root: :data)
   end
 
@@ -26,8 +28,8 @@ class Api::V1::ActionItemsController < ApplicationController
   end
 
   def destroy
-    action_item.destroy!
-    head :ok
+    action_item.update!(date_removed: DateTime.current) 
+    render json: { message: "removed" }, status: :ok
   end
 
   private
@@ -43,8 +45,6 @@ class Api::V1::ActionItemsController < ApplicationController
       [
         :title,
         :description,
-        :priority_level,
-        :status,
         :user_id,
         :child_id
       ])
