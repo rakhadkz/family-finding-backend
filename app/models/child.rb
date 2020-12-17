@@ -29,6 +29,16 @@ class Child < ApplicationRecord
     "Another Planned Permanent Living Arrangement (APPLA)": "appla"
   }
 
+  include PgSearch::Model
+
+  pg_search_scope :search,
+                  against: [
+                    :first_name, :last_name
+                  ],
+                  using: {
+                    tsearch: {prefix: true}
+                  }
+
   def all_siblings
     self.siblings + self.inverse_siblings
   end
