@@ -3,7 +3,7 @@ class Api::V1::ContactsController < ApplicationController
 
   def index
     contacts = Contact.all
-    render json: ContactBlueprint.render(contacts)
+    render json: ContactBlueprint.render(contacts, view: view, root: :data)
   end
 
   def show
@@ -43,7 +43,8 @@ class Api::V1::ContactsController < ApplicationController
         :state,
         :zip,
         :email,
-        :phone
+        :phone,
+        :parent_id
       ])
   end
   

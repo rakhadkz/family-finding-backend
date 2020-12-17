@@ -45,6 +45,7 @@ class Api::V1::AuthController < ApplicationController
         :last_name,
         :email,
         :phone,
+        :organization_id,
         :role,
         :password,
         :password_confirmation

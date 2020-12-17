@@ -1,9 +1,14 @@
 class Api::V1::ChildrenController < ApplicationController
+  include Filterable
+  include Searchable
+  include Sortable
+
   before_action :authenticate_request!
 
   def index
-    children = Child.all
-    render json: ChildBlueprint.render(children, view: view, root: :data)
+    results = sort(search(filter(Child.all)))
+    children = results.page(params[:page]).per(per_page)
+    render json: ChildBlueprint.render(children, root: :data, view: view, meta: page_info(children))
   end
 
   def show

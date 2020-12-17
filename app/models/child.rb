@@ -21,6 +21,14 @@ class Child < ApplicationRecord
 
   enum continuous_search: { Yes: "Yes", No: "No"}
 
+  enum permanency_goal: {
+    "Return to Parent(s) (Reunification)": "return_to_parent",
+    "Adoption": "adoption",
+    "Permanent Legal Custody (PLC)": "permanent_legal_custody",
+    "Permanent Placement with a Fit and Willing Relative": "permanent_placement",
+    "Another Planned Permanent Living Arrangement (APPLA)": "appla"
+  }
+
   def all_siblings
     self.siblings + self.inverse_siblings
   end

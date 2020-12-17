@@ -1,6 +1,6 @@
 class CommentBlueprint < Blueprinter::Base
   identifier :id
-  fields :user_id, :title, :body, :created_at, :updated_at, :child_id
+  fields :user_id, :title, :body, :created_at, :updated_at, :child_id, :mentions
 
   view :extended do
     association :parent, blueprint:  CommentBlueprint, name: :in_reply_to

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_150630) do
+ActiveRecord::Schema.define(version: 2020_12_17_125856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,11 @@ ActiveRecord::Schema.define(version: 2020_11_30_150630) do
   create_table "action_items", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.integer "priority_level", default: 1
-    t.string "status", default: "Open"
     t.bigint "user_id"
     t.bigint "child_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_removed"
     t.index ["child_id"], name: "index_action_items_on_child_id"
     t.index ["user_id"], name: "index_action_items_on_user_id"
   end
@@ -55,6 +54,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_150630) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "relationship"
+    t.bigint "parent_id"
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_150630) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "child_id"
+    t.integer "mentions", default: [], array: true
     t.index ["child_id"], name: "index_comments_on_child_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -108,6 +109,7 @@ ActiveRecord::Schema.define(version: 2020_11_30_150630) do
     t.string "zip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "parent_id"
   end
 
   create_table "finding_attachments", force: :cascade do |t|
@@ -156,8 +158,12 @@ ActiveRecord::Schema.define(version: 2020_11_30_150630) do
   create_table "siblingships", force: :cascade do |t|
     t.bigint "child_id", null: false
     t.bigint "sibling_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
+    t.index ["child_id"], name: "index_siblingships_on_child_id"
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
+    t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
   end
 
   create_table "user_organizations", force: :cascade do |t|

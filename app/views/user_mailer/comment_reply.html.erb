@@ -1,0 +1,4 @@
+<p> Dear <%= @user_replied_to.first_name.capitalize%> <%= @user_replied_to.last_name.capitalize %>, </p>
+<p> Someone has replied to your comment </p>
+<i><%= @comment.body %></i>
+<p><%= link_to 'See comment thread', "#{ENV['CLIENT_URL']}/children/#{@comment.child_id}#comments" %></p>
