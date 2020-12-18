@@ -37,7 +37,7 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal)
+    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search)
   end
 
 end

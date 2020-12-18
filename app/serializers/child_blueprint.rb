@@ -22,6 +22,7 @@ class ChildBlueprint < Blueprinter::Base
     field :days_in_system do |child|
       ((Time.now - child.created_at) / 86400).to_i
     end
+    field :continuous_search, default: "ON"
     field :permanency_goal, default: "Return To Parent"
     field :relatives do |child|
       child.contacts.count

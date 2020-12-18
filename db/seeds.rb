@@ -12,6 +12,7 @@
 end
 
 
+
 20.times do
   Child.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
 end
@@ -26,21 +27,24 @@ end
   random_user_id = User.find(User.pluck(:id).sample).id
   Finding.create!(child_id: random_child_id, search_vector_id: random_search_vector_id, user_id: random_user_id)
 end
-=end
+# =end
+#
+#
+# 20.times do
+#   ava = [
+#     "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png",
+#     "https://www.himalmag.com/wp-content/uploads/2019/07/sample-profile-picture.png",
+#     "https://www.rottmair.de/profiles/Sebastian_Rottmair.jpg",
+#     "https://www.beautycastnetwork.com/images/banner-profile_pic.jpg",
+#     "https://www.templatebeats.com/files/images/profile_user.jpg",
+#     "https://www.renewablecities.ca/rc-wp/wp-content/uploads/Scott-Sinclair.jpg"
+#   ].sample
+#   User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.cell_phone_in_e164, ava: ava)
+# end
 
-20.times do
-  ava = [
-    "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png",
-    "https://www.himalmag.com/wp-content/uploads/2019/07/sample-profile-picture.png",
-    "https://www.rottmair.de/profiles/Sebastian_Rottmair.jpg",
-    "https://www.beautycastnetwork.com/images/banner-profile_pic.jpg",
-    "https://www.templatebeats.com/files/images/profile_user.jpg",
-    "https://www.renewablecities.ca/rc-wp/wp-content/uploads/Scott-Sinclair.jpg"
-  ].sample
-  User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.cell_phone_in_e164, ava: ava)
-end
 
 =begin
 10.times do
   Contact.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
 end=end
+
