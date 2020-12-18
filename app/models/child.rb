@@ -19,7 +19,7 @@ class Child < ApplicationRecord
 
   has_many :comments
 
-  enum continuous_search: { Yes: "Yes", No: "No"}
+  enum continuous_search: { ON: "on", OFF: "off"}
 
   enum permanency_goal: {
     "Return to Parent(s) (Reunification)": "return_to_parent",
