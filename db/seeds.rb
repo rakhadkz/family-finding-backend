@@ -46,5 +46,18 @@ end
 =begin
 10.times do
   Contact.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name)
-end=end
+end
+=end
 
+# 20.times do |i|
+#   ava = [
+#         "https://vengreso.com/wp-content/uploads/2016/03/LinkedIn-Profile-Professional-Picture-Sample-Bernie-Borges.png",
+#         "https://www.himalmag.com/wp-content/uploads/2019/07/sample-profile-picture.png",
+#         "https://www.rottmair.de/profiles/Sebastian_Rottmair.jpg",
+#         "https://www.beautycastnetwork.com/images/banner-profile_pic.jpg",
+#         "https://www.templatebeats.com/files/images/profile_user.jpg",
+#         "https://www.renewablecities.ca/rc-wp/wp-content/uploads/Scott-Sinclair.jpg"
+#       ].sample
+#   user = User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.cell_phone_in_e164, ava: ava)
+#   user.user_organizations.create!(organization_id: i + 1, role: "user")
+# end

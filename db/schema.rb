@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_17_125856) do
+ActiveRecord::Schema.define(version: 2020_12_21_112753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,7 +23,10 @@ ActiveRecord::Schema.define(version: 2020_12_17_125856) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "date_removed"
+    t.bigint "organization_id"
+    t.bigint "related_user_id"
     t.index ["child_id"], name: "index_action_items_on_child_id"
+    t.index ["organization_id"], name: "index_action_items_on_organization_id"
     t.index ["user_id"], name: "index_action_items_on_user_id"
   end
 
@@ -158,12 +161,19 @@ ActiveRecord::Schema.define(version: 2020_12_17_125856) do
   create_table "siblingships", force: :cascade do |t|
     t.bigint "child_id", null: false
     t.bigint "sibling_id", null: false
+    t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
+    t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
+  end
+
+  create_table "user_children", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "child_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
-    t.index ["child_id"], name: "index_siblingships_on_child_id"
-    t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
-    t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
+    t.datetime "date_approved"
+    t.datetime "date_denied"
+    t.index ["child_id"], name: "index_user_children_on_child_id"
+    t.index ["user_id"], name: "index_user_children_on_user_id"
   end
 
   create_table "user_organizations", force: :cascade do |t|
@@ -202,6 +212,7 @@ ActiveRecord::Schema.define(version: 2020_12_17_125856) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "action_items", "organizations"
   add_foreign_key "attachments", "users"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
@@ -210,6 +221,8 @@ ActiveRecord::Schema.define(version: 2020_12_17_125856) do
   add_foreign_key "findings", "users"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
+  add_foreign_key "user_children", "children"
+  add_foreign_key "user_children", "users"
   add_foreign_key "user_organizations", "organizations"
   add_foreign_key "user_organizations", "users"
   add_foreign_key "users", "organizations"

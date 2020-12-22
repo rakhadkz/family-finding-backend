@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
       resources :siblingships
 
+      resources :user_children
+
       resources :contacts
       
       resources :comments
