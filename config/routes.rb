@@ -31,6 +31,14 @@ Rails.application.routes.draw do
 
       resources :siblingships
 
+      resources :user_children do
+        collection do
+          get '' => 'user_children#index'
+          post '' => 'user_children#create'
+          put '' => 'user_children#update'
+        end
+      end
+
       resources :contacts
       
       resources :comments

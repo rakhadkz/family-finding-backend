@@ -8,11 +8,11 @@ class Api::V1::ChildrenController < ApplicationController
   def index
     results = sort(search(filter(Child.all)))
     children = results.page(params[:page]).per(per_page)
-    render json: ChildBlueprint.render(children, root: :data, view: view, meta: page_info(children))
+    render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: page_info(children))
   end
 
   def show
-    render json: ChildBlueprint.render(child, view: view, root: :data)
+    render json: ChildBlueprint.render(child, view: view, user: @current_user, root: :data)
   end
 
   def create
@@ -33,11 +33,10 @@ class Api::V1::ChildrenController < ApplicationController
   private
 
   def child
-    @child ||= Child.includes(:child_contacts, :contacts).find(params[:id])
+    @child ||= @current_user.role === 'user' ? @current_user.children.find_by(id: params[:id]) : Child.includes(:child_contacts, :contacts).find(params[:id])
   end
 
   def child_params
     params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search)
   end
-
 end
