@@ -48,7 +48,8 @@ class Api::V1::ActionItemsController < ApplicationController
         :user_id,
         :child_id,
         :organization_id,
-        :related_user_id
+        :related_user_id,
+        :action_type
       ])
   end
 
