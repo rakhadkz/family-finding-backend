@@ -58,7 +58,7 @@ class User < ApplicationRecord
   end
 
   def action_items
-    organization_id.present? ?
+    organization_id.present? && role != 'user' ?
       ActionItem.where(organization_id: organization_id).or(ActionItem.where(user_id: id))
       : super
   end
