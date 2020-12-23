@@ -35,7 +35,7 @@ class Api::V1::CommentsController < ApplicationController
         user_id: replied_comment.user_id, 
         child_id: comment.child_id, 
         description: comment.body,
-        title: "New Comment"
+        title: "New comment"
       ) unless replied_comment.user_id == @current_user.id
     end
     if comment.mentions.present?
@@ -44,7 +44,7 @@ class Api::V1::CommentsController < ApplicationController
           user_id: id, 
           child_id: comment.child_id, 
           description: comment.body,
-          title: "New Comment"
+          title: "Someone has mentioned you in a comment"
         ) 
       end
     end

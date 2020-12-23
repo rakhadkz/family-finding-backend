@@ -15,7 +15,7 @@ class Api::V1::AuthController < ApplicationController
     params[:organizations].map do |organization|
       user.user_organizations.create!(organization_id: organization[:id], role: organization[:role])
     end if params[:organizations]
-    user.send_reset_password_instructions
+    send_create_password_instructions(user)
     render json: UserBlueprint.render(user, view: :auth, root: :data)
   end
 
@@ -33,6 +33,16 @@ class Api::V1::AuthController < ApplicationController
       password_confirmation: params[:password]
     )
     render json: UserBlueprint.render(user, root: :data)
+  end
+
+  def send_create_password_instructions(user)
+    raw, hashed = Devise.token_generator.generate(User, :reset_password_token)
+    user.reset_password_token = hashed
+    user.reset_password_sent_at = Time.now.utc
+    user.save
+    current_user ||= User.find(auth_token[:user_id])
+    organization = user.organizations[0].name unless user.organizations.blank?
+    UserMailer.send_create_password(user, raw, current_user, organization).deliver_later 
   end
 
   private
