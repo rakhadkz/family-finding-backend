@@ -33,11 +33,10 @@ class Api::V1::ChildrenController < ApplicationController
   private
 
   def child
-    @child ||= Child.includes(:child_contacts, :contacts).find(params[:id])
+    @child ||= @current_user.role === 'user' ? @current_user.children.find_by(id: params[:id]) : Child.includes(:child_contacts, :contacts).find(params[:id])
   end
 
   def child_params
     params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search)
   end
-
 end
