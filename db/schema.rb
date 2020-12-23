@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_131650) do
+ActiveRecord::Schema.define(version: 2020_12_23_190753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,17 @@ ActiveRecord::Schema.define(version: 2020_12_23_131650) do
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
+  end
+
+  create_table "child_tree_contacts", force: :cascade do |t|
+    t.bigint "child_id"
+    t.bigint "contact_id"
+    t.string "relationship"
+    t.bigint "parent_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_child_tree_contacts_on_child_id"
+    t.index ["contact_id"], name: "index_child_tree_contacts_on_contact_id"
   end
 
   create_table "children", force: :cascade do |t|
