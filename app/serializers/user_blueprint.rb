@@ -12,10 +12,10 @@ class UserBlueprint < Blueprinter::Base
 
   view :extended do
     association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: [] do |user, options|
-      if options[:organization_id]
-        user.user_organizations.filter_by_organization_id(options[:organization_id]).order(id: :asc)
+      if %w[user admin manager].include? options[:user].role
+        user.user_organizations.filter_by_organization_id(options[:user].organization_id)
       else
-        user.user_organizations.order(id: :asc)
+        user.user_organizations
       end
     end
   end

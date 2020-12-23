@@ -14,6 +14,16 @@ class ChildBlueprint < Blueprinter::Base
     association :child_contacts, blueprint: ChildContactBlueprint, view: :extended, name: :contacts
   end
 
+  view :not_child_users do
+    association :users, blueprint: UserBlueprint, name: :not_child_users do |child, options|
+      options[:user].organization_users(:user) - child.users
+    end
+  end
+
+  view :child_users do
+    association :users, blueprint: UserBlueprint, name: :child_users
+  end
+
   view :table do
     excludes :first_name, :last_name
     field :full_name do |child|
@@ -22,12 +32,16 @@ class ChildBlueprint < Blueprinter::Base
     field :days_in_system do |child|
       ((Time.now - child.created_at) / 86400).to_i
     end
+    field :continuous_search, default: "ON"
     field :permanency_goal, default: "Return To Parent"
     field :relatives do |child|
       child.contacts.count
     end
     field :matches do |child|
       child.findings.count
+    end
+    field :user_request do |child, options|
+      UserChild.find_by(user_id: options[:user].id, child_id: child.id).as_json
     end
   end
 
@@ -52,5 +66,10 @@ class ChildBlueprint < Blueprinter::Base
     field :system_status do
       "In searching"
     end
+  end
+
+  view :users do
+    include_view :not_child_users
+    include_view :child_users
   end
 end

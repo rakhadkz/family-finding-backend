@@ -17,9 +17,12 @@ class Child < ApplicationRecord
 
   has_many :action_items
 
+  has_many :user_children, dependent: :destroy
+  has_many :users, -> { where.not(user_children: {date_approved: nil})}, through: :user_children
+
   has_many :comments
 
-  enum continuous_search: { Yes: "Yes", No: "No"}
+  enum continuous_search: { ON: "on", OFF: "off"}
 
   enum permanency_goal: {
     "Return to Parent(s) (Reunification)": "return_to_parent",

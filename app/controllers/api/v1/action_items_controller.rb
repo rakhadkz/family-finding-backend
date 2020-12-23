@@ -13,7 +13,7 @@ class Api::V1::ActionItemsController < ApplicationController
 
   def show
     user = User.find_by_id(params[:user_id])
-    action_item = user.action_items.active.find_by_id(params[:id])
+    action_item = user.action_items.active.find(params[:id])
     render json: ActionItemBlueprint.render(action_item, view: view, root: :data)
   end
 
@@ -46,7 +46,10 @@ class Api::V1::ActionItemsController < ApplicationController
         :title,
         :description,
         :user_id,
-        :child_id
+        :child_id,
+        :organization_id,
+        :related_user_id,
+        :action_type
       ])
   end
 

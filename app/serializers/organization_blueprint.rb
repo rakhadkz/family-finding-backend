@@ -6,5 +6,7 @@ class OrganizationBlueprint < Blueprinter::Base
     excludes :address, :state, :city, :zip, :phone, :logo, :website
   end
 
-  association :users, blueprint: UserBlueprint
+  view :extended do
+    association :users, blueprint: UserBlueprint
+  end
 end

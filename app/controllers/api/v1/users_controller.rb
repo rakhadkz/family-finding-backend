@@ -2,7 +2,7 @@ class Api::V1::UsersController < ApplicationController
   before_action :authenticate_request!
 
   def show
-    render json: UserBlueprint.render(@current_user, view: view, root: :data)
+    render json: UserBlueprint.render(@current_user, view: view, user: @current_user, root: :data)
   end
 
   def update
