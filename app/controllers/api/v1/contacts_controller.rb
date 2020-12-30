@@ -36,6 +36,7 @@ class Api::V1::ContactsController < ApplicationController
       .permit([
         :first_name,
         :last_name,
+        :relationship,
         :birthday,
         :address,
         :address_2,
