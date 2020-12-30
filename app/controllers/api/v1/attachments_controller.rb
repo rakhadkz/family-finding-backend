@@ -33,6 +33,8 @@ class Api::V1::AttachmentsController < ApplicationController
         :file_name,
         :file_type,
         :file_url,
+        :file_id,
+        :file_format,
         :file_size,
         :user_id
       ])
