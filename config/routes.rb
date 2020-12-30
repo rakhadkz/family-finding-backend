@@ -29,6 +29,8 @@ Rails.application.routes.draw do
 
       resources :child_contacts
 
+      resources :child_tree_contacts
+
       resources :siblingships
 
       resources :user_children do
