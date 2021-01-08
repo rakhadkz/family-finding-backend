@@ -1,9 +1,8 @@
 class ChildAttachmentBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :child_id, :attachment_id
+  fields :id, :child_id, :attachment_id, :created_at, :updated_at
 
   view :extended do
-    excludes :child_id, :attachment_id
     association :attachment, blueprint: AttachmentBlueprint
   end
 
