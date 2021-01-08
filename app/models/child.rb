@@ -6,6 +6,9 @@ class Child < ApplicationRecord
   has_many :child_contacts
   has_many :contacts, through: :child_contacts
 
+  has_many :child_tree_contacts
+  has_many :contacts, through: :child_tree_contacts
+
   has_many :child_attachments
   has_many :attachments, through: :child_attachments
 
