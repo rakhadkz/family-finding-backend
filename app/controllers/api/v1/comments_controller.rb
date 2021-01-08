@@ -63,6 +63,7 @@ class Api::V1::CommentsController < ApplicationController
         [
           :title,
           :body,
+          :html_body,
           :in_reply_to,
           :child_id,
           :mentions => []
