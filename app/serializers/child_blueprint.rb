@@ -7,7 +7,7 @@ class ChildBlueprint < Blueprinter::Base
   end
   
   view :attachments do
-    association :attachments, blueprint: AttachmentBlueprint, view: :extended, name: :attachments
+    association :child_attachments, blueprint: ChildAttachmentBlueprint, view: :extended, name: :attachments
   end
 
   view :contacts do
@@ -56,8 +56,6 @@ class ChildBlueprint < Blueprinter::Base
 
   view :extended do
     include_view :contacts
-    include_view :comments
-    include_view :attachments
     include_view :family_tree
     field :birthday do
       "14/10/2001"
@@ -71,6 +69,7 @@ class ChildBlueprint < Blueprinter::Base
     field :system_status do
       "In searching"
     end
+    field :request_pending, default: false
   end
 
   view :users do

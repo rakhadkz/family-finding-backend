@@ -25,6 +25,8 @@ class Child < ApplicationRecord
 
   has_many :comments
 
+  attr_accessor :request_pending
+
   enum continuous_search: { ON: "on", OFF: "off"}
 
   enum permanency_goal: {

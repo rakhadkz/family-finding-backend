@@ -33,7 +33,16 @@ class Api::V1::ChildrenController < ApplicationController
   private
 
   def child
-    @child ||= @current_user.role === 'user' ? @current_user.children.find_by(id: params[:id]) : Child.includes(:child_contacts, :contacts).find(params[:id])
+    child = Child.includes(:child_contacts, :contacts).find(params[:id])
+    has_access ? child : {
+      first_name: child.first_name,
+      last_name: child.last_name,
+      request_pending: @current_user.user_children.find_by(child_id: params[:id], date_approved: nil, date_denied: nil).present?,
+    }
+  end
+
+  def has_access
+    @current_user.children.find_by(id: params[:id]).present? || @current_user.role != "user"
   end
 
   def child_params
