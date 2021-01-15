@@ -14,6 +14,10 @@ class ChildBlueprint < Blueprinter::Base
     association :child_contacts, blueprint: ChildContactBlueprint, view: :extended, name: :contacts
   end
 
+  view :family_tree do
+    association :child_tree_contacts, blueprint: ChildTreeContactBlueprint, view: :extended, name: :family_tree
+  end
+
   view :not_child_users do
     association :users, blueprint: UserBlueprint, name: :not_child_users do |child, options|
       options[:user].organization_users(:user) - child.users
@@ -54,6 +58,7 @@ class ChildBlueprint < Blueprinter::Base
     field :gender, default: :Undefined
     field :race, default: :Undefined
     field :system_status, default: :Inactive
+    include_view :family_tree
     field :request_pending, default: false
   end
 
