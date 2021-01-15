@@ -3,7 +3,7 @@ class OrganizationBlueprint < Blueprinter::Base
   fields :id, :name, :address, :state, :city, :zip, :phone, :logo, :website
 
   view :short do
-    excludes :address, :state, :city, :zip, :phone, :logo, :website
+    excludes :address, :state, :city, :zip, :phone, :website
   end
 
   view :extended do

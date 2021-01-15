@@ -48,19 +48,26 @@ class User < ApplicationRecord
     role_scope ? users.filter_by_role(role_scope) : users
   end
 
-  #temp solution of multi-roles system
   def organization_id
-    first_user_org.present? ? first_user_org.organization_id : super
+    if super.present?
+      super
+    else
+      first_user_org.present? ? first_user_org.organization_id : nil
+    end
   end
 
   def role
-    first_user_org.present? ? first_user_org.role : super
+    if super.present?
+      super
+    else
+      first_user_org.present? ? first_user_org.role : nil
+    end
   end
 
   def action_items
     organization_id.present? && role != 'user' ?
-      ActionItem.where(organization_id: organization_id).or(ActionItem.where(user_id: id))
-      : super
+        ActionItem.where(organization_id: organization_id).where.not(related_user_id: nil).or(ActionItem.where(user_id: id, organization_id: organization_id))
+        : super.filter_by_org_id(organization_id)
   end
 
   def delete_role(user)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_08_140938) do
+ActiveRecord::Schema.define(version: 2021_01_14_134945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2021_01_08_140938) do
     t.string "race"
     t.string "gender"
     t.string "permanency_status"
+    t.string "system_status"
   end
 
   create_table "comment_attachments", force: :cascade do |t|

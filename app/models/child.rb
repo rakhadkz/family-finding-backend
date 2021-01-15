@@ -37,6 +37,25 @@ class Child < ApplicationRecord
     "Another Planned Permanent Living Arrangement (APPLA)": "appla"
   }
 
+  enum gender: {
+    Male: "male",
+    Female: "female"
+  }
+
+  enum race: {
+    "American Indian or Alaska Native": "american_indian_or_alaska_native",
+    "Asian": "asian",
+    "Black or African American": "black_or_african_american",
+    "Hispanic or Latino": "hispanic_or_latino",
+    "Native Hawaiian or Other Pacific Islander": "native_hawaiian_or_other_pacific_islander",
+    "White": "white"
+  }
+
+  enum system_status: {
+    Active: "active",
+    Inactive: "inactive"
+  }
+
   include PgSearch::Model
 
   pg_search_scope :search,

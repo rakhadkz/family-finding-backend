@@ -18,8 +18,14 @@ class Api::V1::ActionItemsController < ApplicationController
   end
 
   def create
-    action_item = ActionItem.create!(action_item_params)
-    render json: ActionItemBlueprint.render(action_item, root: :data)
+    action_items = []
+    if action_item_params[:title].present?
+      action_items.push ActionItem.create!(action_item_params.except(:items).merge({organization_id: @current_user.organization_id}))
+    end
+    action_item_params[:items].each do |record|
+      action_items.push ActionItem.create!(record.merge({organization_id: @current_user.organization_id}))
+    end if action_item_params[:items].present?
+    render json: ActionItemBlueprint.render(action_items, root: :data)
   end
 
   def update
@@ -42,15 +48,20 @@ class Api::V1::ActionItemsController < ApplicationController
     params
       .require(:action_item)
       .permit(
-      [
         :title,
         :description,
         :user_id,
         :child_id,
-        :organization_id,
         :related_user_id,
-        :action_type
-      ])
+        :action_type,
+        items: [
+          :title,
+          :description,
+          :user_id,
+          :child_id,
+          :related_user_id,
+          :action_type
+        ])
   end
 
 end

@@ -26,7 +26,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def show
-    render json: UserBlueprint.render(user, root: :data, user: @current_user, view: :extended)
+    render json: UserBlueprint.render(user, root: :data, user: @current_user, view: view)
   end
 
   def destroy
