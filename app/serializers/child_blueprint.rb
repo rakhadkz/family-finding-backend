@@ -1,6 +1,6 @@
 class ChildBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search
+  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status
 
   view :siblings do
     association :all_siblings, blueprint: ChildBlueprint, name: :siblings
@@ -46,24 +46,14 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :comments do
-
     association :comments, blueprint: CommentBlueprint, view: :extended
   end
 
   view :extended do
     include_view :contacts
-    field :birthday do
-      "14/10/2001"
-    end
-    field :gender do
-      "Male"
-    end
-    field :race do
-      "White"
-    end
-    field :system_status do
-      "In searching"
-    end
+    field :gender, default: :Undefined
+    field :race, default: :Undefined
+    field :system_status, default: :Inactive
     field :request_pending, default: false
   end
 

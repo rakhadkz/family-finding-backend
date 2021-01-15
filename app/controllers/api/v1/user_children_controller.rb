@@ -6,6 +6,7 @@ class Api::V1::UserChildrenController < ApplicationController
 
   def create
     user_children = []
+    user_children.push UserChild.create!(user_child_params.except(:users)) if user_child_params[:user_id].present?
     user_child_params[:users].each do |record|
       user_child = UserChild.find_by(child_id: record[:child_id], user_id: record[:user_id])
       if user_child.nil?
@@ -13,7 +14,7 @@ class Api::V1::UserChildrenController < ApplicationController
       else
         user_child.update!(record)
       end
-    end
+    end if user_child_params[:users].present?
     render json: UserChildBlueprint.render(user_children, root: :data)
   end
 
