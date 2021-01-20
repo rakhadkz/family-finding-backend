@@ -15,7 +15,7 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def update
-    communication_template.update(communication_templates_scope)
+    communication_template.update!(communication_template_params)
     render json: CommunicationTemplateBlueprint.render(communication_template, root: :data)
   end
 
