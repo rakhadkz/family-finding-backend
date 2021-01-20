@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
       resources :child_tree_contacts
 
+      resources :communication_templates
+
       resources :siblingships
 
       resources :user_children do

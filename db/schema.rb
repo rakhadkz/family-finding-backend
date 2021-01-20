@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_14_134945) do
+ActiveRecord::Schema.define(version: 2021_01_20_140051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,16 @@ ActiveRecord::Schema.define(version: 2021_01_14_134945) do
     t.text "html_body"
     t.index ["child_id"], name: "index_comments_on_child_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "communication_templates", force: :cascade do |t|
+    t.string "name"
+    t.text "content"
+    t.string "template_type"
+    t.bigint "organization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_communication_templates_on_organization_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -239,6 +249,7 @@ ActiveRecord::Schema.define(version: 2021_01_14_134945) do
   add_foreign_key "attachments", "users"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
+  add_foreign_key "communication_templates", "organizations"
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
