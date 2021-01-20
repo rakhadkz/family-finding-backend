@@ -44,7 +44,7 @@ class User < ApplicationRecord
   }
 
   def organization_users(role_scope = nil)
-    users = role === 'super_admin' ? User.all : User.filter_by_organization(organization_id)
+    users = role === 'super_admin' ? User.all.includes(:organizations) : User.filter_by_organization(organization_id).includes(:organizations)
     role_scope ? users.filter_by_role(role_scope) : users
   end
 
