@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_20_140051) do
+ActiveRecord::Schema.define(version: 2021_01_21_144021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,8 @@ ActiveRecord::Schema.define(version: 2021_01_20_140051) do
     t.boolean "in_continuous_search"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_search_vectors_on_organization_id"
   end
 
   create_table "siblingships", force: :cascade do |t|
@@ -253,6 +255,7 @@ ActiveRecord::Schema.define(version: 2021_01_20_140051) do
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
+  add_foreign_key "search_vectors", "organizations"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
   add_foreign_key "user_children", "children"
