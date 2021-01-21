@@ -41,7 +41,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def user
-    @user ||= User.includes(:organizations).find(params[:id])
+    @user ||= @current_user.organization_users.find(params[:id])
   end
 
   def user_params
