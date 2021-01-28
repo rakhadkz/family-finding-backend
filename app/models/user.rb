@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 
+  belongs_to :organization
+
   has_many :comments, dependent: :destroy
   has_many :findings, dependent: :destroy
   has_many :action_items, dependent: :destroy
