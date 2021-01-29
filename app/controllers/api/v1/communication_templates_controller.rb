@@ -24,6 +24,15 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
     head :ok
   end
 
+  def send_message_to_contact
+    case template_send_params[:template_type]
+    when 'SMS'
+      TwilioPhone.send(template_send_params)
+    when 'Email'
+      UserMailer.send_message_to_contact(template_send_params[:email],template_send_params[:content]).deliver_now
+    end
+  end
+
   private
 
   def communication_template
@@ -45,6 +54,15 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
       )
   end
 
-
-
+  def template_send_params
+    params.require(:template_send)
+      .permit(
+        [
+          :email,
+          :content,
+          :template_type,
+          :phone
+        ]
+      )
+  end
 end

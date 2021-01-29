@@ -31,7 +31,11 @@ Rails.application.routes.draw do
 
       resources :child_tree_contacts
 
-      resources :communication_templates
+      resources :communication_templates do
+        collection do
+          post 'send_message_to_contact'
+        end
+      end
 
       resources :siblingships
 
