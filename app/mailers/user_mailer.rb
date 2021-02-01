@@ -39,4 +39,9 @@ class UserMailer < ApplicationMailer
     @comment = comment
     mail(to: email, subject: subject)
   end
+
+  def send_message_to_contact(email, content)
+    @content = content
+    mail(to: email, subject: 'Message')
+  end
 end

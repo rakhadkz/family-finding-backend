@@ -13,13 +13,13 @@ class Api::V1::CommentsController < ApplicationController
   
 
   def update
-    comment.update!(comment_params)
+    comment.update!(comment_params) if @current_user.id == comment.user_id
     render json: CommentBlueprint.render(comment, root: :data)
   end
 
   def destroy
-    comment.destroy!
-    head :ok
+    comment.destroy! if @current_user.id == comment.user_id
+    render json: { message: "removed" }, status: :ok
   end
 
   def send_mention_emails(comment)
@@ -66,6 +66,7 @@ class Api::V1::CommentsController < ApplicationController
           :html_body,
           :in_reply_to,
           :child_id,
+          :user_id,
           :mentions => []
         ])
   end
