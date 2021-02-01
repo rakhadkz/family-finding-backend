@@ -46,14 +46,11 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   def communication_template_params
     params.require(:communication_template)
       .permit(
-        [
           :name,
           :content,
           :template_type
-        ]
       )
   end
-
   def template_send_params
     params.require(:template_send)
       .permit(

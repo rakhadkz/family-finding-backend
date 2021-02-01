@@ -20,7 +20,7 @@ class Child < ApplicationRecord
 
   has_many :action_items
 
-  has_many :user_children, dependent: :destroy
+  has_many :user_children, -> { where.not(date_approved: nil )}, dependent: :destroy
   has_many :users, -> { where.not(user_children: {date_approved: nil})}, through: :user_children
 
   has_many :comments

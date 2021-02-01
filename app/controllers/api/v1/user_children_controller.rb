@@ -1,5 +1,7 @@
 class Api::V1::UserChildrenController < ApplicationController
 
+  before_action :authenticate_request!
+
   def index
     render json: UserChildBlueprint.render(UserChild.all, root: :data)
   end
@@ -24,6 +26,12 @@ class Api::V1::UserChildrenController < ApplicationController
     render json: user_child
   end
 
+  def destroy
+    user_child.destroy!
+    render json: { status: "deleted" }, status: :ok
+  end
+
+  private
   def user_child_params
     params
       .require(:user_child)
@@ -31,5 +39,9 @@ class Api::V1::UserChildrenController < ApplicationController
         :user_id, :child_id, :date_approved, :date_denied,
         users: [:user_id, :child_id, :date_approved, :date_denied]
       )
+  end
+
+  def user_child
+    @user_child ||= UserChild.find(params[:id])
   end
 end

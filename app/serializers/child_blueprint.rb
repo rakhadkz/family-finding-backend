@@ -25,7 +25,8 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :child_users do
-    association :users, blueprint: UserBlueprint, name: :child_users
+    # association :users, blueprint: UserBlueprint, name: :child_users
+    association :user_children, blueprint: UserChildBlueprint, name: :child_users
   end
 
   view :table do
