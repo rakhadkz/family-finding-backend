@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_115144) do
+ActiveRecord::Schema.define(version: 2021_02_04_180726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,24 @@ ActiveRecord::Schema.define(version: 2021_02_04_115144) do
     t.index ["child_id"], name: "index_child_attachments_on_child_id"
   end
 
+  create_table "child_contact_attachments", force: :cascade do |t|
+    t.bigint "child_contact_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachment_id"], name: "index_child_contact_attachments_on_attachment_id"
+    t.index ["child_contact_id"], name: "index_child_contact_attachments_on_child_contact_id"
+  end
+
+  create_table "child_contact_comments", force: :cascade do |t|
+    t.bigint "child_contact_id"
+    t.bigint "comment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_contact_id"], name: "index_child_contact_comments_on_child_contact_id"
+    t.index ["comment_id"], name: "index_child_contact_comments_on_comment_id"
+  end
+
   create_table "child_contacts", force: :cascade do |t|
     t.bigint "child_id"
     t.bigint "contact_id"
@@ -74,6 +92,9 @@ ActiveRecord::Schema.define(version: 2021_02_04_115144) do
     t.bigint "parent_id"
     t.integer "family_fit_score", default: 0
     t.boolean "potential_match", default: false
+    t.boolean "is_confirmed", default: false
+    t.boolean "is_placed", default: false
+    t.boolean "is_disqualified", default: false
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
@@ -138,24 +159,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_115144) do
     t.index ["organization_id"], name: "index_communication_templates_on_organization_id"
   end
 
-  create_table "connection_attachments", force: :cascade do |t|
-    t.bigint "contact_id"
-    t.bigint "attachment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["attachment_id"], name: "index_connection_attachments_on_attachment_id"
-    t.index ["contact_id"], name: "index_connection_attachments_on_contact_id"
-  end
-
-  create_table "connection_comments", force: :cascade do |t|
-    t.bigint "contact_id"
-    t.bigint "comment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["comment_id"], name: "index_connection_comments_on_comment_id"
-    t.index ["contact_id"], name: "index_connection_comments_on_contact_id"
-  end
-
   create_table "contacts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -171,8 +174,6 @@ ActiveRecord::Schema.define(version: 2021_02_04_115144) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "parent_id"
     t.string "relationship"
-    t.boolean "is_confirmed", default: false
-    t.boolean "is_placed", default: false
   end
 
   create_table "finding_attachments", force: :cascade do |t|
@@ -275,13 +276,13 @@ ActiveRecord::Schema.define(version: 2021_02_04_115144) do
   add_foreign_key "alerts", "children"
   add_foreign_key "alerts", "contacts"
   add_foreign_key "attachments", "users"
+  add_foreign_key "child_contact_attachments", "attachments"
+  add_foreign_key "child_contact_attachments", "child_contacts"
+  add_foreign_key "child_contact_comments", "child_contacts"
+  add_foreign_key "child_contact_comments", "comments"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"
-  add_foreign_key "connection_attachments", "attachments"
-  add_foreign_key "connection_attachments", "contacts"
-  add_foreign_key "connection_comments", "comments"
-  add_foreign_key "connection_comments", "contacts"
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"

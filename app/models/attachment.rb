@@ -10,6 +10,6 @@ class Attachment < ApplicationRecord
 
   belongs_to :user
 
-  has_many :connection_attachments
-  has_many :contacts, through: :connection_attachments
+  has_many :child_contact_attachments
+  has_many :child_contacts, through: :child_contact_attachments
 end
