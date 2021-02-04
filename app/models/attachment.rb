@@ -9,4 +9,7 @@ class Attachment < ApplicationRecord
   has_many :children, through: :child_attachments
 
   belongs_to :user
+
+  has_many :connection_attachments
+  has_many :contacts, through: :connection_attachments
 end
