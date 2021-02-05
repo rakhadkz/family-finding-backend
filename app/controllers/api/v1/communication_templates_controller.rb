@@ -15,13 +15,22 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def update
-    communication_template.update(communication_templates_scope)
+    communication_template.update!(communication_template_params)
     render json: CommunicationTemplateBlueprint.render(communication_template, root: :data)
   end
 
   def destroy
     communication_template.destroy!
     head :ok
+  end
+
+  def send_message_to_contact
+    case template_send_params[:template_type]
+    when 'SMS'
+      TwilioPhone.send(template_send_params)
+    when 'Email'
+      UserMailer.send_message_to_contact(template_send_params[:email],template_send_params[:content]).deliver_now
+    end
   end
 
   private
@@ -40,6 +49,17 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
           :name,
           :content,
           :template_type
+      )
+  end
+  def template_send_params
+    params.require(:template_send)
+      .permit(
+        [
+          :email,
+          :content,
+          :template_type,
+          :phone
+        ]
       )
   end
 end

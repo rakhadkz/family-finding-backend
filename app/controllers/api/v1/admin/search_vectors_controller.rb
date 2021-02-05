@@ -1,10 +1,14 @@
 class Api::V1::Admin::SearchVectorsController < ApplicationController
   before_action :authenticate_request!
   before_action :require_admin
-  
+  include Filterable
+  include Searchable
+  include Sortable
+
   def index
-    search_vectors = SearchVector.all
-    render json: SearchVectorBlueprint.render(search_vectors, root: :data)
+    results = sort(search(filter(search_vector_scope)))
+    search_vectors = results.page(params[:page]).per(per_page)
+    render json: SearchVectorBlueprint.render(search_vectors, root: :data, view: view, meta: page_info(search_vectors))
   end
 
   def show
@@ -27,12 +31,16 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   private
+    def search_vector_scope
+      SearchVector.where(:organization_id => params[:organization_id])
+    end
+
     def search_vector
       @search_vector ||= SearchVector.find(params[:id])
     end
 
     def search_vector_params
-      params.require(:search_vector).permit(:name, :description, :in_continuous_search)
+      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id)
     end
   end
   
