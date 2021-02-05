@@ -11,13 +11,7 @@ class UserBlueprint < Blueprinter::Base
   end
 
   view :table do
-    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: [] do |user, options|
-      if %w[user admin manager].include? options[:user].role
-        user.user_organizations
-      else
-        user.user_organizations
-      end
-    end
+    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: []
   end
 
   view :extended do

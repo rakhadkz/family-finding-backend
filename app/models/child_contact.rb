@@ -6,4 +6,10 @@ class ChildContact < ApplicationRecord
 
   belongs_to :parent, class_name: "ChildContact", foreign_key: :parent_id
   has_many :children, class_name: "ChildContact", foreign_key: :parent_id
+
+  has_many :child_contact_attachments
+  has_many :attachments, through: :child_contact_attachments
+
+  has_many :child_contact_comments
+  has_many :comments, through: :child_contact_comments
 end
