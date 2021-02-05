@@ -55,6 +55,7 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :extended do
+    include_view :comments
     include_view :contacts
     field :gender, default: :Undefined
     field :race, default: :Undefined
