@@ -53,6 +53,10 @@ Rails.application.routes.draw do
 
       resources :comment_attachments
 
+      resources :connection_attachments
+
+      resources :connection_comments
+
       resources :findings
 
       resources :finding_attachments
