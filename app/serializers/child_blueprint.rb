@@ -55,11 +55,11 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :extended do
-    include_view :contacts
+    # include_view :contacts
     field :gender, default: :Undefined
     field :race, default: :Undefined
     field :system_status, default: :Inactive
-    include_view :family_tree
+    # include_view :family_tree
     field :request_pending, default: false
   end
 
