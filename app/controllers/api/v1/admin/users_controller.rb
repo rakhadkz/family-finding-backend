@@ -31,7 +31,7 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   def destroy
     @current_user.delete_role(user)
-    head :ok
+    render json: { message: "removed" }, status: :ok
   end
 
   private
