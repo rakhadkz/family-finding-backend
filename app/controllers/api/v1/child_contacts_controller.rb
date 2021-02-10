@@ -33,7 +33,10 @@ class Api::V1::ChildContactsController < ApplicationController
         :relationship,
         :parent_id,
         :family_fit_score,
-        :potential_match
+        :potential_match,
+        :is_confirmed,
+        :is_disqualified,
+        :is_placed
       ])
   end
 

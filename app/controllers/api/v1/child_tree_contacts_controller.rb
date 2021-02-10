@@ -19,7 +19,7 @@ class Api::V1::ChildTreeContactsController < ApplicationController
       child_tree_contact.destroy!
       head :ok
     end
-  
+
     private
     def child_tree_contact
       @child_tree_contact ||= ChildTreeContact.find(params[:id])
