@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  post "sendgrid_webhook/:token", to: "sendgrid#webhook"
+  post "twilio_webhook/:token", to: "twilio#webhook"
+
   namespace :api do
     namespace :v1 do
       
@@ -30,6 +33,8 @@ Rails.application.routes.draw do
       resources :child_contacts
 
       resources :child_tree_contacts
+
+      resources :templates_sent
 
       resources :communication_templates do
         collection do
@@ -70,7 +75,6 @@ Rails.application.routes.draw do
       end
 
       devise_for :users
-
     end
   end
 end

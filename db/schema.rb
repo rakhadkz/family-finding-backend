@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_144021) do
+ActiveRecord::Schema.define(version: 2021_02_05_015119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,6 +200,19 @@ ActiveRecord::Schema.define(version: 2021_01_21_144021) do
     t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
   end
 
+  create_table "templates_sents", force: :cascade do |t|
+    t.bigint "communication_template_id"
+    t.bigint "contact_id"
+    t.bigint "child_id"
+    t.string "content"
+    t.string "opened"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_id"], name: "index_templates_sents_on_child_id"
+    t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
+    t.index ["contact_id"], name: "index_templates_sents_on_contact_id"
+  end
+
   create_table "user_children", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "child_id"
@@ -258,6 +271,9 @@ ActiveRecord::Schema.define(version: 2021_01_21_144021) do
   add_foreign_key "search_vectors", "organizations"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
+  add_foreign_key "templates_sents", "children"
+  add_foreign_key "templates_sents", "communication_templates"
+  add_foreign_key "templates_sents", "contacts"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
   add_foreign_key "user_organizations", "organizations"
