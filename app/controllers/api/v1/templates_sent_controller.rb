@@ -8,7 +8,7 @@ class Api::V1::TemplatesSentController < ApplicationController
     private
 
     def communication_templates_scope
-      TemplatesSent.filter_by_contact_id(@current_user.organization_id)
+      TemplatesSent.filter_by_contact_id(params[:id])
     end
   end
   
