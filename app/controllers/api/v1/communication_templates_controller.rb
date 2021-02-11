@@ -25,6 +25,12 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def send_message_to_contact
+    TemplatesSent.create!(
+      contact_id: template_send_params[:contact_id], 
+      communication_template_id: template_send_params[:template_id],
+      content: template_send_params[:content],
+      child_id: template_send_params[:child_id]
+    )
     case template_send_params[:template_type]
     when 'SMS'
       TwilioPhone.send(template_send_params)
@@ -58,7 +64,10 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
           :email,
           :content,
           :template_type,
-          :phone
+          :phone,
+          :contact_id,
+          :template_id,
+          :child_id
         ]
       )
   end

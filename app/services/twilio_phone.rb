@@ -9,7 +9,8 @@ module TwilioPhone
     message = message = @client.messages.create( 
       body: params[:content],  
       messaging_service_sid: 'MG89460dc0d3b9ce3ba5984b40e8cc749b',      
-      to: params[:phone] 
+      to: params[:phone],
+      status_callback: "https://webhook.site/deb3e9b0-7dc7-4772-acbc-2940797ce89b"
     ) 
   end
 end

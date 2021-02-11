@@ -2,7 +2,7 @@ class Api::V1::ChildContactsController < ApplicationController
   before_action :authenticate_request!
 
   def show
-    render json: ChildContactBlueprint.render(child_contact, root: :data)
+    render json: ChildContactBlueprint.render(child_contact, root: :data, view: view)
   end
 
   def create
