@@ -12,5 +12,6 @@ module TwilioPhone
       to: params[:phone],
       status_callback: "https://webhook.site/deb3e9b0-7dc7-4772-acbc-2940797ce89b"
     ) 
+    return message.sid
   end
 end
