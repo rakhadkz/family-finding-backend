@@ -11,7 +11,7 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   field :templates_size, default: "0" do |connection|
-
+    connection.templates_sents.size
   end
 
   field :alerts_size, default: "0" do |connection|
@@ -29,5 +29,9 @@ class ChildContactBlueprint < Blueprinter::Base
 
   view :comments do
     association :child_contact_comments, blueprint: ConnectionCommentBlueprint, view: :extended, name: :comments
+  end
+
+  view :templates do
+    association :templates_sents, blueprint: TemplatesSentBlueprint, name: :templates
   end
 end

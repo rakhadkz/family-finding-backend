@@ -12,4 +12,7 @@ class ChildContact < ApplicationRecord
 
   has_many :child_contact_comments
   has_many :comments, through: :child_contact_comments
+
+  has_many :templates_sents
+  has_many :communication_templates, through: :templates_sents
 end
