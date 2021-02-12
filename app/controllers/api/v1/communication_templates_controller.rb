@@ -26,10 +26,9 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
 
   def send_message_to_contact
     template_sent = TemplatesSent.create!(
-      contact_id: template_send_params[:contact_id], 
       communication_template_id: template_send_params[:template_id],
+      child_contact_id: template_send_params[:child_contact_id],
       content: template_send_params[:content],
-      child_id: template_send_params[:child_id]
     )
     msg = template_sent[:id];
     email = template_send_params[:email];
@@ -71,7 +70,8 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
           :phone,
           :contact_id,
           :template_id,
-          :child_id
+          :child_id,
+          :child_contact_id
         ]
       )
   end

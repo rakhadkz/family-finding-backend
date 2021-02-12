@@ -234,16 +234,14 @@ ActiveRecord::Schema.define(version: 2021_02_12_162053) do
 
   create_table "templates_sents", force: :cascade do |t|
     t.bigint "communication_template_id"
-    t.bigint "contact_id"
-    t.bigint "child_id"
     t.string "content"
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_contact_id"
+    t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.string "sid"
-    t.index ["child_id"], name: "index_templates_sents_on_child_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
-    t.index ["contact_id"], name: "index_templates_sents_on_contact_id"
   end
 
   create_table "user_children", force: :cascade do |t|
@@ -310,9 +308,8 @@ ActiveRecord::Schema.define(version: 2021_02_12_162053) do
   add_foreign_key "search_vectors", "organizations"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
-  add_foreign_key "templates_sents", "children"
+  add_foreign_key "templates_sents", "child_contacts"
   add_foreign_key "templates_sents", "communication_templates"
-  add_foreign_key "templates_sents", "contacts"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
   add_foreign_key "user_organizations", "organizations"

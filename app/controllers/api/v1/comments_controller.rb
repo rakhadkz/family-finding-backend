@@ -18,7 +18,12 @@ class Api::V1::CommentsController < ApplicationController
   end
 
   def destroy
-    comment.destroy! if @current_user.id == comment.user_id
+    if @current_user.id == comment.user_id
+      connection_comment = ChildContactComment.find_by_comment_id!(comment.id)
+      connection_comment.destroy! if connection_comment.present?
+      comment.destroy!
+    end
+
     render json: { message: "removed" }, status: :ok
   end
 

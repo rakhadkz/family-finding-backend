@@ -1,7 +1,6 @@
 class TemplatesSent < ApplicationRecord
   belongs_to :communication_template
-  belongs_to :contact
-  belongs_to :child
+  belongs_to :child_contact
 
-  scope :filter_by_contact_id, -> (contact_id) { where contact_id: contact_id}
+  scope :filter_by_organization_id, -> (id) { where(communication_templates: { organization_id: id })}
 end
