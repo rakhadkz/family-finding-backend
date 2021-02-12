@@ -40,8 +40,11 @@ class UserMailer < ApplicationMailer
     mail(to: email, subject: subject)
   end
 
-  def send_message_to_contact(email, content)
+  def send_message_to_contact(msg, content, email)
     @content = content
+    headers "X-SMTPAPI" => {
+      unique_args: { ff_msg_id: msg }
+    }.to_json
     mail(to: email, subject: 'Message')
   end
 end
