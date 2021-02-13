@@ -19,8 +19,7 @@ class Api::V1::CommentsController < ApplicationController
 
   def destroy
     if @current_user.id == comment.user_id
-      connection_comment = ChildContactComment.find_by_comment_id!(comment.id)
-      connection_comment.destroy! if connection_comment.present?
+      ChildContactComment.where(comment_id: comment.id).destroy_all
       comment.destroy!
     end
 

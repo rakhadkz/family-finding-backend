@@ -19,7 +19,7 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   view :extended do
-    excludes :child_id, :contact_id
+    excludes :contact_id
     association :contact, blueprint: ContactBlueprint
   end
 

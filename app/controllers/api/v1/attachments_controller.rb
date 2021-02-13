@@ -17,6 +17,7 @@ class Api::V1::AttachmentsController < ApplicationController
 
   def destroy
     Cloudinary::Api.delete_resources([attachment.file_id])
+    ChildContactAttachment.where(attachment_id: attachment.id).destroy_all
     attachment.destroy!
     head :ok
   end
