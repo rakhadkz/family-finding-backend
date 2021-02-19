@@ -40,6 +40,8 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
       when 'Email'
         UserMailer.send_message_to_contact(msg,content,email).deliver_now
     end
+    data = { data: template_sent }
+    render json: data;
   end
 
   private

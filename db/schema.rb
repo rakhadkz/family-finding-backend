@@ -240,8 +240,8 @@ ActiveRecord::Schema.define(version: 2021_02_19_150811) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end

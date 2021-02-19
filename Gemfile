@@ -21,6 +21,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'sendgrid-ruby'
 gem 'twilio-ruby'
 gem 'cloudinary'
+gem 'prawn-markup'
+gem 'prawn', '~>2.2.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

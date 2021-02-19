@@ -34,7 +34,11 @@ Rails.application.routes.draw do
 
       resources :child_tree_contacts
 
-      resources :templates_sent
+      resources :templates_sent do
+        collection do
+          get 'generate_pdf'
+        end
+      end
 
       resources :communication_templates do
         collection do
