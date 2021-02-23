@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :user_children, dependent: :destroy
   has_many :children, -> { where.not(user_children: {date_approved: nil})}, through: :user_children
 
+  has_many :family_searches
+
   scope :filter_by_role, -> (role) do
     User.joins(:user_organizations).where(user_organizations: { role: role })
   end
