@@ -16,6 +16,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def create
+    search_vector_params[:organization_id] = @current_user.organization_id
     search_vector = SearchVector.create!(search_vector_params)
     render json: SearchVectorBlueprint.render(search_vector, root: :data)
   end
@@ -32,7 +33,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
 
   private
     def search_vector_scope
-      SearchVector.where(:organization_id => params[:organization_id])
+      SearchVector.filter_by_org_id @current_user.organization_id
     end
 
     def search_vector
@@ -42,5 +43,5 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
     def search_vector_params
       params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id)
     end
-  end
+end
   

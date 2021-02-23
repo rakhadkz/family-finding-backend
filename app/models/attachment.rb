@@ -12,4 +12,7 @@ class Attachment < ApplicationRecord
 
   has_many :child_contact_attachments
   has_many :child_contacts, through: :child_contact_attachments
+
+  has_many :family_search_attachments
+  has_many :family_searches, through: :family_search_attachments
 end
