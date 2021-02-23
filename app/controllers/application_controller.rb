@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include ApiException
+  include ActionController::MimeResponds
   MAX_PER_PAGE = 20
 
   def authenticate_request!
