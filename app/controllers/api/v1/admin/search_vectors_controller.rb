@@ -16,7 +16,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def create
-    search_vector_params[:organization_id] = @current_user.organization_id
+    params[:search_vector][:organization_id] = @current_user.organization_id
     search_vector = SearchVector.create!(search_vector_params)
     render json: SearchVectorBlueprint.render(search_vector, root: :data)
   end
