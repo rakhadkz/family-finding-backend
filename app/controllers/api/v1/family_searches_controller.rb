@@ -26,7 +26,7 @@ class Api::V1::FamilySearchesController < ApplicationController
 
   private
   def family_search_scopes
-    FamilySearch.all
+    FamilySearch.order(created_at: :asc)
   end
 
   def family_search
@@ -34,6 +34,6 @@ class Api::V1::FamilySearchesController < ApplicationController
   end
 
   def family_search_params
-    params.require(:family_search).permit([:search_vector_id, :user_id, :description])
+    params.require(:family_search).permit([:search_vector_id, :user_id, :child_id, :description])
   end
 end
