@@ -7,6 +7,17 @@ class TwilioController < ApplicationController
     render json: {}, status: :ok
   end
 
+  def available_phone_numbers
+    available_phone_numbers = TwilioPhone.available_phone_numbers
+    data = {data: available_phone_numbers}
+    render json: data, status: :ok
+  end
+
+  def choose_phone_number
+    choose_phone_number = TwilioPhone.choose_phone_number
+    render json: choose_phone_number, status: :ok
+  end
+
   private
 
   def set_template
