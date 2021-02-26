@@ -38,4 +38,8 @@ class ChildContactBlueprint < Blueprinter::Base
   view :templates do
     association :templates_sents, blueprint: TemplatesSentBlueprint, name: :templates
   end
+
+  view :alerts do
+    association :family_search_connections , blueprint: FamilySearchConnectionBlueprint, view: :extended, name: :alerts
+  end
 end
