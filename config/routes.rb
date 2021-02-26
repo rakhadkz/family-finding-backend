@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   post "sendgrid_webhook/:token", to: "sendgrid#webhook"
   post "twilio_webhook/:token", to: "twilio#webhook"
+  get "available_phone_numbers/:token", to: "twilio#available_phone_numbers"
+  get "choose_phone_number/:token", to: "twilio#choose_phone_number"
 
   namespace :api do
     namespace :v1 do
