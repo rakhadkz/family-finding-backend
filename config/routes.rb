@@ -25,15 +25,10 @@ Rails.application.routes.draw do
       end
 
       resources :action_items
-
       resources :attachments
-
       resources :children
-
       resources :child_attachments
-
       resources :child_contacts
-
       resources :child_tree_contacts
 
       resources :templates_sent do
@@ -59,20 +54,16 @@ Rails.application.routes.draw do
       end
 
       resources :contacts
-      
       resources :comments
-
       resources :comment_attachments
-
       resources :connection_attachments
-
       resources :connection_comments
-
       resources :findings
-
       resources :finding_attachments
-
       resources :user_organizations
+      resources :family_searches
+      resources :family_search_attachments
+      resources :family_search_connections
 
       namespace :super_admin do
         resources :organizations

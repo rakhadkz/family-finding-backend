@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_150811) do
+ActiveRecord::Schema.define(version: 2021_02_25_143435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,36 @@ ActiveRecord::Schema.define(version: 2021_02_19_150811) do
     t.string "relationship"
   end
 
+  create_table "family_search_attachments", force: :cascade do |t|
+    t.bigint "family_search_id"
+    t.bigint "attachment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["attachment_id"], name: "index_family_search_attachments_on_attachment_id"
+    t.index ["family_search_id"], name: "index_family_search_attachments_on_family_search_id"
+  end
+
+  create_table "family_search_connections", force: :cascade do |t|
+    t.bigint "family_search_id"
+    t.bigint "child_contact_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["child_contact_id"], name: "index_family_search_connections_on_child_contact_id"
+    t.index ["family_search_id"], name: "index_family_search_connections_on_family_search_id"
+  end
+
+  create_table "family_searches", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "search_vector_id"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_id"
+    t.index ["child_id"], name: "index_family_searches_on_child_id"
+    t.index ["search_vector_id"], name: "index_family_searches_on_search_vector_id"
+    t.index ["user_id"], name: "index_family_searches_on_user_id"
+  end
+
   create_table "finding_attachments", force: :cascade do |t|
     t.bigint "finding_id"
     t.bigint "attachment_id"
@@ -240,8 +270,8 @@ ActiveRecord::Schema.define(version: 2021_02_19_150811) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "sid"
     t.bigint "child_contact_id"
+    t.string "sid"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end
@@ -304,6 +334,13 @@ ActiveRecord::Schema.define(version: 2021_02_19_150811) do
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"
+  add_foreign_key "family_search_attachments", "attachments"
+  add_foreign_key "family_search_attachments", "family_searches"
+  add_foreign_key "family_search_connections", "child_contacts"
+  add_foreign_key "family_search_connections", "family_searches"
+  add_foreign_key "family_searches", "children"
+  add_foreign_key "family_searches", "search_vectors"
+  add_foreign_key "family_searches", "users"
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"

@@ -15,12 +15,15 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   field :alerts_size, default: "0" do |connection|
-
+    connection.family_searches.size
   end
 
-  association :children, blueprint: ChildBlueprint do |connection|
-    connection.contact.children
+  view :children do
+    association :children, blueprint: ChildBlueprint do |connection|
+      connection.contact.children
+    end
   end
+
 
   view :extended do
     excludes :contact_id
@@ -37,5 +40,9 @@ class ChildContactBlueprint < Blueprinter::Base
 
   view :templates do
     association :templates_sents, blueprint: TemplatesSentBlueprint, name: :templates
+  end
+
+  view :alerts do
+    association :family_search_connections , blueprint: FamilySearchConnectionBlueprint, view: :extended, name: :alerts
   end
 end

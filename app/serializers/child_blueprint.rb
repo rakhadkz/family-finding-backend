@@ -18,6 +18,10 @@ class ChildBlueprint < Blueprinter::Base
     association :child_tree_contacts, blueprint: ChildTreeContactBlueprint, view: :extended, name: :family_tree
   end
 
+  view :family_searches do
+    association :family_searches, blueprint: FamilySearchBlueprint
+  end
+
   view :not_child_users do
     association :users, blueprint: UserBlueprint, name: :not_child_users do |child, options|
       options[:user].organization_users(:user) - child.users
