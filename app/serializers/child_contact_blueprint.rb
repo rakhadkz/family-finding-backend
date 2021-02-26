@@ -15,7 +15,7 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   field :alerts_size, default: "0" do |connection|
-
+    connection.family_searches.size
   end
 
   view :children do
