@@ -18,9 +18,12 @@ class ChildContactBlueprint < Blueprinter::Base
 
   end
 
-  association :children, blueprint: ChildBlueprint do |connection|
-    connection.contact.children
+  view :children do
+    association :children, blueprint: ChildBlueprint do |connection|
+      connection.contact.children
+    end
   end
+
 
   view :extended do
     excludes :contact_id

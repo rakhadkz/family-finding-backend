@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_23_170806) do
+ActiveRecord::Schema.define(version: 2021_02_25_143435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,8 @@ ActiveRecord::Schema.define(version: 2021_02_23_170806) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_id"
+    t.index ["child_id"], name: "index_family_searches_on_child_id"
     t.index ["search_vector_id"], name: "index_family_searches_on_search_vector_id"
     t.index ["user_id"], name: "index_family_searches_on_user_id"
   end
@@ -336,6 +338,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_170806) do
   add_foreign_key "family_search_attachments", "family_searches"
   add_foreign_key "family_search_connections", "child_contacts"
   add_foreign_key "family_search_connections", "family_searches"
+  add_foreign_key "family_searches", "children"
   add_foreign_key "family_searches", "search_vectors"
   add_foreign_key "family_searches", "users"
   add_foreign_key "findings", "children"
