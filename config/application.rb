@@ -19,5 +19,6 @@ module RailsAPI
     config.api_only = true
     config.eager_load_paths << Rails.root.join('lib')
     config.active_record.belongs_to_required_by_default = false
+    config.active_job.queue_adapter = :good_job
   end
 end
