@@ -70,6 +70,7 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
           :content,
           :template_type,
           :phone,
+          :from_phone,
           :contact_id,
           :template_id,
           :child_id,

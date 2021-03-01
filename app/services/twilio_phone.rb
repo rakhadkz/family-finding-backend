@@ -8,10 +8,11 @@ module TwilioPhone
     @client = Twilio::REST::Client.new(ENV['TWILIO_MESSAGE_ACCOUNT_SID'], ENV['TWILIO_MESSAGE_AUTH_TOKEN'])
     message = message = @client.messages.create( 
       body: params[:content],  
-      messaging_service_sid: 'MG89460dc0d3b9ce3ba5984b40e8cc749b',      
+      from: params[:from_phone],
       to: params[:phone],
       status_callback: "https://family-finding-api-dev.herokuapp.com/twilio_webhook/0987654321poiuytrewq"
     ) 
+    puts('WHAHAHAHA',message)
     return message.sid
   end
 
@@ -25,9 +26,18 @@ module TwilioPhone
     phone_numbers
   end
 
-  def self.choose_phone_number()
-    @client = Twilio::REST::Client.new(ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN'])
-    incoming_phone_number = @client.incoming_phone_numbers.create(phone_number: '+12067078526')
-    puts incoming_phone_number.sid
+  def self.choose_phone_number(phone_number)
+    @client = Twilio::REST::Client.new(ENV['TWILIO_MESSAGE_ACCOUNT_SID'], ENV['TWILIO_MESSAGE_AUTH_TOKEN'])
+    incoming_phone_number = @client.incoming_phone_numbers.create(phone_number: phone_number)
+  end
+
+  def self.add_phone_number(phone_number_sid)
+    @client = Twilio::REST::Client.new(ENV['TWILIO_MESSAGE_ACCOUNT_SID'], ENV['TWILIO_MESSAGE_AUTH_TOKEN'])
+    phone_number = @client.messaging
+    .services('MG89460dc0d3b9ce3ba5984b40e8cc749b')
+    .phone_numbers
+    .create(
+       phone_number_sid: phone_number_sid
+     )
   end
 end

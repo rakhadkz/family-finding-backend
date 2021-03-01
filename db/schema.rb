@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_25_143435) do
+ActiveRecord::Schema.define(version: 2021_03_01_123505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -270,10 +270,20 @@ ActiveRecord::Schema.define(version: 2021_02_25_143435) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
+  end
+
+  create_table "twilio_phone_numbers", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.string "phone"
+    t.string "friendly_name"
+    t.string "phone_sid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_twilio_phone_numbers_on_organization_id"
   end
 
   create_table "user_children", force: :cascade do |t|
@@ -349,6 +359,7 @@ ActiveRecord::Schema.define(version: 2021_02_25_143435) do
   add_foreign_key "siblingships", "children", column: "sibling_id"
   add_foreign_key "templates_sents", "child_contacts"
   add_foreign_key "templates_sents", "communication_templates"
+  add_foreign_key "twilio_phone_numbers", "organizations"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
   add_foreign_key "user_organizations", "organizations"
