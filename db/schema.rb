@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_28_201037) do
+ActiveRecord::Schema.define(version: 2021_03_01_160300) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "action_items", force: :cascade do |t|
@@ -231,6 +232,20 @@ ActiveRecord::Schema.define(version: 2021_02_28_201037) do
     t.index ["user_id"], name: "index_findings_on_user_id"
   end
 
+  create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "queue_name"
+    t.integer "priority"
+    t.jsonb "serialized_params"
+    t.datetime "scheduled_at"
+    t.datetime "performed_at"
+    t.datetime "finished_at"
+    t.text "error"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
+    t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -267,10 +282,20 @@ ActiveRecord::Schema.define(version: 2021_02_28_201037) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
+  end
+
+  create_table "twilio_phone_numbers", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.string "phone"
+    t.string "friendly_name"
+    t.string "phone_sid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_twilio_phone_numbers_on_organization_id"
   end
 
   create_table "user_children", force: :cascade do |t|
@@ -345,6 +370,7 @@ ActiveRecord::Schema.define(version: 2021_02_28_201037) do
   add_foreign_key "siblingships", "children", column: "sibling_id"
   add_foreign_key "templates_sents", "child_contacts"
   add_foreign_key "templates_sents", "communication_templates"
+  add_foreign_key "twilio_phone_numbers", "organizations"
   add_foreign_key "user_children", "children"
   add_foreign_key "user_children", "users"
   add_foreign_key "user_organizations", "organizations"
