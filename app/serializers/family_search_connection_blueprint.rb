@@ -5,5 +5,8 @@ class FamilySearchConnectionBlueprint < Blueprinter::Base
   view :extended do
     association :family_search, blueprint: FamilySearchBlueprint
   end
+  view :connection do
+    association :child_contact, blueprint: ChildContactBlueprint, view: :extended
+  end
 
 end

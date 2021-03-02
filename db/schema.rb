@@ -10,21 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_123505) do
+ActiveRecord::Schema.define(version: 2021_03_01_160300) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "action_items", force: :cascade do |t|
     t.string "title"
     t.text "description"
+    t.datetime "date_removed"
     t.bigint "user_id"
     t.bigint "child_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "date_removed"
     t.bigint "organization_id"
     t.bigint "related_user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "action_type"
     t.index ["child_id"], name: "index_action_items_on_child_id"
     t.index ["organization_id"], name: "index_action_items_on_organization_id"
@@ -193,6 +194,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_123505) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["child_contact_id"], name: "index_family_search_connections_on_child_contact_id"
+    t.index ["family_search_id", "child_contact_id"], name: "family_search_connections_unique", unique: true
     t.index ["family_search_id"], name: "index_family_search_connections_on_family_search_id"
   end
 
@@ -230,6 +232,20 @@ ActiveRecord::Schema.define(version: 2021_03_01_123505) do
     t.index ["user_id"], name: "index_findings_on_user_id"
   end
 
+  create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "queue_name"
+    t.integer "priority"
+    t.jsonb "serialized_params"
+    t.datetime "scheduled_at"
+    t.datetime "performed_at"
+    t.datetime "finished_at"
+    t.text "error"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
+    t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -256,12 +272,8 @@ ActiveRecord::Schema.define(version: 2021_03_01_123505) do
   create_table "siblingships", force: :cascade do |t|
     t.bigint "child_id", null: false
     t.bigint "sibling_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
-    t.index ["child_id"], name: "index_siblingships_on_child_id"
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
-    t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
   end
 
   create_table "templates_sents", force: :cascade do |t|
@@ -289,10 +301,10 @@ ActiveRecord::Schema.define(version: 2021_03_01_123505) do
   create_table "user_children", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "child_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.datetime "date_approved"
     t.datetime "date_denied"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["child_id"], name: "index_user_children_on_child_id"
     t.index ["user_id"], name: "index_user_children_on_user_id"
   end
@@ -333,7 +345,6 @@ ActiveRecord::Schema.define(version: 2021_03_01_123505) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "action_items", "organizations"
   add_foreign_key "alerts", "children"
   add_foreign_key "alerts", "contacts"
   add_foreign_key "attachments", "users"
