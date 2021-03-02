@@ -4,11 +4,11 @@ module TwilioPhone
     client.lookups.phone_numbers(params[:phone]).fetch(type: ["carrier"]).phone_number
   end
 
-  def self.send(params)
+  def self.send(params, from)
     @client = Twilio::REST::Client.new(ENV['TWILIO_MESSAGE_ACCOUNT_SID'], ENV['TWILIO_MESSAGE_AUTH_TOKEN'])
     message = message = @client.messages.create( 
       body: params[:content],  
-      from: params[:from_phone],
+      from: from,
       to: params[:phone],
       status_callback: "https://family-finding-api-dev.herokuapp.com/twilio_webhook/0987654321poiuytrewq"
     ) 
