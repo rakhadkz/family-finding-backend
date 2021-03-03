@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   post "sendgrid_webhook/:token", to: "sendgrid#webhook"
+  post "authenticate_domain/:token", to: "sendgrid#authenticate_domain"
   post "twilio_webhook/:token", to: "twilio#webhook"
   get "available_phone_numbers/:token", to: "twilio#available_phone_numbers"
   post "choose_phone_number/:token", to: "twilio#choose_phone_number"
