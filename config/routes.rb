@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount GoodJob::Engine => 'jobs'
+  
   post "sendgrid_webhook/:token", to: "sendgrid#webhook"
   post "authenticate_domain/:token", to: "sendgrid#authenticate_domain"
   post "twilio_webhook/:token", to: "twilio#webhook"
