@@ -8,5 +8,6 @@ class OrganizationBlueprint < Blueprinter::Base
 
   view :extended do
     association :users, blueprint: UserBlueprint
+    association :twilio_phone_number, blueprint: TwilioPhoneNumberBlueprint
   end
 end

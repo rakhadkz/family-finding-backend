@@ -15,7 +15,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def show
-    render json: OrganizationBlueprint.render(organization, root: :data)
+    render json: OrganizationBlueprint.render(organization, root: :data, view: view)
   end
 
   def create

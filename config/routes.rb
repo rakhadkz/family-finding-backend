@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
   post "sendgrid_webhook/:token", to: "sendgrid#webhook"
+  post "authenticate_domain/:token", to: "sendgrid#authenticate_domain"
   post "twilio_webhook/:token", to: "twilio#webhook"
   get "available_phone_numbers/:token", to: "twilio#available_phone_numbers"
-  get "choose_phone_number/:token", to: "twilio#choose_phone_number"
+  post "choose_phone_number/:token", to: "twilio#choose_phone_number"
 
   namespace :api do
     namespace :v1 do
-      
       resources :auth do
         collection do
           post 'login'
@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       resources :child_attachments
       resources :child_contacts
       resources :child_tree_contacts
+      resources :twilio_phone_numbers
+      resources :sendgrid_domains
 
       resources :templates_sent do
         collection do
