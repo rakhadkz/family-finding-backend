@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       resources :child_contacts
       resources :child_tree_contacts
       resources :twilio_phone_numbers
+      resources :sendgrid_domains
 
       resources :templates_sent do
         collection do

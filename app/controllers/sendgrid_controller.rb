@@ -13,22 +13,17 @@ class SendgridController < ApplicationController
 
   def authenticate_domain
     authenticate_domain_res = authenticate_domain_name(domain_params[:name])
-    puts('wWSSSSSws',authenticate_domain_res,'wsd')
-    # choose_phone_number = TwilioPhone.choose_phone_number(params[:phone])
-    # add_phone = TwilioPhone.add_phone_number(choose_phone_number.sid)
-    # created = TwilioPhoneNumber.create!(
-    #   phone: params[:phone],
-    #   friendly_name: params[:friendly_name],
-    #   phone_sid: choose_phone_number.sid,
-    #   organization_id: params[:organization_id]
-    # )
+    created = SendgridDomain.create!(
+      domain_id: authenticate_domain_res["id"],
+      organization_id: domain_params[:organization_id]
+    )
     render json: authenticate_domain_res, status: :ok
   end
 
   private
 
   def domain_params
-    params.require(:domain).permit(:name)
+    params.require(:domain).permit(:name,:organization_id)
   end
 
   def set_template
@@ -52,7 +47,7 @@ class SendgridController < ApplicationController
     request.body = '{ "domain": "' + domain_name + '"}'
     
     response = http.request(request)
-    response.read_body
+    JSON.parse(response.body)
   end
 
   def valid_webhook_token?

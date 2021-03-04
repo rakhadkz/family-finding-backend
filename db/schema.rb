@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_160300) do
+ActiveRecord::Schema.define(version: 2021_03_03_194400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -269,6 +269,14 @@ ActiveRecord::Schema.define(version: 2021_03_01_160300) do
     t.index ["organization_id"], name: "index_search_vectors_on_organization_id"
   end
 
+  create_table "sendgrid_domains", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.integer "domain_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_sendgrid_domains_on_organization_id"
+  end
+
   create_table "siblingships", force: :cascade do |t|
     t.bigint "child_id", null: false
     t.bigint "sibling_id", null: false
@@ -371,6 +379,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_160300) do
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
   add_foreign_key "search_vectors", "organizations"
+  add_foreign_key "sendgrid_domains", "organizations"
   add_foreign_key "siblingships", "children"
   add_foreign_key "siblingships", "children", column: "sibling_id"
   add_foreign_key "templates_sents", "child_contacts"
