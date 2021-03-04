@@ -7,6 +7,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
+require "good_job/engine"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,6 +20,6 @@ module RailsAPI
     config.api_only = true
     config.eager_load_paths << Rails.root.join('lib')
     config.active_record.belongs_to_required_by_default = false
-    config.active_job.queue_adapter = :good_job
+    config.active_job.queue_adapter = Rails.env.development? ? :inline : :good_job
   end
 end
