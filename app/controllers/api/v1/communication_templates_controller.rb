@@ -35,7 +35,8 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
     content = template_send_params[:content]
     case template_send_params[:template_type]
       when 'SMS'
-        sid = TwilioPhone.send(template_send_params)
+        twilioPhoneResult = TwilioPhoneNumber.where(organization_id: @current_user.organization_id).first || { phone: '+13238706031' }
+        sid = TwilioPhone.send(template_send_params, twilioPhoneResult[:phone])
         template_sent.update_column(:sid, sid)
       when 'Email'
         UserMailer.send_message_to_contact(msg,content,email).deliver_now
@@ -70,6 +71,7 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
           :content,
           :template_type,
           :phone,
+          :from_phone,
           :contact_id,
           :template_id,
           :child_id,

@@ -7,7 +7,11 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def show
-    render json: SiblingshipBlueprint.render(siblingship, view: view, root: :data)
+    data = {
+      siblings: JSON.parse(SiblingshipBlueprint.render(siblingship, view: view)),
+      possible: JSON.parse(SiblingshipBlueprint.render(possible_relationships, view: view))
+    }
+    render json: {data: data}
   end
 
   def create
@@ -20,10 +24,25 @@ class Api::V1::SiblingshipsController < ApplicationController
     head :ok
   end
 
+  def possible
+    render json: SiblingshipBlueprint.render(possible_relationships, view: view, root: :data)
+  end
+
   private
 
   def siblingship
-    @siblingship ||= Siblingship.includes(:child, :sibling).find(params[:id])
+    siblingship_res ||= Siblingship.where(child_id: params[:id])
+    wws ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
+    puts('HAAHHAHAHA',wws.map { |id| id["sibling_id"]}, 'wfw')
+    wws2 ||= Siblingship.where(child_id: wws.map { |id| id["sibling_id"]})
+    puts('HAAHHAHA 2222',wws2, 'wfw')
+    @siblingship = siblingship_res
+  end
+
+  def possible_relationships
+    siblingship_res ||= Siblingship.where(child_id: params[:id])
+    sibling_ids ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
+    @possible_relationships ||= Siblingship.where(child_id: sibling_ids.map { |id| id["sibling_id"]})
   end
 
   def siblingship_params
@@ -33,5 +52,4 @@ class Api::V1::SiblingshipsController < ApplicationController
         :sibling_id
       ])
   end
-
 end
