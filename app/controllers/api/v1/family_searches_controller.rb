@@ -34,6 +34,6 @@ class Api::V1::FamilySearchesController < ApplicationController
   end
 
   def family_search_params
-    params.require(:family_search).permit([:search_vector_id, :user_id, :child_id, :description])
+    params.require(:family_search).permit(:search_vector_id, :user_id, :child_id, :description, :blocks)
   end
 end
