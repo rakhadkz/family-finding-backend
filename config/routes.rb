@@ -46,8 +46,12 @@ Rails.application.routes.draw do
           post 'send_message_to_contact'
         end
       end
-
-      resources :siblingships
+      
+      resources :siblingships do
+        collection do
+          get 'possible/:id' => 'siblingships#possible'
+        end
+      end
 
       resources :user_children do
         collection do
