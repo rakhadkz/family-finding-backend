@@ -42,7 +42,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   def possible_relationships
     siblingship_res ||= Siblingship.where(child_id: params[:id])
     sibling_ids ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
-    @possible_relationships ||= Siblingship.where(child_id: sibling_ids.map { |id| id["sibling_id"]})
+    @possible_relationships ||= Siblingship.where(child_id: sibling_ids.map { |id| id["sibling_id"]}).where.not(sibling_id:  sibling_ids.map { |id| id["sibling_id"]})
   end
 
   def siblingship_params
