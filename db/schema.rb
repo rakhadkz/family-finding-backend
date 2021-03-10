@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_04_100439) do
+ActiveRecord::Schema.define(version: 2021_03_10_132238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -177,6 +177,8 @@ ActiveRecord::Schema.define(version: 2021_03_04_100439) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "parent_id"
     t.string "relationship"
+    t.string "race"
+    t.string "sex"
   end
 
   create_table "family_search_attachments", force: :cascade do |t|
@@ -295,8 +297,8 @@ ActiveRecord::Schema.define(version: 2021_03_04_100439) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "sid"
     t.bigint "child_contact_id"
+    t.string "sid"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end
