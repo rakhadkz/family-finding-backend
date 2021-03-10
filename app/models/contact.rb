@@ -5,7 +5,7 @@ class Contact < ApplicationRecord
   # has_many :child_tree_contacts
   # has_many :children, through: :child_tree_contacts
 
-  enum gender: {
+  enum sex: {
     Male: "male",
     Female: "female"
   }
@@ -18,5 +18,5 @@ class Contact < ApplicationRecord
     "Native Hawaiian or Other Pacific Islander": "native_hawaiian_or_other_pacific_islander",
     "White": "white"
   }
-  
+
 end
