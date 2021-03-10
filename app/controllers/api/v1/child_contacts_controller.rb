@@ -38,7 +38,9 @@ class Api::V1::ChildContactsController < ApplicationController
         :is_disqualified,
         :is_placed,
         :disqualify_reason,
-        :placed_date
+        :placed_date,
+        :sex,
+        :race
       ])
   end
 
