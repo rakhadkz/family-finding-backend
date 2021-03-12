@@ -3,7 +3,7 @@ Rake::Task.clear
 class PaMeganSearchJob < ApplicationJob
   queue_as :default
   require 'nokogiri'
-  require 'byebug'
+  # require 'byebug'
 
   def perform(options)
     puts('==============JOBJOB==============', options.to_h,'4')
