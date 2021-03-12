@@ -20,7 +20,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   end
 
   def destroy
-    siblingship.destroy!
+    only_siblingship.destroy!
     head :ok
   end
 
@@ -30,8 +30,12 @@ class Api::V1::SiblingshipsController < ApplicationController
 
   private
 
+  def only_siblingship
+    @only_siblingship ||= Siblingship.find(params[:id])
+  end
+
   def siblingship
-    siblingship_res ||= Siblingship.where(child_id: params[:id])
+    siblingship_res ||= Siblingship.where(child_id: params[:id]).or(Siblingship.where(sibling_id: params[:id]))
     wws ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
     puts('HAAHHAHAHA',wws.map { |id| id["sibling_id"]}, 'wfw')
     wws2 ||= Siblingship.where(child_id: wws.map { |id| id["sibling_id"]})
@@ -42,7 +46,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   def possible_relationships
     siblingship_res ||= Siblingship.where(child_id: params[:id])
     sibling_ids ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
-    @possible_relationships ||= Siblingship.where(child_id: sibling_ids.map { |id| id["sibling_id"]})
+    @possible_relationships ||= Siblingship.where(child_id: sibling_ids.map { |id| id["sibling_id"]}).where.not(sibling_id:  sibling_ids.map { |id| id["sibling_id"]})
   end
 
   def siblingship_params
