@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 
       namespace :search_jobs do
         match :call_rake, via: [:get, :post]
+        match :ready, via: [:get, :post]
       end
 
       resources :templates_sent do
