@@ -6,7 +6,7 @@ class BopSearchJob < ApplicationJob
 
   def perform(options)
     uri = URI("https://www.bop.gov/PublicInfo/execute/inmateloc?todo=query&output=json&nameFirst=#{options[:first_name]}&nameLast=#{options[:last_name]}")
-    family_search = FamilySearch.find(opti  ons[:family_search_id])
+    family_search = FamilySearch.find(options[:family_search_id])
     response = Net::HTTP.get(uri)
     description = ""
     JSON.parse(response)["InmateLocator"].each do |object|
