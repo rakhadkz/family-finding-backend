@@ -35,6 +35,10 @@ Rails.application.routes.draw do
       resources :twilio_phone_numbers
       resources :sendgrid_domains
 
+      namespace :search_jobs do
+        match :call_rake, via: [:get, :post]
+      end
+
       resources :templates_sent do
         collection do
           get 'generate_pdf'
