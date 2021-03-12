@@ -12,7 +12,7 @@ class Api::V1::SearchJobsController < ApplicationController
 
   def call_rake
     task = "search_" + search_job_params[:task].gsub(/[[:space:]]/, '') # prevent users from malicious tasks like db:drop
-    options = [ search_job_params[:first_name], search_job_params[:last_name] ]
+    options = [ search_job_params[:first_name], search_job_params[:last_name], search_job_params[:family_search_id] ]
     load File.join(Rails.root, 'lib', 'tasks', 'search_pa_megan.rake')
     Rake::Task[task].execute(options)
     render json: { message: "success" }, status: :ok

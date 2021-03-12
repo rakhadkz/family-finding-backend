@@ -12,5 +12,8 @@ class PaMeganSearchJob < ApplicationJob
         + "&chkNameIncarcerated=true&chkNameIncarcerated=false&chkNameSoundex=true&chkNameSoundex=false"
     doc = Nokogiri::HTML.parse(open(endpoint))
     puts(doc)
+    fs = FamilySearch.find(options[2])
+    fs.date_completed = DateTime.now
+    fs.save
   end
 end
