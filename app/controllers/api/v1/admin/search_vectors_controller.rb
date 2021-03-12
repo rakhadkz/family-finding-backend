@@ -1,4 +1,5 @@
 class Api::V1::Admin::SearchVectorsController < ApplicationController
+  require 'net/https'
   before_action :authenticate_request!
   before_action :require_admin
   include Filterable
@@ -29,6 +30,13 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   def destroy
     search_vector.destroy!
     render status: :ok
+  end
+
+  def send_request
+    first_name = params[:contact][:first_name]
+    last_name = params[:contact][:last_name]
+    uri = URI("https://www.bop.gov/PublicInfo/execute/inmateloc?todo=query&output=json&nameFirst=" + first_name + "&nameLast=" + last_name)
+    render json: Net::HTTP.get(uri)
   end
 
   private

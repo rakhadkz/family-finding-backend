@@ -80,7 +80,11 @@ Rails.application.routes.draw do
 
       namespace :admin do
         resources :users
-        resources :search_vectors
+        resources :search_vectors do
+          collection do
+            post 'send_request'
+          end
+        end
       end
 
       devise_for :users
