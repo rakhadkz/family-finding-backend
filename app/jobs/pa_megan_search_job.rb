@@ -10,10 +10,8 @@ class PaMeganSearchJob < ApplicationJob
     endpoint = "https://www.pameganslaw.state.pa.us/Search/NameSearchResults?enteredFirstName="
        + options[0].to_s + "&enteredLastName=" + options[1].to_s
         + "&chkNameIncarcerated=true&chkNameIncarcerated=false&chkNameSoundex=true&chkNameSoundex=false"
-    doc = Nokogiri::HTML.parse(open(endpoint))
-    puts(doc)
-    fs = FamilySearch.find(options[2])
-    fs.date_completed = DateTime.now
-    fs.save
+    
+        doc = Nokogiri::HTML.parse(open(endpoint))
+    # puts(doc)
   end
 end
