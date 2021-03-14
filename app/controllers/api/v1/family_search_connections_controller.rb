@@ -10,7 +10,7 @@ class Api::V1::FamilySearchConnectionsController < ApplicationController
   end
 
   def create
-    family_search_connection = FamilySearchConnection.create!(fs_connection_params)
+    family_search_connection = FamilySearchConnection.create(fs_connection_params)
     render json: FamilySearchConnectionBlueprint.render(family_search_connection, root: :data)
   end
 

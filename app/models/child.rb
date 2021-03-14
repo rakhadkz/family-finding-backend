@@ -23,7 +23,7 @@ class Child < ApplicationRecord
   has_many :user_children, -> { where.not(date_approved: nil )}, dependent: :destroy
   has_many :users, -> { where.not(user_children: {date_approved: nil})}, through: :user_children
 
-  has_many :family_searches, -> { order(created_at: :desc) }
+  has_many :family_searches, -> { where(date_rejected: nil).order(created_at: :desc) }
 
   has_many :comments
 
