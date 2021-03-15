@@ -10,7 +10,7 @@ class BopSearchJob < ApplicationJob
       family_search = FamilySearch.find options[:family_search_id]
       family_search.update date_completed: nil
       raise ArgumentError.new "Connection id cannot be nil" if family_search.child_contact_id.nil?
-      raise ArgumentError.new "Not BOP search vector!" if family_search.search_vector_id != 15
+      raise ArgumentError.new "Not BOP search vector!" if family_search.search_vector_id != 10
       send_request family_search
     else
       scope.update_all date_completed: nil
