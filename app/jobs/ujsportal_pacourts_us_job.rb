@@ -44,11 +44,11 @@ class UjsportalPacourtsUsJob < ApplicationJob
     table = doc.search('#caseSearchResultGrid')
     if Digest::SHA1.hexdigest(table.to_s) != family_search.hashed_description
       family_search.update date_completed: nil
-      result = "<table><tr><th>Docket Number</th><th>Court Type</th><th>Case Caption</th><th>Case Status</th><th>Filing Date</th><th>Primary Participant(s)</th><th>Date Of Birth(s)</th><th>County</th><th>Court Office</th><th>OTN</th><th>LOTN</th><th>Police Incident/ Complaint</th></tr>"
+      result = "<table><tr><th>Docket Number</th><th>Court Type</th><th>Case Caption</th><th>Case Status</th><th>Filing Date</th><th>Primary Participant(s)</th><th>Date Of Birth(s)</th><th>County</th></tr>"
       rows = table.css("tr")
       rows.map do |row|
         result += "<tr>"
-        row.css('td').each_with_index { |data, index| result += "<td>#{data.text}</td>" if index > 1 && index < 14 }
+        row.css('td').each_with_index { |data, index| result += "<td>#{data.text}</td>" if index > 1 && index < 10 }
         result += "</tr>"
       end
       result += "</table>"
