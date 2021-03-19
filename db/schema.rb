@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_081244) do
+ActiveRecord::Schema.define(version: 2021_03_19_121809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -162,6 +162,15 @@ ActiveRecord::Schema.define(version: 2021_03_13_081244) do
     t.index ["organization_id"], name: "index_communication_templates_on_organization_id"
   end
 
+  create_table "communications", force: :cascade do |t|
+    t.string "communication_type"
+    t.string "value"
+    t.bigint "contact_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_communications_on_contact_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -303,8 +312,8 @@ ActiveRecord::Schema.define(version: 2021_03_13_081244) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end
@@ -377,6 +386,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_081244) do
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"
+  add_foreign_key "communications", "contacts"
   add_foreign_key "family_search_attachments", "attachments"
   add_foreign_key "family_search_attachments", "family_searches"
   add_foreign_key "family_search_connections", "child_contacts"
