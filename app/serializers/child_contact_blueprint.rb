@@ -43,6 +43,8 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   view :alerts do
-    association :family_search_connections , blueprint: FamilySearchConnectionBlueprint, view: :extended, name: :alerts
+    association :family_search_connections, blueprint: FamilySearchConnectionBlueprint, view: :extended, name: :alerts do |child_contact|
+      child_contact.family_search_connections.filter_by_link_alerts
+    end
   end
 end
