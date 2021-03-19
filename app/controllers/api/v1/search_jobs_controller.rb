@@ -14,12 +14,31 @@ class Api::V1::SearchJobsController < ApplicationController
   def call_rake
     rake = Rake.application
     rake.load_rakefile
-    task = "search_" + search_job_params[:task].gsub(/[[:space:]]/, '') # prevent users from malicious tasks like db:drop
+    task = "search_#{task_name.gsub(/[[:space:]]/, '')}"
     rake[task].execute(search_job_params)
-    render json: { message: "success" }, status: :ok
+    render json: { message: "success", search_vector_id: search_vector_id, task_name: task_name }, status: :ok
   end
 
   private
+
+  def task_name
+    case search_vector_id
+    when 10
+      "bop"
+    when 5
+      "ujsportal_pacourts_us"
+    else
+      "bop"
+    end
+  end
+
+  def search_vector_id
+    family_search.search_vector_id
+  end
+
+  def family_search
+    @family_search ||= FamilySearch.find(search_job_params[:family_search_id])
+  end
 
   def search_job_params
       params.require(:search_job)

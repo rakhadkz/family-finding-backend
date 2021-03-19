@@ -5,7 +5,7 @@ require 'net/https'
 
 class UjsportalPacourtsUsJob < ApplicationJob
   queue_as :default
-  SEARCH_VECTOR_ID = 16
+  SEARCH_VECTOR_ID = 5
   def perform(options)
     if options[:family_search_id].present?
       family_search = FamilySearch.find options[:family_search_id]
