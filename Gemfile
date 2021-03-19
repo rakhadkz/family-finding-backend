@@ -24,6 +24,7 @@ gem 'twilio-ruby'
 gem 'cloudinary'
 gem 'prawn-markup'
 gem 'prawn', '~>2.2.0'
+gem 'watir'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
