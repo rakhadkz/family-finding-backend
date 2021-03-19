@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_081244) do
+ActiveRecord::Schema.define(version: 2021_03_19_145225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -213,6 +213,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_081244) do
     t.datetime "date_accepted"
     t.bigint "child_contact_id"
     t.text "hashed_description"
+    t.boolean "is_link_alert"
     t.index ["child_contact_id"], name: "index_family_searches_on_child_contact_id"
     t.index ["child_id"], name: "index_family_searches_on_child_id"
     t.index ["search_vector_id"], name: "index_family_searches_on_search_vector_id"
