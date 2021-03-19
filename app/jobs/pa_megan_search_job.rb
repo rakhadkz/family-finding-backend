@@ -3,7 +3,6 @@ Rake::Task.clear
 class PaMeganSearchJob < ApplicationJob
   queue_as :default
   require 'watir'
-  include Services::Base
 
   def call(first_name, last_name)
     browser.goto(contact_form_url)
@@ -50,13 +49,7 @@ class PaMeganSearchJob < ApplicationJob
 
 
  
-    Services::Result.new
-    rescue => ex
-      puts(ex)
-    
-      Services::Result.new(value: 'unknown_error', error_code: 500)
-    ensure
-      browser.close
+    browser.close
 
     return search_result.html
     
