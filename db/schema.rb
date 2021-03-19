@@ -19,13 +19,13 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
   create_table "action_items", force: :cascade do |t|
     t.string "title"
     t.text "description"
-    t.datetime "date_removed"
     t.bigint "user_id"
     t.bigint "child_id"
-    t.bigint "organization_id"
-    t.bigint "related_user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_removed"
+    t.bigint "organization_id"
+    t.bigint "related_user_id"
     t.string "action_type"
     t.index ["child_id"], name: "index_action_items_on_child_id"
     t.index ["organization_id"], name: "index_action_items_on_organization_id"
@@ -162,6 +162,15 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
     t.index ["organization_id"], name: "index_communication_templates_on_organization_id"
   end
 
+  create_table "communications", force: :cascade do |t|
+    t.string "communication_type"
+    t.string "value"
+    t.bigint "contact_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_communications_on_contact_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -290,8 +299,12 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
   create_table "siblingships", force: :cascade do |t|
     t.bigint "child_id", null: false
     t.bigint "sibling_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
+    t.index ["child_id"], name: "index_siblingships_on_child_id"
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
+    t.index ["sibling_id"], name: "index_siblingships_on_sibling_id"
   end
 
   create_table "templates_sents", force: :cascade do |t|
@@ -300,8 +313,8 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end
@@ -319,10 +332,10 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
   create_table "user_children", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "child_id"
-    t.datetime "date_approved"
-    t.datetime "date_denied"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "date_approved"
+    t.datetime "date_denied"
     t.index ["child_id"], name: "index_user_children_on_child_id"
     t.index ["user_id"], name: "index_user_children_on_user_id"
   end
@@ -363,6 +376,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "action_items", "organizations"
   add_foreign_key "alerts", "children"
   add_foreign_key "alerts", "contacts"
   add_foreign_key "attachments", "users"
@@ -373,6 +387,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_145225) do
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"
+  add_foreign_key "communications", "contacts"
   add_foreign_key "family_search_attachments", "attachments"
   add_foreign_key "family_search_attachments", "family_searches"
   add_foreign_key "family_search_connections", "child_contacts"
