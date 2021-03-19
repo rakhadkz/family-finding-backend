@@ -11,4 +11,6 @@ class FamilySearch < ApplicationRecord
   has_many :child_contacts, through: :family_search_connections
 
   scope :filter_by_search_vector_for_job, -> (id){ where(search_vector_id: id, date_accepted: nil, date_rejected: nil) }
+
+  scope :only_link_alerts, -> { where( is_link_alert: true )}
 end
