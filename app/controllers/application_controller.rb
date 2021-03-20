@@ -3,6 +3,9 @@ class ApplicationController < ActionController::API
   include ActionController::MimeResponds
   MAX_PER_PAGE = 20
 
+  BOP = 10
+  UJS = 5
+
   def authenticate_request!
     raise ApiException::InvalidToken if auth_token.nil?
     @current_user ||= User.find(auth_token[:user_id])

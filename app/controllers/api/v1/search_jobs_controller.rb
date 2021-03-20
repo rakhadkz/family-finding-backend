@@ -23,9 +23,9 @@ class Api::V1::SearchJobsController < ApplicationController
 
   def task_name
     case search_vector_id
-    when 10
+    when BOP
       "bop"
-    when 5
+    when UJS
       "ujsportal_pacourts_us"
     else
       "bop"

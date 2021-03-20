@@ -4,7 +4,7 @@ require 'digest/sha1'
 
 class BopSearchJob < ApplicationJob
   queue_as :default
-  SEARCH_VECTOR_ID = 10
+  SEARCH_VECTOR_ID = ApplicationController::BOP
   def perform(options)
     if options[:family_search_id].present?
       family_search = FamilySearch.find options[:family_search_id]
