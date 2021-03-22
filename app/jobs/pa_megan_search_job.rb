@@ -3,55 +3,56 @@ Rake::Task.clear
 class PaMeganSearchJob < ApplicationJob
   queue_as :default
   require 'watir'
+  require 'webdrivers'
 
   def call(first_name, last_name)
     browser.goto(contact_form_url)
  
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------1-----------------')
+    puts('-----------1-----------------')
     puts(browser.html)
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------1-----------------')
+    puts('-----------1-----------------')
 
     accept_terms
 
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------2-----------------')
+    puts('-----------2-----------------')
     puts(browser.html)
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------2-----------------')
+    puts('-----------2-----------------')
 
     browser.goto('https://www.pameganslaw.state.pa.us/Search/NameSearch')
 
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------3-----------------')
+    puts('-----------3-----------------')
     puts(browser.html)
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------3-----------------')
+    puts('-----------3-----------------')
 
     fill_search_form(first_name, last_name)
 
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------4-----------------')
+    puts('-----------4-----------------')
     puts(browser.html)
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------4-----------------')
+    puts('-----------4-----------------')
 
     submit_search_form
 
-    search_result = browser.div(:id, "nameSearchResults")
+    search_result = browser.div(:id, "nameSearchResults") 
 
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------5-----------------')
+    puts('-----------5-----------------')
     puts(search_result.html)
-    puts('-----------AHAHHAAHHAHAHA-----------------')
-    puts('-----------AHAHHAAHHAHAHA-----------------')
+    puts('-----------5-----------------')
+    puts('-----------5-----------------')
 
-
+    description = search_result.html
  
     browser.close
 
-    return search_result.html
+    return description
     
   end
 
@@ -105,10 +106,22 @@ class PaMeganSearchJob < ApplicationJob
     family_search = FamilySearch.find(options[:family_search_id])
     puts('====================THIS IS DESCRIPTION===========================',description)
     unless family_search.nil?
+      puts('-=================THIS IS FAMILY SEARCH EDIT')
+      description = change_desc(description)
       family_search.description = description
       family_search.date_completed = DateTime.now
       family_search.save
     end
     puts family_search
   end
+
+  private
+
+  def change_desc(desc)
+    desc = desc.to_s
+    desc = desc.gsub(/<a.*?>|<\/a>/, '')
+    desc = desc.gsub(/<onclick.*?>|<\/">/, '' )  
+    desc
+  end
+
 end
