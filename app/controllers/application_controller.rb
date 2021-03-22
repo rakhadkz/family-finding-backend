@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
 
   BOP = 10
   UJS = 5
+  PAMEGAN = 14
 
   def authenticate_request!
     raise ApiException::InvalidToken if auth_token.nil?
