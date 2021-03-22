@@ -3,7 +3,6 @@ Rake::Task.clear
 class PaMeganSearchJob < ApplicationJob
   queue_as :default
   require 'watir'
-  require 'webdrivers'
 
   def call(first_name, last_name)
     browser.goto(contact_form_url)
