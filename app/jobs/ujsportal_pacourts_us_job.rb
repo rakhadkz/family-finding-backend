@@ -2,6 +2,7 @@ Rake::Task.clear
 require 'digest/sha1'
 require 'nokogiri'
 require 'net/https'
+require 'json'
 
 class UjsportalPacourtsUsJob < ApplicationJob
   queue_as :default
@@ -24,52 +25,43 @@ class UjsportalPacourtsUsJob < ApplicationJob
 
   def send_request(family_search)
     return if family_search.child_contact.nil?
+    family_search.update date_completed: nil
+    uri = URI.parse("https://api.apify.com/v2/actor-tasks/qfpI8LT6l00ylR9dT/run-sync-get-dataset-items?token=6SazwMxeqz9f3QLsExNWJ8tR7")
+    header = { "Content-Type": 'application/json' }
+    body = request_body(family_search)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.read_timeout = 100
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body.to_json
+    response = JSON.parse(http.request(request).body)[0]["description"]
+
+    if Digest::SHA1.hexdigest(response) != family_search.hashed_description
+      family_search.description = response
+      family_search.hashed_description = Digest::SHA1.hexdigest(response)
+      family_search.is_link_alert = true if family_search.is_link_alert === false || family_search.is_link_alert.nil?
+    end
+
+    family_search.date_completed = Time.now
+    family_search.save
+  end
+
+  def request_body(family_search)
     first_name = family_search.child_contact.contact.first_name
     last_name = family_search.child_contact.contact.last_name
     birthday = family_search.child_contact.contact.birthday
-    uri = URI('https://ujsportal.pacourts.us/CaseSearch')
-    https = Net::HTTP.new(uri.host,uri.port)
-    https.use_ssl = true
-    req = Net::HTTP::Post.new(uri.path)
-    req['Content-Type'] = 'application/x-www-form-urlencoded'
-    req['Cookie'] = 'ASP.NET_SessionId=crfqutfefikkhg30cf14br2z; .AspNetCore.Antiforgery.SBFfOFqeTDE=CfDJ8LeJeCJb_ztImosVsKnfuYf38G-vgTwpOQKGtySsnzrxRJdGxoIJgRIfczs0jXAyoy6h-zFRJo90D6Me26DMEEM8bkBAbXXF30JBbYbDQQ47rv37nMVu3MZWvtUR5-19iP7BA0AIRbPlgekPUa1T90w; f5avraaaaaaaaaaaaaaaa_session_=EFDIMDLKBNEMAEOBJEGFMEEONHPGJGMNNDHBHJNALKEHLFBAALBIENMDKECBNOJGAJEDPEENMDIBGECAEOOAAFBHOHFMHHLLCCDMBGCKNOOMAOCBNKNHDANAFDLDJBKF'
-    req.body = URI.encode_www_form([
-                                     %w[SearchBy ParticipantName],
-                                     %w[FiledStartDate 2001-01-01],
-                                     %w[FiledEndDate 2021-03-18],
-                                     [ "ParticipantLastName", last_name ],
-                                     [ "ParticipantDateOfBirth",  birthday.present? ? birthday.strftime("%Y-%T") : nil],
-                                     [ "ParticipantFirstName", first_name ],
-                                     %w[__RequestVerificationToken CfDJ8LeJeCJb_ztImosVsKnfuYcCr6K5Z-IMIpAp2gUA4SAhAyWMww62tYGWMLR-Pu-yudz2Zv22WKHSkYJfgXZhveOFGdO_63mKjCLiG7f44-J5K1lfek816o1C_6zEBL_RB6OKo9OREVQDMxVw069GCF0],
-                                   ])
-    doc = Nokogiri::HTML(https.request(req).body)
-    table = doc.search('#caseSearchResultGrid')
-    if Digest::SHA1.hexdigest(table.to_s) != family_search.hashed_description
-      family_search.update date_completed: nil
-      result = "<table style='font-size: 12px;'><tr><th>Docket Number</th><th>Court Type</th><th>Case Caption</th><th>Case Status</th><th>Filing Date</th><th>Primary Participant(s)</th><th>County</th><th>Files</th></tr>"
-      rows = table.css("tr")
-      rows.map do |row|
-        result += "<tr>"
-        row.css('td').each_with_index do |data, index|
-          if index === 9
-            next
-          end
-          if index > 1 && index < 10
-            result += "<td>#{data.text}</td>"
-          elsif index === 18
-            result += "<td><div style='display: flex;'><a href='https://ujsportal.pacourts.us#{data.css("a")[0]["href"]}' target='_blank' title='File 1' style='font-size: 15px;'>🗃️ </a>"
-            result += "<a href='https://ujsportal.pacourts.us#{data.css("a")[1]["href"]}' target='_blank' title='File 2' style='font-size: 15px;'>📁</a></div></td>"
-          else
-          end
-        end
-        result += "</tr>"
-      end
-      result += "</table>"
-      family_search.description = result
-      family_search.hashed_description = Digest::SHA1.hexdigest(result)
-      family_search.date_completed = Time.now
-      family_search.is_link_alert = true if family_search.is_link_alert === false || family_search.is_link_alert.nil?
-      family_search.save
-    end
+    {
+      startUrls: [
+        {
+          url: "https://ujsportal.pacourts.us/CaseSearch",
+          method: "GET",
+          userData: {
+            firstName: first_name,
+            lastName: last_name,
+            birthday: birthday.present? ? birthday.strftime("%m%d%Y") : nil
+          }
+        }
+      ]
+    }
   end
 end
