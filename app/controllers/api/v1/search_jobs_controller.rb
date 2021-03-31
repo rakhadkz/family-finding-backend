@@ -30,6 +30,8 @@ class Api::V1::SearchJobsController < ApplicationController
       "bop"
     when UJS
       "ujsportal_pacourts_us"
+    when PAMEGAN
+      "pa_megan"
     else
       "bop"
     end
