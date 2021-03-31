@@ -10,7 +10,7 @@ class Api::V1::SearchJobsController < ApplicationController
   end
 
   def call_webhook
-    dataset_id = search_job_params[:webhook]["defaultDatasetId"]
+    dataset_id = search_job_params[:webhook]["default_dataset_id"]
     raise ArgumentError.new "No dataset provided" if dataset_id.nil?
     url = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=html")
     req = Net::HTTP::Get.new(url.to_s)
