@@ -3,19 +3,20 @@ require 'rake'
 class Api::V1::SearchJobsController < ApplicationController
 
   def ready
-    if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil ) 
+    if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil )
       render json: { message: "ready" }, status: :ok
-    else 
+    else
       render json: { message: "not ready" }, status: :ok
     end
   end
 
   def call_rake
-    rake = Rake.application
-    rake.load_rakefile
-    task = "search_#{task_name.gsub(/[[:space:]]/, '')}"
-    rake[task].execute(search_job_params)
-    render json: { message: "success", search_vector_id: search_vector_id, task_name: task_name }, status: :ok
+    render json: { data: search_job_params }
+    # rake = Rake.application
+    # rake.load_rakefile
+    # task = "search_#{task_name.gsub(/[[:space:]]/, '')}"
+    # rake[task].execute(search_job_params)
+    # render json: { message: "success", search_vector_id: search_vector_id, task_name: task_name }, status: :ok
   end
 
   private
@@ -56,7 +57,7 @@ class Api::V1::SearchJobsController < ApplicationController
         :first_name,
         :last_name,
         :family_search_id,
-        :webhook
+        :webhook => {}
       )
   end
 
