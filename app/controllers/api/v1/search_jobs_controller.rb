@@ -11,6 +11,7 @@ class Api::V1::SearchJobsController < ApplicationController
 
   def call_webhook
     dataset_id = search_job_params[:webhook]["default_dataset_id"]
+    raise ArgumentError.new "No dataset provided" if dataset_id.nil?
     url = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=html")
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port) {|http|
@@ -18,6 +19,7 @@ class Api::V1::SearchJobsController < ApplicationController
     }
     description = JSON.parse(res.body)[0]["description"]
     family_search_id = JSON.parse(res.body)[0]["family_search_id"]
+    raise ArgumentError.new "Family Search not found" if family_search_id.nil?
     family_search = FamilySearch.find(family_search_id)
     if Digest::SHA1.hexdigest(description) != family_search.hashed_description
       family_search.description = description
