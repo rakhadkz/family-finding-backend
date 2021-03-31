@@ -10,11 +10,23 @@ class Api::V1::SearchJobsController < ApplicationController
   end
 
   def call_webhook
-    rake = Rake.application
-    rake.load_rakefile
-    # task = "search_#{get_task_name.gsub(/[[:space:]]/, '')}"
-    # rake["search_ujsportal_pacourts_us"].execute(search_job_params)
-    render json: { data: search_job_params }
+    dataset_id = search_job_params[:webhook]["default_dataset_id"]
+    url = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=html")
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    description = JSON.parse(res.body)[0]["description"]
+    family_search_id = JSON.parse(res.body)[0]["family_search_id"]
+    family_search = FamilySearch.find(family_search_id)
+    if Digest::SHA1.hexdigest(description) != family_search.hashed_description
+      family_search.description = description
+      family_search.hashed_description = Digest::SHA1.hexdigest(description)
+      family_search.is_link_alert = true if family_search.is_link_alert === false || family_search.is_link_alert.nil?
+    end
+    family_search.date_completed = Time.now
+    family_search.save
+    render status: :ok
   end
 
   def call_rake
@@ -95,9 +107,9 @@ class Api::V1::SearchJobsController < ApplicationController
       customData: {
         firstName: first_name,
         lastName: last_name,
-        birthday: birthday.present? ? birthday.strftime("%m%d%Y") : nil
+        birthday: birthday.present? ? birthday.strftime("%m%d%Y") : nil,
         family_search_id: family_search.id
-      },
+      }
     }
   end
 
