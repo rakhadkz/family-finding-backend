@@ -6,6 +6,7 @@ require 'json'
 
 class UjsportalPacourtsUsJob < ApplicationJob
   queue_as :default
+  TOKEN = "6SazwMxeqz9f3QLsExNWJ8tR7"
   SEARCH_VECTOR_ID = ApplicationController::UJS
   def perform(options)
     if options[:family_search_id].present?
@@ -15,14 +16,24 @@ class UjsportalPacourtsUsJob < ApplicationJob
       raise ArgumentError.new "Not Ujs search vector!" if family_search.search_vector_id != SEARCH_VECTOR_ID
 
       if options.key?(:webhook)
-        response = options[:webhook][:description]
-        if Digest::SHA1.hexdigest(response) != family_search.hashed_description
-          family_search.description = response
-          family_search.hashed_description = Digest::SHA1.hexdigest(response)
+        dataset_id = options[:webhook]["default_dataset_id"]
+        url = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=html")
+        req = Net::HTTP::Get.new(url.to_s)
+        res = Net::HTTP.start(url.host, url.port) {|http|
+          http.request(req)
+        }
+        puts res.body
+        description = JSON.parse(res.body)[0]["description"]
+        if Digest::SHA1.hexdigest(description) != family_search.hashed_description
+          family_search.description = description
+          family_search.hashed_description = Digest::SHA1.hexdigest(description)
           family_search.is_link_alert = true if family_search.is_link_alert === false || family_search.is_link_alert.nil?
         end
         family_search.date_completed = Time.now
         family_search.save
+        puts "Successfully saved!"
+        puts family_search.description
+        puts "========"
       else
         send_request family_search
       end

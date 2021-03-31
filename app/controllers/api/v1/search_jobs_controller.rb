@@ -1,7 +1,6 @@
 Rake::Task.clear
 require 'rake'
 class Api::V1::SearchJobsController < ApplicationController
-
   def ready
     if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil )
       render json: { message: "ready" }, status: :ok
@@ -10,13 +9,20 @@ class Api::V1::SearchJobsController < ApplicationController
     end
   end
 
-  def call_rake
+  def call_webhook
+    rake = Rake.application
+    rake.load_rakefile
+    # task = "search_#{get_task_name.gsub(/[[:space:]]/, '')}"
+    rake["search_ujsportal_pacourts_us"].execute(search_job_params)
     render json: { data: search_job_params }
-    # rake = Rake.application
-    # rake.load_rakefile
-    # task = "search_#{task_name.gsub(/[[:space:]]/, '')}"
-    # rake[task].execute(search_job_params)
-    # render json: { message: "success", search_vector_id: search_vector_id, task_name: task_name }, status: :ok
+  end
+
+  def call_rake
+    rake = Rake.application
+    rake.load_rakefile
+    task = "search_#{task_name.gsub(/[[:space:]]/, '')}"
+    rake[task].execute(search_job_params)
+    render json: { message: "success", search_vector_id: search_vector_id, task_name: task_name }, status: :ok
   end
 
   private
