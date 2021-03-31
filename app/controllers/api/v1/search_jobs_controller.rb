@@ -10,7 +10,6 @@ class Api::V1::SearchJobsController < ApplicationController
     end
   end
 
-
   def call_rake
     rake = Rake.application
     rake.load_rakefile
@@ -20,6 +19,10 @@ class Api::V1::SearchJobsController < ApplicationController
   end
 
   private
+
+  def get_task_name
+    Generator.generate_username(search_vector.name)
+  end
 
   def task_name
     case search_vector_id
@@ -36,6 +39,10 @@ class Api::V1::SearchJobsController < ApplicationController
     family_search.search_vector_id
   end
 
+  def search_vector
+    @search_vector ||= SearchVector.find(family_search.search_vector_id)
+  end
+
   def family_search
     @family_search ||= FamilySearch.find(search_job_params[:family_search_id])
   end
@@ -46,7 +53,8 @@ class Api::V1::SearchJobsController < ApplicationController
         :task,
         :first_name,
         :last_name,
-        :family_search_id
+        :family_search_id,
+        :webhook
       )
   end
 

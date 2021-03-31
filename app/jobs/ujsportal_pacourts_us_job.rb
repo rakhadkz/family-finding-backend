@@ -10,11 +10,24 @@ class UjsportalPacourtsUsJob < ApplicationJob
   def perform(options)
     if options[:family_search_id].present?
       family_search = FamilySearch.find options[:family_search_id]
+
       raise ArgumentError.new "Connection id cannot be nil" if family_search.child_contact_id.nil?
       raise ArgumentError.new "Not Ujs search vector!" if family_search.search_vector_id != SEARCH_VECTOR_ID
-      send_request family_search
+
+      if options.key?(:webhook)
+        response = options[:webhook][:description]
+        if Digest::SHA1.hexdigest(response) != family_search.hashed_description
+          family_search.description = response
+          family_search.hashed_description = Digest::SHA1.hexdigest(response)
+          family_search.is_link_alert = true if family_search.is_link_alert === false || family_search.is_link_alert.nil?
+        end
+        family_search.date_completed = Time.now
+        family_search.save
+      else
+        send_request family_search
+      end
     else
-      scope.each { |family_search| send_request family_search }
+      scope.each { |item| send_request item }
     end
   end
 
