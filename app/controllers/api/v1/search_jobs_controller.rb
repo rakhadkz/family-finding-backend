@@ -1,5 +1,9 @@
 Rake::Task.clear
 require 'rake'
+require 'net/https'
+require 'json'
+require 'open-uri'
+
 class Api::V1::SearchJobsController < ApplicationController
   def ready
     if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil )
@@ -12,13 +16,9 @@ class Api::V1::SearchJobsController < ApplicationController
   def call_webhook
     dataset_id = search_job_params[:webhook]["default_dataset_id"]
     raise ArgumentError.new "No dataset provided" if dataset_id.nil?
-    url = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=html")
-    req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port) {|http|
-      http.request(req)
-    }
-    description = JSON.parse(res.body)[0]["description"]
-    family_search_id = JSON.parse(res.body)[0]["family_search_id"]
+    response = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=json&token=#{ENV["APIFY_TOKEN"]}").read
+    description = JSON.parse(response)[0]["description"]
+    family_search_id = JSON.parse(response)[0]["family_search_id"]
     raise ArgumentError.new "Family Search not found" if family_search_id.nil?
     family_search = FamilySearch.find(family_search_id)
     if Digest::SHA1.hexdigest(description) != family_search.hashed_description
