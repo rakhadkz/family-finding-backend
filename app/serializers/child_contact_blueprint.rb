@@ -14,8 +14,8 @@ class ChildContactBlueprint < Blueprinter::Base
     connection.templates_sents.size
   end
 
-  field :alerts_size, default: "0" do |connection|
-    connection.family_searches.only_link_alerts.size
+  field :alerts_size, default: "0" do |child_contact|
+    child_contact.family_searches.only_link_alerts.not_rejected
   end
 
   view :children do
@@ -43,8 +43,8 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   view :alerts do
-    association :family_search_connections, blueprint: FamilySearchConnectionBlueprint, view: :extended, name: :alerts do |child_contact|
-      child_contact.family_search_connections.filter_by_link_alerts
+    association :family_searches, blueprint: FamilySearchBlueprint, name: :alerts do |child_contact|
+      child_contact.family_searches.only_link_alerts.not_rejected
     end
   end
 end
