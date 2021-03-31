@@ -96,6 +96,7 @@ class Api::V1::SearchJobsController < ApplicationController
         firstName: first_name,
         lastName: last_name,
         birthday: birthday.present? ? birthday.strftime("%m%d%Y") : nil
+        family_search_id: family_search.id
       },
     }
   end
