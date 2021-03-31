@@ -13,7 +13,7 @@ class Api::V1::SearchJobsController < ApplicationController
     rake = Rake.application
     rake.load_rakefile
     # task = "search_#{get_task_name.gsub(/[[:space:]]/, '')}"
-    rake["search_ujsportal_pacourts_us"].execute(search_job_params)
+    # rake["search_ujsportal_pacourts_us"].execute(search_job_params)
     render json: { data: search_job_params }
   end
 
