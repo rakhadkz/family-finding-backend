@@ -1,13 +1,20 @@
 Rake::Task.clear
 require 'rake'
 class Api::V1::SearchJobsController < ApplicationController
-
   def ready
-    if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil ) 
+    if( FamilySearch.find(search_job_params[:family_search_id]).date_completed != nil )
       render json: { message: "ready" }, status: :ok
-    else 
+    else
       render json: { message: "not ready" }, status: :ok
     end
+  end
+
+  def call_webhook
+    rake = Rake.application
+    rake.load_rakefile
+    # task = "search_#{get_task_name.gsub(/[[:space:]]/, '')}"
+    # rake["search_ujsportal_pacourts_us"].execute(search_job_params)
+    render json: { data: search_job_params }
   end
 
   def call_rake
@@ -31,6 +38,10 @@ class Api::V1::SearchJobsController < ApplicationController
 
   private
 
+  def get_task_name
+    Generator.generate_username(search_vector.name)
+  end
+
   def task_name
     case search_vector_id
     when BOP
@@ -51,7 +62,7 @@ class Api::V1::SearchJobsController < ApplicationController
   def send_request(family_search)
     return if family_search.child_contact.nil?
     family_search.update date_completed: nil
-    uri = URI.parse("https://api.apify.com/v2/actor-tasks/#{task_id}/runs?token=#{ENV["APIFY_TOKEN"]}")
+    uri = URI.parse("https://api.apify.com/v2/actor-tasks/#{search_vector.task_id}/runs?token=#{ENV["APIFY_TOKEN"]}")
     header = { "Content-Type": 'application/json' }
     body = request_body(family_search)
     http = Net::HTTP.new(uri.host, uri.port)
@@ -92,10 +103,9 @@ class Api::V1::SearchJobsController < ApplicationController
   def search_vector_id
     family_search.search_vector_id
   end
-
-  def task_id
-    search_vector = SearchVector.find(search_vector_id)
-    return search_vector ? search_vector.task_id : nil
+  
+  def search_vector
+    @search_vector ||= SearchVector.find(family_search.search_vector_id)
   end
 
   def family_search
@@ -108,7 +118,8 @@ class Api::V1::SearchJobsController < ApplicationController
         :task,
         :first_name,
         :last_name,
-        :family_search_id
+        :family_search_id,
+        :webhook => {}
       )
   end
 
