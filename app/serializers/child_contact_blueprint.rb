@@ -15,7 +15,7 @@ class ChildContactBlueprint < Blueprinter::Base
   end
 
   field :alerts_size, default: "0" do |child_contact|
-    child_contact.family_searches.only_link_alerts.not_rejected
+    child_contact.family_searches.only_link_alerts.not_rejected.count
   end
 
   view :children do
