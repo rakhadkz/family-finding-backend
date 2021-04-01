@@ -34,7 +34,7 @@ class Api::V1::SearchJobsController < ApplicationController
         next if Attachment.where(file_name: attachment["file_name"]).count > 0
         new_attachment = Attachment.create!(**attachment, user_id: family_search.user_id)
         new_attachment.child_contact_attachments.create!(child_contact_id: family_search.child_contact_id)
-        # new_attachment.family_search_attachments.create!(family_search_id: family_search_id)
+        new_attachment.family_search_attachments.create!(family_search_id: family_search_id)
       end
       contacts = JSON.parse(response)[0]["contacts"] || []
       contacts.each do |contact|
