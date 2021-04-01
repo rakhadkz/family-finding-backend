@@ -34,11 +34,13 @@ class Api::V1::SearchJobsController < ApplicationController
         next if Attachment.where(file_name: attachment["file_name"]).count > 0
         new_attachment = Attachment.create!(**attachment, user_id: family_search.user_id)
         new_attachment.child_contact_attachments.create!(child_contact_id: family_search.child_contact_id)
+        new_attachment.family_search_attachments.create!(family_search_id: family_search_id)
       end
       contacts = JSON.parse(response)[0]["contacts"] || []
       contacts.each do |contact|
         new_contact = Contact.create!(contact.except("relationship"))
-        new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
+        new_connection = new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
+        new_connection.family_search_connections.create!(family_search_id: family_search_id)
       end
     end
     render status: :ok
