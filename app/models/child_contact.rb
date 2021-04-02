@@ -17,5 +17,6 @@ class ChildContact < ApplicationRecord
   has_many :communication_templates, through: :templates_sents
 
   has_many :family_search_connections
-  has_many :family_searches, through: :family_search_connections
+
+  has_many :family_searches
 end
