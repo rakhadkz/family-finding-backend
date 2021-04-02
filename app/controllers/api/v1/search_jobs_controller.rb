@@ -104,13 +104,15 @@ class Api::V1::SearchJobsController < ApplicationController
   def request_body(family_search)
     first_name = family_search.child_contact.contact.first_name
     last_name = family_search.child_contact.contact.last_name
+    sex = family_search.child_contact.contact.sex
     birthday = family_search.child_contact.contact.birthday
     {
       customData: {
         firstName: first_name,
         lastName: last_name,
-        birthday: birthday.present? ? birthday.strftime("%m%d%Y") : nil,
-        family_search_id: family_search.id
+        birthday: birthday,
+        family_search_id: family_search.id,
+        sex: sex
       }
     }
   end
