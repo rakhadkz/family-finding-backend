@@ -26,8 +26,7 @@ class Api::V1::SearchJobsController < ApplicationController
       family_search.update!(
         description: description,
         hashed_description: Digest::SHA1.hexdigest(description),
-        is_link_alert: is_link_alert,
-        date_completed: Time.now
+        is_link_alert: is_link_alert
       )
       attachments = JSON.parse(response)[0]["attachments"] || []
       attachments.each do |attachment|
@@ -43,6 +42,7 @@ class Api::V1::SearchJobsController < ApplicationController
         new_connection.family_search_connections.create!(family_search_id: family_search_id)
       end
     end
+    family_search.update!(date_completed: Time.now)
     render status: :ok
   end
 
