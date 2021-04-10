@@ -14,7 +14,7 @@ class Api::V1::SearchJobsController < ApplicationController
   end
 
   def call_webhook
-    dataset_id = search_job_params[:webhook]["default_dataset_id"]
+    dataset_id = search_job_params[:webhook]["default_dataset_id"] || search_job_params[:webhook]["defaultDatasetId"]
     raise ArgumentError.new "No dataset provided" if dataset_id.nil?
     response = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=json&token=#{ENV["APIFY_TOKEN"]}").read
     family_search_id = JSON.parse(response)[0]["family_search_id"]

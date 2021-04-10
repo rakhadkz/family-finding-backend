@@ -49,7 +49,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
     end
 
     def search_vector_params
-      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id)
+      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id, :task_id)
     end
 end
   
