@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_125156) do
+ActiveRecord::Schema.define(version: 2021_04_12_172343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -98,9 +98,11 @@ ActiveRecord::Schema.define(version: 2021_03_31_125156) do
     t.boolean "is_disqualified", default: false
     t.text "disqualify_reason"
     t.datetime "placed_date"
+    t.bigint "link_score_id"
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
+    t.index ["link_score_id"], name: "index_child_contacts_on_link_score_id"
   end
 
   create_table "child_tree_contacts", force: :cascade do |t|
@@ -126,6 +128,8 @@ ActiveRecord::Schema.define(version: 2021_03_31_125156) do
     t.string "gender"
     t.string "permanency_status"
     t.string "system_status"
+    t.string "school_district"
+    t.string "address"
   end
 
   create_table "comment_attachments", force: :cascade do |t|
@@ -265,6 +269,16 @@ ActiveRecord::Schema.define(version: 2021_03_31_125156) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "link_scores", force: :cascade do |t|
+    t.integer "demographics"
+    t.integer "housing"
+    t.integer "financial"
+    t.integer "criminal_history"
+    t.integer "transportation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -380,6 +394,7 @@ ActiveRecord::Schema.define(version: 2021_03_31_125156) do
   add_foreign_key "child_contact_attachments", "child_contacts"
   add_foreign_key "child_contact_comments", "child_contacts"
   add_foreign_key "child_contact_comments", "comments"
+  add_foreign_key "child_contacts", "link_scores"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"

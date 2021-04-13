@@ -33,10 +33,10 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-    first_name = params[:contact][:first_name]
-    last_name = params[:contact][:last_name]
-    uri = URI("https://www.bop.gov/PublicInfo/execute/inmateloc?todo=query&output=json&nameFirst=" + first_name + "&nameLast=" + last_name)
-    render json: Net::HTTP.get(uri)
+    # ChildContact.includes(:contact).find_by(contacts: { first_name: "Sam" })
+    # link_score = LinkScoreCalculator.new(1)
+    # link_score.increment
+    # render json: { result: link_score.increment }
   end
 
   private

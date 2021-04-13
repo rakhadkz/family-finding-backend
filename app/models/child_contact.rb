@@ -19,4 +19,11 @@ class ChildContact < ApplicationRecord
   has_many :family_search_connections
 
   has_many :family_searches
+
+  belongs_to :link_score
+
+  def link_score_number
+    LinkScoreCalculator.new(self).calculate
+  end
+
 end

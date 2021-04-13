@@ -1,0 +1,3 @@
+class LinkScore < ApplicationRecord
+
+end
