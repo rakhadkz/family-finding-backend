@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_062024) do
+ActiveRecord::Schema.define(version: 2021_04_14_064434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -128,7 +128,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_062024) do
     t.string "gender"
     t.string "permanency_status"
     t.string "system_status"
-    t.string "address"
     t.bigint "school_district_id"
     t.index ["school_district_id"], name: "index_children_on_school_district_id"
   end

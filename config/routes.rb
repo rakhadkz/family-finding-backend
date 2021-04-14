@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       resources :family_searches
       resources :family_search_attachments
       resources :family_search_connections
+      resources :school_districts
 
       namespace :super_admin do
         resources :organizations

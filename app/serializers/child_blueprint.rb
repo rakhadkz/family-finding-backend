@@ -1,6 +1,6 @@
 class ChildBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status
+  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id
 
   view :siblings do
     association :all_siblings, blueprint: ChildBlueprint, name: :siblings
