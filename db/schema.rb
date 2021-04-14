@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_172343) do
+ActiveRecord::Schema.define(version: 2021_04_14_062024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -128,8 +128,9 @@ ActiveRecord::Schema.define(version: 2021_04_12_172343) do
     t.string "gender"
     t.string "permanency_status"
     t.string "system_status"
-    t.string "school_district"
     t.string "address"
+    t.bigint "school_district_id"
+    t.index ["school_district_id"], name: "index_children_on_school_district_id"
   end
 
   create_table "comment_attachments", force: :cascade do |t|
@@ -292,6 +293,15 @@ ActiveRecord::Schema.define(version: 2021_04_12_172343) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "school_districts", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.float "lat"
+    t.float "long"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "search_vectors", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -395,6 +405,7 @@ ActiveRecord::Schema.define(version: 2021_04_12_172343) do
   add_foreign_key "child_contact_comments", "child_contacts"
   add_foreign_key "child_contact_comments", "comments"
   add_foreign_key "child_contacts", "link_scores"
+  add_foreign_key "children", "school_districts"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"

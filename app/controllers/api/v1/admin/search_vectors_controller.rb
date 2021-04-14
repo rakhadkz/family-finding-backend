@@ -33,10 +33,8 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-    # ChildContact.includes(:contact).find_by(contacts: { first_name: "Sam" })
-    # link_score = LinkScoreCalculator.new(1)
-    # link_score.increment
-    # render json: { result: link_score.increment }
+
+    render json: { result: "Hello" }
   end
 
   private
