@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         match :ready, via: [:get, :post]
         match :call_apify_task, via: [:get, :post]
         match :call_webhook, via: [:get, :post]
+        match :call_webhook_cheerio, via: [:get, :post]
       end
 
       resources :templates_sent do
