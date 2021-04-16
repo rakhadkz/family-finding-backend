@@ -51,4 +51,8 @@ class ChildContactBlueprint < Blueprinter::Base
       child_contact.family_searches.only_link_alerts.not_rejected
     end
   end
+
+  view :link_score do
+    association :link_score, blueprint: LinkScoreBlueprint
+  end
 end

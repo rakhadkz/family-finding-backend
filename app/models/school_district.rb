@@ -1,4 +1,7 @@
 class SchoolDistrict < ApplicationRecord
+
+  belongs_to :address
+
   def get_lat_long
     {
       "Latitude" => lat,

@@ -12,11 +12,11 @@ class LinkScoreCalculator
     @connection = connection
     @overall = 40
     @categories = {
-      criminal_history: 0,
-      demographics: 0,
-      financial: 0,
-      housing: 0,
-      transportation: 0
+      criminal_history: nil,
+      demographics: nil,
+      financial: nil,
+      housing: nil,
+      transportation: nil
     }
     @nil_categories = CATEGORIES
   end
@@ -24,7 +24,7 @@ class LinkScoreCalculator
   def calculate
     begin
       run_factors
-      CATEGORIES.each { |key, value| @overall += @categories[key] }
+      CATEGORIES.each { |key, value| @overall += @categories[key] unless @categories[key].nil? }
     rescue ZeroOverallError => e
       @overall = 0
       @categories[e.message.to_sym] = 0
@@ -32,12 +32,6 @@ class LinkScoreCalculator
       @connection.link_score.update(@categories)
       return @overall
     end
-  end
-
-  def run_factors
-    proximity
-    megans_low
-    criminal_records
   end
 
   def proximity
@@ -48,13 +42,13 @@ class LinkScoreCalculator
       raise NilInfoError.new(c) if school_district.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.empty?)
       proximity = DistanceMatrix.calculate(school_district.address, contact_address) / 1609
       if proximity <= 10
-        @categories[c] += 20
+        increment_score(c, 20)
       elsif proximity > 10 && proximity <= 30
-        @categories[c] += 10
+        increment_score(c, 10)
       elsif proximity > 30 && proximity <= 60
-        @categories[c] += 5
+        increment_score(c, 5)
       else
-        @categories[c] += 0
+        increment_score(c, 0)
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
@@ -66,11 +60,11 @@ class LinkScoreCalculator
       c = :criminal_history
       criminal_records = RowCounter.count_from_task_id(@connection, "qfpI8LT6l00ylR9dT", c)
       if criminal_records >= 1 && criminal_records < 3
-        @categories[c] -= 20
+        decrement_score(c, 20)
       elsif criminal_records >= 3 && criminal_records < 5
-        @categories[c] -= 40
+        decrement_score(c, 40)
       elsif criminal_records >= 5 && criminal_records < 10
-        @categories[c] -= 60
+        decrement_score(c, 60)
       elsif criminal_records >= 10
         raise ZeroCriminalHistory.new "More than 10 Criminal Records found"
       end
@@ -91,5 +85,22 @@ class LinkScoreCalculator
       @nil_categories[e.message.to_sym] -= 1
     end
   end
+
+  private
+    def increment_score(c, number)
+      @categories[c] = 0 unless @categories[c]
+      @categories[c] += number
+    end
+
+    def decrement_score(c, number)
+      @categories[c] = 0 unless @categories[c]
+      @categories[c] -= number
+    end
+
+    def run_factors
+      proximity
+      megans_low
+      criminal_records
+    end
 
 end

@@ -3,7 +3,7 @@ module DistanceMatrix
   require 'net/http'
   require 'json'
 
-  TOKEN = "YRJo46EXNPOSeX67iC4PUS**nSAcwXpxhQ0PC2lXxuDAZ-**"
+  TOKEN = "TX5gIf0E78OoB_lpBmnJEG**nSAcwXpxhQ0PC2lXxuDAZ-**"
   EARTH_RADIUS = 6371e3
 
   def self.calculate(address1, address2)
@@ -12,6 +12,8 @@ module DistanceMatrix
 
   private
     def self.get_lat_long(address)
+      contact_address = Address.find_by(address_1: address)
+
       school_district = SchoolDistrict.find_by(address: address)
       return school_district&.get_lat_long if school_district&.has_lat_long?
       uri = URI("http://address.melissadata.net/V3/WEB/GlobalAddress/doGlobalAddress?id=#{TOKEN}&a1=#{address}&ctry=US&format=JSON")
