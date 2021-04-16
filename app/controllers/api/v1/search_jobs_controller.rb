@@ -90,7 +90,7 @@ class Api::V1::SearchJobsController < ApplicationController
   end
 
   def call_webhook
-    dataset_id = search_job_params[:webhook]["default_dataset_id"]
+    dataset_id = search_job_params[:webhook]["default_dataset_id"] || search_job_params[:webhook]["defaultDatasetId"]
     raise ArgumentError.new "No dataset provided" if dataset_id.nil?
     response = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=json&token=#{ENV["APIFY_TOKEN"]}").read
     family_search_id = JSON.parse(response)[0]["family_search_id"]
@@ -113,9 +113,12 @@ class Api::V1::SearchJobsController < ApplicationController
       end
       contacts = JSON.parse(response)[0]["contacts"] || []
       contacts.each do |contact|
-        new_contact = Contact.create!(contact.except("relationship"))
-        new_connection = new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
-        new_connection.family_search_connections.create!(family_search_id: family_search_id)
+        existing = Contact.where(:first_name => contact.first_name, :last_name => contact.last_name, :birthday => contact.birthday)
+        if(existing.length == 0)
+          new_contact = Contact.create!(contact.except("relationship"))
+          new_connection = new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
+          new_connection.family_search_connections.create!(family_search_id: family_search_id)
+        end
       end
     end
     family_search.update!(date_completed: Time.now)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_214922) do
+ActiveRecord::Schema.define(version: 2021_04_16_131352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -30,6 +30,14 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.index ["child_id"], name: "index_action_items_on_child_id"
     t.index ["organization_id"], name: "index_action_items_on_organization_id"
     t.index ["user_id"], name: "index_action_items_on_user_id"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "address_1"
+    t.string "address_2"
+    t.string "address_3"
+    t.float "lat"
+    t.float "long"
   end
 
   create_table "alerts", force: :cascade do |t|
@@ -100,7 +108,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "relationship"
     t.bigint "parent_id"
-    t.integer "family_fit_score", default: 0
     t.boolean "potential_match", default: false
     t.boolean "is_confirmed", default: false
     t.boolean "is_placed", default: false
@@ -135,6 +142,8 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.string "gender"
     t.string "permanency_status"
     t.string "system_status"
+    t.bigint "school_district_id"
+    t.index ["school_district_id"], name: "index_children_on_school_district_id"
   end
 
   create_table "comment_attachments", force: :cascade do |t|
@@ -184,8 +193,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.string "first_name"
     t.string "last_name"
     t.datetime "birthday"
-    t.string "address"
-    t.string "address_2"
     t.string "city"
     t.string "state"
     t.string "email"
@@ -197,6 +204,8 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.string "relationship"
     t.string "race"
     t.string "sex"
+    t.bigint "address_id"
+    t.index ["address_id"], name: "index_contacts_on_address_id"
   end
 
   create_table "family_search_attachments", force: :cascade do |t|
@@ -276,6 +285,18 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "link_scores", force: :cascade do |t|
+    t.integer "demographics"
+    t.integer "housing"
+    t.integer "financial"
+    t.integer "criminal_history"
+    t.integer "transportation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_contact_id"
+    t.index ["child_contact_id"], name: "index_link_scores_on_child_contact_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -287,6 +308,14 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
     t.string "city"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "school_districts", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "address_id"
+    t.index ["address_id"], name: "index_school_districts_on_address_id"
   end
 
   create_table "search_vectors", force: :cascade do |t|
@@ -396,10 +425,12 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
   add_foreign_key "child_contact_attachments", "child_contacts"
   add_foreign_key "child_contact_comments", "child_contacts"
   add_foreign_key "child_contact_comments", "comments"
+  add_foreign_key "children", "school_districts"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
   add_foreign_key "communication_templates", "organizations"
   add_foreign_key "communications", "contacts"
+  add_foreign_key "contacts", "addresses"
   add_foreign_key "family_search_attachments", "attachments"
   add_foreign_key "family_search_attachments", "family_searches"
   add_foreign_key "family_search_connections", "child_contacts"
@@ -411,6 +442,8 @@ ActiveRecord::Schema.define(version: 2021_04_14_214922) do
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
+  add_foreign_key "link_scores", "child_contacts"
+  add_foreign_key "school_districts", "addresses"
   add_foreign_key "search_vectors", "organizations"
   add_foreign_key "sendgrid_domains", "organizations"
   add_foreign_key "siblingships", "children"

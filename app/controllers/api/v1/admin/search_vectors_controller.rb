@@ -33,10 +33,21 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-    first_name = params[:contact][:first_name]
-    last_name = params[:contact][:last_name]
-    uri = URI("https://www.bop.gov/PublicInfo/execute/inmateloc?todo=query&output=json&nameFirst=" + first_name + "&nameLast=" + last_name)
-    render json: Net::HTTP.get(uri)
+    file = File.read('school_districts_data.json')
+    data_hash = JSON.parse(file)
+    string = ""
+    data_hash.each do |item|
+      string += item["address"]
+    end
+    render json: { data: string }
+    # connection = ChildContact.find(31)
+    # overall = connection.link_score_overall
+    # link_score = connection.link_score
+    # render json: {
+    #   overall: overall,
+    #   link_score: link_score,
+    #   address: connection.contact.address.address_1
+    # }
   end
 
   private
@@ -49,7 +60,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
     end
 
     def search_vector_params
-      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id)
+      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id, :task_id)
     end
 end
   

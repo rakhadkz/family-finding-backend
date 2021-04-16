@@ -7,8 +7,8 @@ class Api::V1::ChildrenController < ApplicationController
 
   def index
     results = sort(search(filter(Child.all)))
-    children = results.page(params[:page]).per(per_page)
-    render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: page_info(children))
+    children = params[:page].present? ? results.page(params[:page]).per(per_page) : Child.all
+    render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: params[:page].present? ? page_info(children) : nil)
   end
 
   def show
@@ -46,6 +46,6 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :race, :gender)
+    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :race, :gender, :school_district_id)
   end
 end

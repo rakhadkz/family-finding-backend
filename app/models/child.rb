@@ -27,6 +27,10 @@ class Child < ApplicationRecord
 
   has_many :comments
 
+  belongs_to :school_district
+
+  has_one :address
+
   attr_accessor :request_pending
 
   enum continuous_search: { ON: "on", OFF: "off"}
