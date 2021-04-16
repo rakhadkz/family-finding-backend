@@ -6,4 +6,8 @@ class Address < ApplicationRecord
       "Longitude" => long
     }
   end
+
+  def has_lat_long?
+    !lat.nil? && !long.nil?
+  end
 end

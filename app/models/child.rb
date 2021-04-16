@@ -29,7 +29,7 @@ class Child < ApplicationRecord
 
   belongs_to :school_district
 
-  has_one :address
+  belongs_to :address
 
   attr_accessor :request_pending
 
