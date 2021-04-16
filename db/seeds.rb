@@ -61,3 +61,17 @@ end
 #   user = User.create!(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.cell_phone_in_e164, ava: ava)
 #   user.user_organizations.create!(organization_id: i + 1, role: "user")
 # end
+
+# SchoolDistrict.all.each do |item|
+#   address = Address.create!(address_1: item.address, lat: item.lat, long: item.long)
+#   item.update!(address_id: address.id, lat: nil, long: nil, address: nil)
+# end
+#
+require "json"
+file = File.read('school_districts_data.json')
+data_hash = JSON.parse(file)
+data_hash.each do |district|
+  district = SchoolDistrict.create!(name: district["name"])
+  address = Address.create!(address_1: district["address"])
+  district.update(address_id: address.id)
+end

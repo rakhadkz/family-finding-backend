@@ -19,4 +19,19 @@ class ChildContact < ApplicationRecord
   has_many :family_search_connections
 
   has_many :family_searches
+
+  has_one :link_score
+
+  after_create :create_link_score
+
+  after_find :create_link_score
+
+  def link_score_overall
+    LinkScoreCalculator.new(self).calculate
+  end
+
+  def create_link_score
+    create_link_score! unless link_score
+  end
+
 end
