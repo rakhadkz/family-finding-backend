@@ -66,7 +66,7 @@ class LinkScoreCalculator
       elsif criminal_records >= 5 && criminal_records < 10
         decrement_score(c, 60)
       elsif criminal_records >= 10
-        raise ZeroCriminalHistory.new "More than 10 Criminal Records found"
+        raise ZeroOverallError.new(c)
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
@@ -79,7 +79,7 @@ class LinkScoreCalculator
       megans_low = RowCounter.count_from_task_id(@connection, "AAn4h8mfBNaKk33Rb", c)
       if megans_low >= 1
         @connection.update!(is_disqualified: true, disqualify_reason: "Pa Megan's Low Registration found") if self.is_disqualified != true
-        raise ZeroCriminalHistory.new "Pa Megan's Low Registration found"
+        raise ZeroOverallError.new(c)
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
