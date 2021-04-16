@@ -3,7 +3,7 @@ module DistanceMatrix
   require 'net/http'
   require 'json'
 
-  TOKEN = "TX5gIf0E78OoB_lpBmnJEG**nSAcwXpxhQ0PC2lXxuDAZ-**"
+  TOKEN = ENV["MELISSA-TOKEN"]
   EARTH_RADIUS = 6371e3
 
   def self.calculate(address1, address2)
@@ -11,15 +11,15 @@ module DistanceMatrix
   end
 
   private
-    def self.get_lat_long(address)
-      contact_address = Address.find_by(address_1: address)
-
-      school_district = SchoolDistrict.find_by(address: address)
-      return school_district&.get_lat_long if school_district&.has_lat_long?
-      uri = URI("http://address.melissadata.net/V3/WEB/GlobalAddress/doGlobalAddress?id=#{TOKEN}&a1=#{address}&ctry=US&format=JSON")
+    def self.get_lat_long(address_line)
+      address = Address.find_by(address_1: address_line)
+      if address
+        return address.get_lat_long if address.has_lat_long?
+      end
+      uri = URI("http://address.melissadata.net/V3/WEB/GlobalAddress/doGlobalAddress?id=#{TOKEN}&a1=#{address_line}&ctry=US&format=JSON")
       res = Net::HTTP.get_response(uri)
       response = JSON.parse(res.body)["Records"][0]
-      school_district&.update(lat: response["Latitude"], long: response["Longitude"])
+      address&.update(lat: response["Latitude"], long: response["Longitude"])
       return {
         "Latitude" => response["Latitude"] || 0,
         "Longitude" => response["Longitude"] || 0

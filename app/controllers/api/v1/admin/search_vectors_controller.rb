@@ -33,21 +33,14 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-    file = File.read('school_districts_data.json')
-    data_hash = JSON.parse(file)
-    string = ""
-    data_hash.each do |item|
-      string += item["address"]
-    end
-    render json: { data: string }
-    # connection = ChildContact.find(31)
-    # overall = connection.link_score_overall
-    # link_score = connection.link_score
-    # render json: {
-    #   overall: overall,
-    #   link_score: link_score,
-    #   address: connection.contact.address.address_1
-    # }
+    connection = ChildContact.find(31)
+    overall = connection.link_score_overall
+    link_score = connection.link_score
+    render json: {
+      overall: overall,
+      link_score: link_score,
+      address: connection.contact.address.address_1
+    }
   end
 
   private

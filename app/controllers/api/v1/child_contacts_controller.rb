@@ -32,7 +32,6 @@ class Api::V1::ChildContactsController < ApplicationController
         :contact_id,
         :relationship,
         :parent_id,
-        :family_fit_score,
         :potential_match,
         :is_confirmed,
         :is_disqualified,
