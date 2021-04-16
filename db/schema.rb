@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_131352) do
+ActiveRecord::Schema.define(version: 2021_04_16_083244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 2021_04_16_131352) do
     t.string "address_3"
     t.float "lat"
     t.float "long"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "alerts", force: :cascade do |t|
