@@ -22,16 +22,11 @@ class LinkScoreCalculator
   end
 
   def calculate
-    begin
-      run_factors
-      CATEGORIES.each { |key, value| @overall += @categories[key] unless @categories[key].nil? }
-    rescue ZeroOverallError => e
-      @overall = 0
-      @categories[e.message.to_sym] = 0
-    ensure
-      @connection.link_score.update(@categories)
-      return @overall
-    end
+    run_factors
+    CATEGORIES.each { |key, value| @overall += @categories[key] unless @categories[key].nil? } if @overall
+    @connection.link_score.update(@categories)
+    return 0 unless @overall
+    @overall
   end
 
   def proximity
@@ -40,7 +35,7 @@ class LinkScoreCalculator
       school_district_address = @connection.child.school_district&.address&.address_1
       contact_address = @connection.contact&.address&.address_1
       raise NilInfoError.new(c) if school_district_address.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.empty?)
-      proximity = DistanceMatrix.calculate(school_district_address, contact_address) / 1609
+      proximity = DistanceMatrix.calculate(school_district_address, contact_address, c) / 1609
       if proximity <= 10
         increment_score(c, 20)
       elsif proximity > 10 && proximity <= 30
@@ -52,6 +47,9 @@ class LinkScoreCalculator
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
+    rescue ZeroOverallError => e
+      @overall = nil
+      @categories[e.message.to_sym] = 0
     end
   end
 
@@ -70,6 +68,9 @@ class LinkScoreCalculator
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
+    rescue ZeroOverallError => e
+      @overall = nil
+      @categories[e.message.to_sym] = 0
     end
   end
 
@@ -83,6 +84,9 @@ class LinkScoreCalculator
       end
     rescue NilInfoError => e
       @nil_categories[e.message.to_sym] -= 1
+    rescue ZeroOverallError => e
+      @overall = nil
+      @categories[e.message.to_sym] = 0
     end
   end
 
