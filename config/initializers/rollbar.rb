@@ -19,7 +19,7 @@ Rollbar.configure do |config|
   # config.person_username_method = "username"
   # config.person_email_method = "email"
 
-  # If you want to attach custom data to all exception and message reports,
+  # If you want to attach exceptions data to all exception and message reports,
   # provide a lambda like the following. It should return a hash.
   # config.custom_data_method = lambda { {:some_key => "some_value" } }
 
@@ -47,7 +47,7 @@ Rollbar.configure do |config|
 
   # Enable delayed reporting (using Sidekiq)
   # config.use_sidekiq
-  # You can supply custom Sidekiq options:
+  # You can supply exceptions Sidekiq options:
   # config.use_sidekiq 'queue' => 'default'
 
   # If your application runs behind a proxy server, you can set proxy parameters here.

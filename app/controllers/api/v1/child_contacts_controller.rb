@@ -2,7 +2,7 @@ class Api::V1::ChildContactsController < ApplicationController
   before_action :authenticate_request!
 
   def show
-    render json: ChildContactBlueprint.render(child_contact, root: :data)
+    render json: ChildContactBlueprint.render(child_contact, root: :data, view: view)
   end
 
   def create
@@ -31,7 +31,15 @@ class Api::V1::ChildContactsController < ApplicationController
         :child_id,
         :contact_id,
         :relationship,
-        :parent_id
+        :parent_id,
+        :potential_match,
+        :is_confirmed,
+        :is_disqualified,
+        :is_placed,
+        :disqualify_reason,
+        :placed_date,
+        :sex,
+        :race
       ])
   end
 

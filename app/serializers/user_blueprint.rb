@@ -1,7 +1,7 @@
 class UserBlueprint < Blueprinter::Base
   identifier :id
   fields :id, :email, :first_name, :phone, :last_name, :role, :organization_id
-
+  association :organization, blueprint: OrganizationBlueprint, view: :short
   view :sidebar_profile do
     excludes :id, :email, :first_name, :phone, :last_name
     field :ava
@@ -10,14 +10,12 @@ class UserBlueprint < Blueprinter::Base
     end
   end
 
+  view :table do
+    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: []
+  end
+
   view :extended do
-    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: [] do |user, options|
-      if options[:organization_id]
-        user.user_organizations.filter_by_organization_id(options[:organization_id]).order(id: :asc)
-      else
-        user.user_organizations.order(id: :asc)
-      end
-    end
+    association :user_organizations, blueprint: UserOrganizationBlueprint, view: :short, default: []
   end
 
   view :auth do

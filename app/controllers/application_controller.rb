@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::API
   include ApiException
+  include ActionController::MimeResponds
   MAX_PER_PAGE = 20
+
+  BOP = 10
+  UJS = 5
+  PAMEGAN = 14
 
   def authenticate_request!
     raise ApiException::InvalidToken if auth_token.nil?

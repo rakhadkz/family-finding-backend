@@ -1,10 +1,15 @@
 class Api::V1::Admin::SearchVectorsController < ApplicationController
+  require 'net/https'
   before_action :authenticate_request!
   before_action :require_admin
-  
+  include Filterable
+  include Searchable
+  include Sortable
+
   def index
-    search_vectors = SearchVector.all
-    render json: SearchVectorBlueprint.render(search_vectors, root: :data)
+    results = sort(search(filter(search_vector_scope)))
+    search_vectors = results.page(params[:page]).per(per_page)
+    render json: SearchVectorBlueprint.render(search_vectors, root: :data, view: view, meta: page_info(search_vectors))
   end
 
   def show
@@ -12,6 +17,7 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def create
+    params[:search_vector][:organization_id] = @current_user.organization_id
     search_vector = SearchVector.create!(search_vector_params)
     render json: SearchVectorBlueprint.render(search_vector, root: :data)
   end
@@ -26,13 +32,28 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
     render status: :ok
   end
 
+  def send_request
+    connection = ChildContact.find(31)
+    overall = connection.link_score_overall
+    link_score = connection.link_score
+    render json: {
+      overall: overall,
+      link_score: link_score,
+      address: connection.contact.address.address_1
+    }
+  end
+
   private
+    def search_vector_scope
+      SearchVector.filter_by_org_id @current_user.organization_id
+    end
+
     def search_vector
       @search_vector ||= SearchVector.find(params[:id])
     end
 
     def search_vector_params
-      params.require(:search_vector).permit(:name, :description, :in_continuous_search)
+      params.require(:search_vector).permit(:name, :description, :in_continuous_search, :organization_id, :task_id)
     end
-  end
+end
   

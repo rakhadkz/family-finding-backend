@@ -3,8 +3,11 @@ class OrganizationBlueprint < Blueprinter::Base
   fields :id, :name, :address, :state, :city, :zip, :phone, :logo, :website
 
   view :short do
-    excludes :address, :state, :city, :zip, :phone, :logo, :website
+    excludes :address, :state, :city, :zip, :phone, :website
   end
 
-  association :users, blueprint: UserBlueprint
+  view :extended do
+    association :users, blueprint: UserBlueprint
+    association :twilio_phone_number, blueprint: TwilioPhoneNumberBlueprint
+  end
 end

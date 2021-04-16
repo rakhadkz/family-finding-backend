@@ -1,0 +1,2 @@
+class CheerioSearch < ApplicationRecord
+end

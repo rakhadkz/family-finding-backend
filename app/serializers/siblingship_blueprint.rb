@@ -1,6 +1,6 @@
 class SiblingshipBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :child_id, :sibling_id
+  fields :id, :child_id, :sibling_id 
 
   view :extended do
     excludes :child_id, :sibling_id

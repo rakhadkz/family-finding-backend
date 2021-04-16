@@ -7,31 +7,39 @@ class Api::V1::CommentsController < ApplicationController
 
   def create
     comment = @current_user.comments.create!(comment_params)
-    sendMentionEmails(comment)
+    send_mention_emails(comment)
     render json: CommentBlueprint.render(comment, root: :data)
   end
   
 
   def update
-    comment.update!(comment_params)
+    comment.update!(comment_params) if @current_user.id == comment.user_id
     render json: CommentBlueprint.render(comment, root: :data)
   end
 
   def destroy
-    comment.destroy!
-    head :ok
+    if @current_user.id == comment.user_id
+      ChildContactComment.where(comment_id: comment.id).destroy_all
+      comment.destroy!
+    end
+
+    render json: { message: "removed" }, status: :ok
   end
 
-  def sendMentionEmails(comment)
+  def send_mention_emails(comment)
     UserMailer.comment_reply(comment).deliver_later unless comment.in_reply_to.blank? || comment.child_id.blank? || comment.in_reply_to==0
     UserMailer.comment_mentions(comment) if comment.mentions.present?
-    if(comment.in_reply_to.present? && comment.in_reply_to != 0)
+    create_action_items_on_comments(comment)
+  end
+
+  def create_action_items_on_comments(comment)
+    if(comment.in_reply_to!=0)
       replied_comment = Comment.find_by_id(comment.in_reply_to)
       ActionItem.create!(
         user_id: replied_comment.user_id, 
         child_id: comment.child_id, 
         description: comment.body,
-        title: "New Comment"
+        title: "New comment"
       ) unless replied_comment.user_id == @current_user.id
     end
     if comment.mentions.present?
@@ -40,7 +48,7 @@ class Api::V1::CommentsController < ApplicationController
           user_id: id, 
           child_id: comment.child_id, 
           description: comment.body,
-          title: "New Comment"
+          title: "Someone has mentioned you in a comment"
         ) 
       end
     end
@@ -59,8 +67,10 @@ class Api::V1::CommentsController < ApplicationController
         [
           :title,
           :body,
+          :html_body,
           :in_reply_to,
           :child_id,
+          :user_id,
           :mentions => []
         ])
   end

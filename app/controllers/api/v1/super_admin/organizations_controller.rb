@@ -6,6 +6,8 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   before_action :authenticate_request!
   before_action :require_super_admin
 
+  sortable_by 'organizations.name', 'organizations.address', 'organizations.state', 'organizations.city'
+
   def index
     results = sort(search(filter(Organization.all)))
     organizations = results.page(params[:page]).per(per_page)
@@ -13,7 +15,7 @@ class Api::V1::SuperAdmin::OrganizationsController < ApplicationController
   end
 
   def show
-    render json: OrganizationBlueprint.render(organization, root: :data)
+    render json: OrganizationBlueprint.render(organization, root: :data, view: view)
   end
 
   def create

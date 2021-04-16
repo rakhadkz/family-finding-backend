@@ -12,7 +12,7 @@ class Api::V1::Admin::UsersController < ApplicationController
   def index
     results = sort(search(filter(users_scope)))
     users = results.page(params[:page]).per(per_page)
-    render json: UserBlueprint.render(users, root: :data, view: view, organization_id: organization, meta: page_info(users))
+    render json: UserBlueprint.render(users, root: :data, view: view, user: @current_user, meta: page_info(users))
   end
 
   def create
@@ -26,46 +26,22 @@ class Api::V1::Admin::UsersController < ApplicationController
   end
 
   def show
-    render json: UserBlueprint.render(user, root: :data, view: :extended, organization_id: organization)
+    render json: UserBlueprint.render(user, root: :data, user: @current_user, view: view)
   end
 
   def destroy
-    delete_user
-    head :ok
+    @current_user.delete_role(user)
+    render json: { message: "removed" }, status: :ok
   end
 
   private
 
   def users_scope
-    if role == "super_admin"
-      User.all
-    elsif role == "admin"
-      Organization.find(organization).users
-    else
-      nil
-    end
-  end
-
-  def delete_user
-    if role == "super_admin"
-      user.user_organizations.destroy_all
-    elsif role == "admin"
-      user.user_organizations.find_by(organization_id: organization).destroy!
-    else
-      nil
-    end
-  end
-
-  def organization
-    UserOrganization.filter_by_user_id(@current_user.id).first!.organization_id if role == "admin"
-  end
-
-  def role
-    UserOrganization.filter_by_user_id(@current_user).first!.role
+    @current_user.organization_users
   end
 
   def user
-    @user ||= User.includes(:organizations).find(params[:id])
+    @user ||= @current_user.organization_users.find(params[:id])
   end
 
   def user_params

@@ -10,6 +10,7 @@ gem 'pg'
 gem 'jwt'
 gem 'blueprinter'
 gem 'rollbar'
+gem 'good_job'
 gem 'devise'
 gem 'dotenv-rails'
 gem 'kaminari'
@@ -20,6 +21,10 @@ gem 'rack-cors'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'sendgrid-ruby'
 gem 'twilio-ruby'
+gem 'cloudinary'
+gem 'prawn-markup'
+gem 'prawn', '~>2.2.0'
+gem 'watir'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -34,7 +39,6 @@ end
 
 group :test do
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'rspec-rails'
   gem 'vcr'
   gem 'webmock'
