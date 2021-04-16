@@ -23,7 +23,7 @@ class Api::V1::SearchJobsController < ApplicationController
     cheerioRun = CheerioSearch.where(last_task_id: last_task_id)
     raise ArgumentError.new "No cheerio run provided" if cheerioRun.nil?
     retry_count = cheerioRun[0]["retry_count"]
-    if response.length() == 0 && retry_count <= 10
+    if response.length() == 0 && retry_count <= 15
       puts "HEllo"
       family_search_by_last_run = FamilySearch.find(cheerioRun[0]["family_search_id"])
       puts family_search_by_last_run.child_contact
