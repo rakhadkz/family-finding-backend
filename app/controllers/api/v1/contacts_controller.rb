@@ -38,8 +38,6 @@ class Api::V1::ContactsController < ApplicationController
         :last_name,
         :relationship,
         :birthday,
-        :address,
-        :address_2,
         :city,
         :state,
         :zip,

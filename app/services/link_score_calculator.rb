@@ -37,10 +37,10 @@ class LinkScoreCalculator
   def proximity
     begin
       c = :housing
-      school_district = @connection.child.school_district
-      contact_address = @connection.contact.address
-      raise NilInfoError.new(c) if school_district.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.empty?)
-      proximity = DistanceMatrix.calculate(school_district.address, contact_address) / 1609
+      school_district_address = @connection.child.school_district&.address&.address_1
+      contact_address = @connection.contact&.address&.address_1
+      raise NilInfoError.new(c) if school_district_address.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.empty?)
+      proximity = DistanceMatrix.calculate(school_district_address, contact_address) / 1609
       if proximity <= 10
         increment_score(c, 20)
       elsif proximity > 10 && proximity <= 30

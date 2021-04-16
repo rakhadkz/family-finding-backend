@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_083244) do
+ActiveRecord::Schema.define(version: 2021_04_16_131352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -38,10 +38,6 @@ ActiveRecord::Schema.define(version: 2021_04_16_083244) do
     t.string "address_3"
     t.float "lat"
     t.float "long"
-    t.bigint "child_id"
-    t.bigint "contact_id"
-    t.index ["child_id"], name: "index_addresses_on_child_id"
-    t.index ["contact_id"], name: "index_addresses_on_contact_id"
   end
 
   create_table "alerts", force: :cascade do |t|
@@ -406,8 +402,6 @@ ActiveRecord::Schema.define(version: 2021_04_16_083244) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "addresses", "children"
-  add_foreign_key "addresses", "contacts"
   add_foreign_key "alerts", "children"
   add_foreign_key "alerts", "contacts"
   add_foreign_key "attachments", "users"
