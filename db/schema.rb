@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_064434) do
+ActiveRecord::Schema.define(version: 2021_04_16_004037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -98,11 +98,9 @@ ActiveRecord::Schema.define(version: 2021_04_14_064434) do
     t.boolean "is_disqualified", default: false
     t.text "disqualify_reason"
     t.datetime "placed_date"
-    t.bigint "link_score_id"
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"
-    t.index ["link_score_id"], name: "index_child_contacts_on_link_score_id"
   end
 
   create_table "child_tree_contacts", force: :cascade do |t|
@@ -277,6 +275,8 @@ ActiveRecord::Schema.define(version: 2021_04_14_064434) do
     t.integer "transportation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "child_contact_id"
+    t.index ["child_contact_id"], name: "index_link_scores_on_child_contact_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -403,7 +403,6 @@ ActiveRecord::Schema.define(version: 2021_04_14_064434) do
   add_foreign_key "child_contact_attachments", "child_contacts"
   add_foreign_key "child_contact_comments", "child_contacts"
   add_foreign_key "child_contact_comments", "comments"
-  add_foreign_key "child_contacts", "link_scores"
   add_foreign_key "children", "school_districts"
   add_foreign_key "comments", "children"
   add_foreign_key "comments", "users"
@@ -420,6 +419,7 @@ ActiveRecord::Schema.define(version: 2021_04_14_064434) do
   add_foreign_key "findings", "children"
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
+  add_foreign_key "link_scores", "child_contacts"
   add_foreign_key "search_vectors", "organizations"
   add_foreign_key "sendgrid_domains", "organizations"
   add_foreign_key "siblingships", "children"

@@ -6,6 +6,10 @@ class ChildContactBlueprint < Blueprinter::Base
     connection.attachments.size
   end
 
+  field :link_score_overall do |connection|
+    connection.link_score_overall
+  end
+
   field :comments_size, default: "0" do |connection|
     connection.comments.size
   end

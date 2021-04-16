@@ -13,16 +13,11 @@ module DistanceMatrix
   private
     def self.get_lat_long(address)
       school_district = SchoolDistrict.find_by(address: address)
-      if school_district
-        return {
-          "Latitude" => school_district.lat,
-          "Longitude" => school_district.long
-        } if school_district.lat.present? && school_district.long.present?
-      end
+      return school_district&.get_lat_long if school_district&.has_lat_long?
       uri = URI("http://address.melissadata.net/V3/WEB/GlobalAddress/doGlobalAddress?id=#{TOKEN}&a1=#{address}&ctry=US&format=JSON")
       res = Net::HTTP.get_response(uri)
       response = JSON.parse(res.body)["Records"][0]
-      school_district.update(lat: response["Latitude"], long: response["Longitude"]) if school_district
+      school_district&.update(lat: response["Latitude"], long: response["Longitude"])
       return {
         "Latitude" => response["Latitude"] || 0,
         "Longitude" => response["Longitude"] || 0

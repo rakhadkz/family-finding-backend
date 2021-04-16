@@ -2,6 +2,10 @@ class ChildBlueprint < Blueprinter::Base
   identifier :id
   fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id
 
+  view :short do
+    excludes :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id
+  end
+
   view :siblings do
     association :all_siblings, blueprint: ChildBlueprint, name: :siblings
   end

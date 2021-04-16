@@ -33,8 +33,9 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-
-    render json: { result: "Hello" }
+    connection = ChildContact.find(31)
+    link_score = connection.link_score
+    render json: { connection: connection.link_score_overall, link_score: link_score, address: connection.contact.address }
   end
 
   private

@@ -7,8 +7,8 @@ class Api::V1::ChildrenController < ApplicationController
 
   def index
     results = sort(search(filter(Child.all)))
-    children = results.page(params[:page]).per(per_page)
-    render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: page_info(children))
+    children = params[:page].present? ? results.page(params[:page]).per(per_page) : Child.all
+    render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: params[:page].present? ? page_info(children) : nil)
   end
 
   def show
