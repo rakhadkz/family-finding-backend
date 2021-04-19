@@ -68,10 +68,10 @@ class Api::V1::SearchJobsController < ApplicationController
         puts relatives
         puts "relative 2"
 
-        response[0]["addresses"].each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: family_search.child_contact_id }) }
-        response[0]["phone_numbers"].each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: family_search.child_contact_id }) }
-        response[0]["emails"].each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: family_search.child_contact_id }) }
-        relatives.each do |relative|
+        response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: family_search.child_contact_id }) }
+        response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: family_search.child_contact_id }) }
+        response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: family_search.child_contact_id }) }
+        relatives&.each do |relative|
           sendedRelativeRequest = send_cheerio_relative_request(family_search, relative["fastpeople_url"])
           CheerioSearch.create!({last_task_id: sendedRelativeRequest["data"]["id"], family_search_id:family_search.id, retry_count:0, url: relative["fastpeople_url"] })
         end
@@ -80,9 +80,9 @@ class Api::V1::SearchJobsController < ApplicationController
         is_link_alert = response[0]["is_link_alert"] || false
         contact = Contact.find_or_create_by({first_name: response[0]["full_name"].split[0], last_name: response[0]["full_name"].split[1]})
         child_contact = ChildContact.create!(child_id:family_search.child_id,contact_id:contact.id)
-        response[0]["addresses"].each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
-        response[0]["phone_numbers"].each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
-        response[0]["emails"].each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
+        response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
+        response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
+        response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
         family_search.update!(
           description: new_description,
           is_link_alert: is_link_alert,
