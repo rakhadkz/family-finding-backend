@@ -6,7 +6,8 @@ module DistanceMatrix
   TOKEN = ENV["MELISSA-TOKEN"]
   EARTH_RADIUS = 6371e3
 
-  def self.calculate(address1, address2)
+  def self.calculate(address1, address2, c)
+    @category = c
     calculate_distance(get_lat_long(address1), get_lat_long(address2))
   end
 
@@ -18,7 +19,9 @@ module DistanceMatrix
       end
       uri = URI("http://address.melissadata.net/V3/WEB/GlobalAddress/doGlobalAddress?id=#{TOKEN}&a1=#{address_line}&ctry=US&format=JSON")
       res = Net::HTTP.get_response(uri)
-      response = JSON.parse(res.body)["Records"][0]
+      json_body = JSON.parse(res.body)
+      raise NilInfoError.new(@category) unless json_body["Records"]
+      response = json_body["Records"][0]
       address&.update(lat: response["Latitude"], long: response["Longitude"])
       return {
         "Latitude" => response["Latitude"] || 0,
