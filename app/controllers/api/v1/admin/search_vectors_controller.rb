@@ -6,6 +6,8 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   include Searchable
   include Sortable
 
+  TOKEN = "nrhSNpMT9endmlnov_Y8Y_**nSAcwXpxhQ0PC2lXxuDAZ-**"
+
   def index
     results = sort(search(filter(search_vector_scope)))
     search_vectors = results.page(params[:page]).per(per_page)
@@ -33,14 +35,11 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def send_request
-    connection = ChildContact.find(31)
-    overall = connection.link_score_overall
-    link_score = connection.link_score
-    render json: {
-      overall: overall,
-      link_score: link_score,
-      address: connection.contact.address.address_1
-    }
+
+    contact = Contact.find(2)
+
+    render json: { age: AgeCalculator.calculate(contact.birthday) }
+
   end
 
   private

@@ -140,6 +140,7 @@ class Api::V1::SearchJobsController < ApplicationController
       end
     end
     family_search.update!(date_completed: Time.now)
+    family_search.child_contact.link_score_overall
     render status: :ok
   end
 

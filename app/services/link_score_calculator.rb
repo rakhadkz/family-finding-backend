@@ -19,6 +19,8 @@ class LinkScoreCalculator
       transportation: nil
     }
     @nil_categories = CATEGORIES
+    @contact = @connection.contact
+    @child = @connection.child
   end
 
   def calculate
@@ -32,10 +34,10 @@ class LinkScoreCalculator
   def proximity
     begin
       c = :housing
-      school_district_address = @connection.child.school_district&.address&.address_1
-      contact_address = @connection.contact&.address&.address_1
-      raise NilInfoError.new(c) if school_district_address.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.empty?)
-      proximity = DistanceMatrix.calculate(school_district_address, contact_address, c) / 1609
+      child_address = @child.school_district&.address&.address_1
+      contact_address = @contact.address&.address_1
+      raise NilInfoError.new(c) if child_address.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.strip.empty?)
+      proximity = DistanceMatrix.calculate(contact_address, contact_address, c) / 1609
       if proximity <= 10
         increment_score(c, 20)
       elsif proximity > 10 && proximity <= 30
@@ -90,6 +92,45 @@ class LinkScoreCalculator
     end
   end
 
+  def age
+    begin
+      c = :demographics
+      contact_age = AgeCalculator.calculate(@contact.birthday)
+      raise NilInfoError.new(c) unless contact_age
+      child_age = AgeCalculator.calculate(@child.birthday)
+      raise NilInfoError.new(c) unless child_age
+      raise ZeroOverallError.new(c) if contact_age >= 80
+      if child_age < 10
+        if contact_age >= 65
+          decrement_score(c, 40)
+        elsif contact_age >= 55 && contact_age < 65
+          decrement_score(c, 20)
+        elsif contact_age >= 50 && contact_age < 55
+          decrement_score(c, 10)
+        elsif contact_age >= 25 && contact_age < 40
+          increment_score(c, 20)
+        elsif contact_age < 21
+          raise ZeroOverallError.new(c)
+        end
+      else
+        if contact_age >= 65 && contact_age < 80
+          decrement_score(c, 20)
+        elsif contact_age >= 55 && contact_age < 65
+          decrement_score(c, 10)
+        elsif contact_age >= 25 && contact_age < 45
+          increment_score(c, 10)
+        elsif contact_age < 21
+          raise ZeroOverallError.new(c)
+        end
+      end
+    rescue NilInfoError => e
+      @nil_categories[e.message.to_sym] -= 1
+    rescue ZeroOverallError => e
+      @overall = nil
+      @categories[e.message.to_sym] = 0
+    end
+  end
+
   private
     def increment_score(c, number)
       @categories[c] = 0 unless @categories[c]
@@ -102,6 +143,7 @@ class LinkScoreCalculator
     end
 
     def run_factors
+      age
       proximity
       megans_low
       criminal_records
