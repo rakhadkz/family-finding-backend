@@ -50,6 +50,8 @@ class Api::V1::SearchJobsController < ApplicationController
       puts response[0]["phone_numbers"].length()
       puts result_type
       puts description
+      puts response[0]["emails"]
+      puts relatives
 
       if result_type == 'main'
         is_link_alert = response[0]["is_link_alert"] || false
