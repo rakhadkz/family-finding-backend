@@ -50,8 +50,9 @@ class Api::V1::SearchJobsController < ApplicationController
       puts response[0]["phone_numbers"].length()
       puts result_type
       puts description
+      puts "EMAILS"
       puts response[0]["emails"]
-      puts relatives
+      puts "EMAILS 1"
 
       if result_type == 'main'
         is_link_alert = response[0]["is_link_alert"] || false
@@ -62,6 +63,11 @@ class Api::V1::SearchJobsController < ApplicationController
           relatives_count: relatives.length(),
           current_relatives: 0
         )
+        puts "relative 1"
+
+        puts relatives
+        puts "relative 2"
+
         response[0]["addresses"].each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: family_search.child_contact_id }) }
         response[0]["phone_numbers"].each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: family_search.child_contact_id }) }
         response[0]["emails"].each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: family_search.child_contact_id }) }
