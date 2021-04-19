@@ -68,12 +68,14 @@ class Api::V1::SearchJobsController < ApplicationController
         puts relatives
         puts "relative 2"
         current_address = response[0]["current_address"] || ""
+        childContact = ChildContact.find(family_search.child_contact_id);
+        contact = Contcat.find(childContact.child_id)
         if current_address != ""
-          Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: family_search.child_contact_id })
+          Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
         end
-        response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: family_search.child_contact_id }) }
-        response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: family_search.child_contact_id }) }
-        response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: family_search.child_contact_id }) }
+        response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
+        response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
+        response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
        
         relatives&.each do |relative|
           sendedRelativeRequest = send_cheerio_relative_request(family_search, relative["fastpeople_url"])
