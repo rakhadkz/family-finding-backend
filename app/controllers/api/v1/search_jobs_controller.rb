@@ -69,7 +69,7 @@ class Api::V1::SearchJobsController < ApplicationController
         puts "relative 2"
         current_address = response[0]["current_address"] || ""
         childContact = ChildContact.find(family_search.child_contact_id);
-        contact = Contact.find(childContact.child_id)
+        contact = Contact.find(childContact.contact_id)
         if current_address != ""
           Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
         end
