@@ -25,7 +25,8 @@ class ChildContact < ApplicationRecord
   after_find :create_link_score
 
   def calculate_link_score
-    LinkScoreCalculator.new(self).calculate
+    overall = LinkScoreCalculator.new(self).calculate
+    self.update!(link_score_overall: overall)
   end
 
   def create_link_score
