@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_131352) do
+ActiveRecord::Schema.define(version: 2021_04_19_204908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_131352) do
     t.boolean "is_disqualified", default: false
     t.text "disqualify_reason"
     t.datetime "placed_date"
+    t.integer "link_score_overall"
     t.index ["child_id", "contact_id"], name: "index_child_contacts_on_child_id_and_contact_id", unique: true
     t.index ["child_id"], name: "index_child_contacts_on_child_id"
     t.index ["contact_id"], name: "index_child_contacts_on_contact_id"

@@ -1,13 +1,9 @@
 class ChildContactBlueprint < Blueprinter::Base
   identifier :id
-  fields :child_id, :contact_id, :relationship, :parent_id, :potential_match, :is_placed, :is_confirmed, :is_disqualified, :disqualify_reason, :placed_date
+  fields :child_id, :contact_id, :relationship, :parent_id, :potential_match, :is_placed, :is_confirmed, :is_disqualified, :disqualify_reason, :placed_date, :link_score_overall
 
   field :attachments_size, default: "0" do |connection|
     connection.attachments.size
-  end
-
-  field :link_score_overall do |connection|
-    connection.link_score_overall
   end
 
   field :comments_size, default: "0" do |connection|
