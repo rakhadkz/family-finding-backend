@@ -110,34 +110,50 @@ class Api::V1::SearchJobsController < ApplicationController
   def call_webhook
     dataset_id = search_job_params[:webhook]["default_dataset_id"] || search_job_params[:webhook]["defaultDatasetId"]
     raise ArgumentError.new "No dataset provided" if dataset_id.nil?
-    response = URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=json&token=#{ENV["APIFY_TOKEN"]}").read
-    family_search_id = JSON.parse(response)[0]["family_search_id"]
+    response = JSON.parse(URI.parse("https://api.apify.com/v2/datasets/#{dataset_id}/items?clean=true&format=json&token=#{ENV["APIFY_TOKEN"]}").read)
+
+    family_search_id = response[0]["family_search_id"]
     raise ArgumentError.new "Family Search not found" if family_search_id.nil?
     family_search = FamilySearch.find(family_search_id)
-    description = JSON.parse(response)[0]["description"]
+    description = response[0]["description"]
+
+    child_contact = ChildContact.find(family_search.child_contact_id);
+    contact = Contact.find(child_contact.contact_id)
+
+    current_address = response[0]["addresses"][0] || ""
+    if current_address != ""
+      Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
+    end
+    response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
+    response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
+    response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
+
     if Digest::SHA1.hexdigest(description) != family_search.hashed_description
-      is_link_alert = JSON.parse(response)[0]["is_link_alert"] || false
+      is_link_alert = response[0]["is_link_alert"] || false
       family_search.update!(
         description: description,
         hashed_description: Digest::SHA1.hexdigest(description),
         is_link_alert: is_link_alert
       )
-      attachments = JSON.parse(response)[0]["attachments"] || []
+
+      attachments = response[0]["attachments"] || []
       attachments.each do |attachment|
         next if Attachment.where(file_name: attachment["file_name"]).count > 0
         new_attachment = Attachment.create!(**attachment, user_id: family_search.user_id)
         new_attachment.child_contact_attachments.create!(child_contact_id: family_search.child_contact_id)
         new_attachment.family_search_attachments.create!(family_search_id: family_search_id)
       end
-      contacts = JSON.parse(response)[0]["contacts"] || []
+
+      contacts = response[0]["contacts"] || []
       contacts.each do |contact|
-        existing = Contact.where(:first_name => contact.first_name, :last_name => contact.last_name, :birthday => contact.birthday)
+        existing = Contact.where(:first_name => contact['first_name'], :last_name => contact['last_name'], :birthday => contact['birthday'])
         if(existing.length == 0)
           new_contact = Contact.create!(contact.except("relationship"))
           new_connection = new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
           new_connection.family_search_connections.create!(family_search_id: family_search_id)
         end
       end
+
     end
     family_search.update!(date_completed: Time.now)
     family_search.child_contact.calculate_link_score
