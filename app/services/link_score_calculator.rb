@@ -2,7 +2,7 @@ class LinkScoreCalculator
 
   CATEGORIES = {
     criminal_history: 2,
-    demographics: 0,
+    demographics: 1  ,
     financial: 0,
     housing: 1,
     transportation: 0
@@ -19,14 +19,12 @@ class LinkScoreCalculator
       transportation: nil
     }
     @nil_categories = CATEGORIES
-    @contact = @connection.contact
-    @child = @connection.child
   end
 
   def calculate
     run_factors
     CATEGORIES.each { |key, value| @overall += @categories[key] unless @categories[key].nil? } if @overall
-    @connection.link_score.update(@categories)
+    @connection.link_score.update!(@categories)
     return 0 unless @overall
     @overall
   end
@@ -34,8 +32,8 @@ class LinkScoreCalculator
   def proximity
     begin
       c = :housing
-      child_address = @child.school_district&.address&.address_1
-      contact_address = @contact.address&.address_1
+      child_address = child.school_district&.address&.address_1
+      contact_address = contact.address&.address_1
       raise NilInfoError.new(c) if child_address.nil? || contact_address.nil? || (!contact_address.nil? && contact_address.strip.empty?)
       proximity = DistanceMatrix.calculate(contact_address, contact_address, c) / 1609
       if proximity <= 10
@@ -111,6 +109,8 @@ class LinkScoreCalculator
           increment_score(c, 20)
         elsif contact_age < 21
           raise ZeroOverallError.new(c)
+        else
+          increment_score(c, 0)
         end
       else
         if contact_age >= 65 && contact_age < 80
@@ -121,6 +121,8 @@ class LinkScoreCalculator
           increment_score(c, 10)
         elsif contact_age < 21
           raise ZeroOverallError.new(c)
+        else
+          increment_score(c, 0)
         end
       end
     rescue NilInfoError => e
@@ -143,10 +145,17 @@ class LinkScoreCalculator
     end
 
     def run_factors
-      age
       proximity
       megans_low
       criminal_records
+      age
     end
 
+    def contact
+      @contact ||= @connection.contact
+    end
+
+    def child
+      @child ||= @connection.child
+    end
 end
