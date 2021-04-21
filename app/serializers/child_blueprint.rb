@@ -23,7 +23,9 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :family_searches do
-    association :family_searches, blueprint: FamilySearchBlueprint
+    association :family_searches, blueprint: FamilySearchBlueprint do |child|
+      child.family_searches.only_link_alerts
+    end
   end
 
   view :not_child_users do
