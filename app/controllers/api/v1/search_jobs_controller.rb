@@ -120,13 +120,19 @@ class Api::V1::SearchJobsController < ApplicationController
     child_contact = ChildContact.find(family_search.child_contact_id);
     contact = Contact.find(child_contact.contact_id)
 
-    current_address = response[0]["addresses"][0] || ""
-    if current_address != ""
-      Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
+    if response[0]["addresses"] != nil
+      current_address = response[0]["addresses"][0] || ""
+      if current_address != ""
+        Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
+      end
+      response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
     end
-    response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
-    response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
-    response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
+    if response[0]["phone_numbers"]
+      response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
+    end
+    if response[0]["emails"]
+      response[0]["emails"]&.each { |email| Communication.find_or_create_by({communication_type: "email", value: email, contact_id: contact.id }) }
+    end
 
     if Digest::SHA1.hexdigest(description) != family_search.hashed_description
       is_link_alert = response[0]["is_link_alert"] || false
