@@ -23,7 +23,7 @@ module DistanceMatrix
       raise NilInfoError.new(@category) unless json_body["Records"]
       response = json_body["Records"][0]
       address&.update(lat: response["Latitude"], long: response["Longitude"])
-      return {
+      {
         "Latitude" => response["Latitude"] || 0,
         "Longitude" => response["Longitude"] || 0
       }
