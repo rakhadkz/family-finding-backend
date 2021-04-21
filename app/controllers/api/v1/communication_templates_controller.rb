@@ -25,9 +25,10 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def send_message_to_contact
+    child_contact = ChildContact.where(child_id: template_send_params[:child_id], contact_id: template_send_params[:child_contact_id])
     template_sent = TemplatesSent.create!(
       communication_template_id: template_send_params[:template_id],
-      child_contact_id: template_send_params[:child_contact_id],
+      child_contact_id: child_contact[0].id,
       content: template_send_params[:content],
     )
     msg = template_sent[:id];
