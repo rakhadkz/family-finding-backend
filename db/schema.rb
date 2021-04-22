@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_204908) do
+ActiveRecord::Schema.define(version: 2021_04_22_130648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -298,6 +298,16 @@ ActiveRecord::Schema.define(version: 2021_04_19_204908) do
     t.index ["child_contact_id"], name: "index_link_scores_on_child_contact_id"
   end
 
+  create_table "linked_connections", force: :cascade do |t|
+    t.bigint "connection_1_id", null: false
+    t.bigint "connection_2_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["connection_1_id", "connection_2_id"], name: "index_linked_connections_on_connection_1_id_and_connection_2_id", unique: true
+    t.index ["connection_1_id"], name: "index_linked_connections_on_connection_1_id"
+    t.index ["connection_2_id"], name: "index_linked_connections_on_connection_2_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.text "address"
@@ -439,6 +449,8 @@ ActiveRecord::Schema.define(version: 2021_04_19_204908) do
   add_foreign_key "findings", "search_vectors"
   add_foreign_key "findings", "users"
   add_foreign_key "link_scores", "child_contacts"
+  add_foreign_key "linked_connections", "child_contacts", column: "connection_1_id"
+  add_foreign_key "linked_connections", "child_contacts", column: "connection_2_id"
   add_foreign_key "school_districts", "addresses"
   add_foreign_key "search_vectors", "organizations"
   add_foreign_key "sendgrid_domains", "organizations"
