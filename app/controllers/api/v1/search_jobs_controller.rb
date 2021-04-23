@@ -157,6 +157,7 @@ class Api::V1::SearchJobsController < ApplicationController
           new_contact = Contact.create!(contact.except("relationship"))
           new_connection = new_contact.child_contacts.create!(child_id: family_search.child_id, relationship: contact["relationship"])
           new_connection.family_search_connections.create!(family_search_id: family_search_id)
+          LinkedConnection.create!(connection_1_id: family_search.child_contact_id, connection_2_id: new_connection.id)
         end
       end
 
@@ -165,6 +166,8 @@ class Api::V1::SearchJobsController < ApplicationController
     family_search.child_contact.calculate_link_score
     render status: :ok
   end
+
+  # 18 23
 
   def call_rake
     rake = Rake.application

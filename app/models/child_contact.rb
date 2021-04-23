@@ -34,4 +34,16 @@ class ChildContact < ApplicationRecord
     create_link_score! unless link_score
   end
 
+  def linked_connection
+    connection = LinkedConnection.where(connection_2_id: id).first&.connection_1
+    return nil unless connection
+    {
+      child_contact_id: connection.id,
+      contact_id: connection.contact_id,
+      child_id: connection.child_id,
+      first_name: connection.contact.first_name,
+      last_name: connection.contact.last_name
+    }
+  end
+
 end
