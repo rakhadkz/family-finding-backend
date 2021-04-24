@@ -45,7 +45,9 @@ class Api::V1::ContactsController < ApplicationController
         :phone,
         :parent_id,
         :race,
-        :sex
+        :sex,
+        :access_to_transportation,
+        :verified_employment
       ])
   end
   

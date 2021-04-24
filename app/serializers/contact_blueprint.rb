@@ -1,6 +1,6 @@
 class ContactBlueprint < Blueprinter::Base
   identifier :id
-  fields :first_name, :last_name, :relationship, :birthday, :city, :state, :zip, :email, :phone, :race, :sex, :address_id
+  fields :first_name, :last_name, :relationship, :birthday, :city, :state, :zip, :email, :phone, :race, :sex, :address_id, :access_to_transportation, :verified_employment
   association :communications, blueprint: CommunicationBlueprint
   association :address, blueprint: AddressBlueprint
 end
