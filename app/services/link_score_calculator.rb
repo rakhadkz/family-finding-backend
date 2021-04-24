@@ -93,9 +93,9 @@ class LinkScoreCalculator
   def age
     begin
       c = :demographics
-      contact_age = AgeCalculator.calculate(@contact.birthday)
+      contact_age = AgeCalculator.calculate(contact.birthday)
       raise NilInfoError.new(c) unless contact_age
-      child_age = AgeCalculator.calculate(@child.birthday)
+      child_age = AgeCalculator.calculate(child.birthday)
       raise NilInfoError.new(c) unless child_age
       raise ZeroOverallError.new(c) if contact_age >= 80
       if child_age < 10
@@ -133,6 +133,18 @@ class LinkScoreCalculator
     end
   end
 
+  def vehicle
+    c = :transportation
+    has_transport = contact.access_to_transportation
+    if has_transport === nil
+      @nil_categories[c] -= 1
+    elsif has_transport
+      increment_score(c, 10)
+    else
+      increment_score(c, 0)
+    end
+  end
+
   private
     def increment_score(c, number)
       @categories[c] = 0 unless @categories[c]
@@ -145,6 +157,7 @@ class LinkScoreCalculator
     end
 
     def run_factors
+      vehicle
       proximity
       megans_low
       criminal_records

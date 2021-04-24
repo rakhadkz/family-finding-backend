@@ -6,8 +6,8 @@ class Api::V1::ChildrenController < ApplicationController
   before_action :authenticate_request!
 
   def index
-    results = sort(search(filter(Child.all)))
-    children = params[:page].present? ? results.page(params[:page]).per(per_page) : Child.all
+    results = sort(search(filter(children_scope)))
+    children = params[:page] ? results.page(params[:page]).per(per_page) : children_scope
     render json: ChildBlueprint.render(children, root: :data, view: view, user: @current_user, meta: params[:page].present? ? page_info(children) : nil)
   end
 
@@ -31,6 +31,21 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   private
+
+  def children_scope
+    case params[:sort]
+    when "days_in_system_asc"
+      Child.all.order(created_at: :desc)
+    when "days_in_system_desc"
+      Child.all.order(created_at: :asc)
+    when "connections_asc"
+      Child.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) asc')
+    when "connections_desc"
+      Child.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) desc')
+    else
+      Child.all
+    end
+  end
 
   def child
     child = Child.includes(:child_contacts, :contacts).find(params[:id])
