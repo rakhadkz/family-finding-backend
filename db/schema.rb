@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_130648) do
+ActiveRecord::Schema.define(version: 2021_04_23_174956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -206,6 +206,8 @@ ActiveRecord::Schema.define(version: 2021_04_22_130648) do
     t.string "race"
     t.string "sex"
     t.bigint "address_id"
+    t.boolean "verified_employment"
+    t.boolean "access_to_transportation"
     t.index ["address_id"], name: "index_contacts_on_address_id"
   end
 
