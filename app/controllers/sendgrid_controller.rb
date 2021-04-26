@@ -31,7 +31,7 @@ class SendgridController < ApplicationController
   end
 
   def sendgrid_params
-    params.require(:_json).first.permit(:ff_msg_id, :event)
+    params.require(:_json).first.permit!
   end
 
   def authenticate_domain_name(domain_name)

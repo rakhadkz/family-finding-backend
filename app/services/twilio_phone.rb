@@ -10,7 +10,7 @@ module TwilioPhone
       body: params[:content],  
       from: from,
       to: params[:phone],
-      status_callback: "https://family-finding-api-dev.herokuapp.com/twilio_webhook/0987654321poiuytrewq"
+      status_callback: "https://family-finding-api.herokuapp.com/twilio_webhook/0987654321poiuytrewq"
     ) 
     puts('WHAHAHAHA',message)
     return message.sid
