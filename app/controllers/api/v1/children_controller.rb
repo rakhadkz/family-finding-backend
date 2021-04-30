@@ -33,17 +33,26 @@ class Api::V1::ChildrenController < ApplicationController
   private
 
   def children_scope
+    if params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "active"
+      children = Child.where(system_status: :active)
+    elsif params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "assigned"
+      children = Child.joins(:user_children)
+    elsif params[:filter].split(",").count === 2
+      children = Child.joins(:user_children).where(system_status: :active)
+    else
+      children = Child.all
+    end
     case params[:sort]
     when "days_in_system_asc"
-      Child.all.order(created_at: :desc)
+      children.order(created_at: :desc)
     when "days_in_system_desc"
-      Child.all.order(created_at: :asc)
+      children.order(created_at: :asc)
     when "connections_asc"
-      Child.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) asc')
+      children.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) asc')
     when "connections_desc"
-      Child.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) desc')
+      children.left_outer_joins(:contacts).group(:id).order('COUNT(contacts.id) desc')
     else
-      Child.all
+      children.order(created_at: :asc)
     end
   end
 

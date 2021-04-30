@@ -48,7 +48,6 @@ class ChildBlueprint < Blueprinter::Base
       ((Time.now - child.created_at) / 86400).to_i
     end
     field :continuous_search, default: "ON"
-    field :permanency_goal, default: "Return To Parent"
     field :relatives do |child|
       child.contacts.count
     end
@@ -65,8 +64,8 @@ class ChildBlueprint < Blueprinter::Base
   end
 
   view :extended do
-    field :gender, default: :Undefined
-    field :race, default: :Undefined
+    field :gender
+    field :race
     field :system_status, default: :Inactive
     field :request_pending, default: false
   end
