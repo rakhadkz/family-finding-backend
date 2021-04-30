@@ -38,3 +38,5 @@
 /tmp
 .idea/
 .vscode/
+
+/vendor/bundle

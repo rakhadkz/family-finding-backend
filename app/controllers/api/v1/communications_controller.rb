@@ -30,7 +30,8 @@ class Api::V1::CommunicationsController < ApplicationController
       .permit([
                 :communication_type,
                 :value,
-                :contact_id
+                :contact_id,
+                :is_current
               ])
   end
 end
