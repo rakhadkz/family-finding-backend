@@ -71,7 +71,7 @@ class Api::V1::SearchJobsController < ApplicationController
         childContact = ChildContact.find(family_search.child_contact_id);
         contact = Contact.find(childContact.contact_id)
         if current_address != ""
-          Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
+          Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id, is_current:true })
         end
         response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
         response[0]["phone_numbers"]&.each { |phone| Communication.find_or_create_by({communication_type: "phone", value: phone, contact_id: contact.id }) }
@@ -123,7 +123,7 @@ class Api::V1::SearchJobsController < ApplicationController
     if response[0]["addresses"] != nil
       current_address = response[0]["addresses"][0] || ""
       if current_address != ""
-        Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id })
+        Communication.find_or_create_by({communication_type: "address", value: current_address, contact_id: contact.id, is_current: true })
       end
       response[0]["addresses"]&.each { |address| Communication.find_or_create_by({communication_type: "address", value: address, contact_id: contact.id }) }
     end
