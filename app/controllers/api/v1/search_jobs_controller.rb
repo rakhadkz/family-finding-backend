@@ -24,35 +24,20 @@ class Api::V1::SearchJobsController < ApplicationController
     raise ArgumentError.new "No cheerio run provided" if cheerioRun.nil?
     retry_count = cheerioRun[0]["retry_count"]
     if response.length() == 0 && retry_count <= 15
-      puts "HEllo"
       family_search_by_last_run = FamilySearch.find(cheerioRun[0]["family_search_id"])
-      puts family_search_by_last_run.child_contact
       if cheerioRun[0]["url"].nil?
-        puts "WWS"
         request_result = send_request(family_search_by_last_run)
-        puts request_result
         cheerioRun.update(retry_count: retry_count + 1, last_task_id: request_result["data"]["id"])
       else
         request_result = send_cheerio_relative_request(family_search_by_last_run, cheerioRun[0]["url"])
         cheerioRun.update(retry_count: retry_count + 1, last_task_id: request_result["data"]["id"])
       end
     else
-      puts "ELSE HELLOW 2"
-      puts response[0]["family_search_id"]
       family_search_id = response[0]["family_search_id"]
       raise ArgumentError.new "Family Search not found" if family_search_id.nil?
       result_type = response[0]["result_type"]
       family_search = FamilySearch.find(family_search_id)
       description = response[0]["description"]
-      puts response[0]["addresses"]
-      puts response[0]["addresses"].length()
-      puts response[0]["phone_numbers"]
-      puts response[0]["phone_numbers"].length()
-      puts result_type
-      puts description
-      puts "EMAILS"
-      puts response[0]["emails"]
-      puts "EMAILS 1"
 
       if result_type == 'main'
         is_link_alert = response[0]["is_link_alert"] || false
@@ -63,10 +48,7 @@ class Api::V1::SearchJobsController < ApplicationController
           relatives_count: relatives.length(),
           current_relatives: 0
         )
-        puts "relative 1"
 
-        puts relatives
-        puts "relative 2"
         current_address = response[0]["current_address"] || ""
         childContact = ChildContact.find(family_search.child_contact_id);
         contact = Contact.find(childContact.contact_id)
