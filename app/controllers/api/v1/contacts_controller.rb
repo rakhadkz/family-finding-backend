@@ -1,8 +1,12 @@
 class Api::V1::ContactsController < ApplicationController
+  include Filterable
+  include Searchable
+  include Sortable
+
   before_action :authenticate_request!
 
   def index
-    contacts = Contact.all
+    contacts = sort(search(filter(contact_scope)))
     render json: ContactBlueprint.render(contacts, view: view, root: :data)
   end
 
@@ -29,6 +33,14 @@ class Api::V1::ContactsController < ApplicationController
 
   def contact
     @contact ||= Contact.find(params[:id])
+  end
+
+  def contact_scope
+    if params[:first_name] && params[:last_name]
+      contacts = Contact.where(first_name: params[:first_name], last_name:params[:last_name])
+    else
+      contacts = Contact.all
+    end
   end
 
   def contact_params
