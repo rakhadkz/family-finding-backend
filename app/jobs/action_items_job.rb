@@ -1,7 +1,7 @@
 class ActionItemsJob < ApplicationJob
     queue_as :default
   
-    def perform(args)
+    def perform
         children = Child.joins(:user_children).where(system_status: :active)
         children.each do |child|
             days_in_system = ((Time.now - child.created_at) / 86400).to_i
