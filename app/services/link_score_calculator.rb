@@ -79,7 +79,7 @@ class LinkScoreCalculator
       c = :criminal_history
       megans_low = RowCounter.count_from_task_id(@connection, "AAn4h8mfBNaKk33Rb", c)
       if megans_low >= 1
-        @connection.update!(is_disqualified: true, disqualify_reason: "Pa Megan's Low Registration found") if @connection.is_disqualified != true
+        @connection.update!(status: 'Disqualifed', disqualify_reason: "Pa Megan's Low Registration found") if @connection.status != 'Disqualifed'
         raise ZeroOverallError.new(c)
       end
     rescue NilInfoError => e
