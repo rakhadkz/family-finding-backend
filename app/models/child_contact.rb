@@ -51,7 +51,6 @@ class ChildContact < ApplicationRecord
     support_resource_only: "Support Resource Only",
     disqualified: "Disqualified", 
     interested_in_placement: "Interested in Placement",
-    none: nil
   }
 
 end
