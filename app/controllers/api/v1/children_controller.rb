@@ -70,6 +70,6 @@ class Api::V1::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :race, :gender, :school_district_id, :system_status)
+    params.require(:child).permit(:first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :race, :gender, :school_district_id, :system_status, :date_entered_foster_care)
   end
 end
