@@ -1,6 +1,6 @@
 class ChildBlueprint < Blueprinter::Base
   identifier :id
-  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id
+  fields :id, :first_name, :last_name, :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id, :date_entered_foster_care
 
   view :short do
     excludes :birthday, :permanency_goal, :continuous_search, :system_status, :school_district_id
