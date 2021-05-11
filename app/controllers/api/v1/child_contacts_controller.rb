@@ -34,13 +34,12 @@ class Api::V1::ChildContactsController < ApplicationController
         :parent_id,
         :potential_match,
         :is_confirmed,
-        :is_disqualified,
-        :is_placed,
         :disqualify_reason,
         :placed_date,
         :sex,
         :race,
-        :link_score_overall
+        :link_score_overall,
+        :status
       ])
   end
 
