@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_145156) do
+ActiveRecord::Schema.define(version: 2021_05_12_124828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -326,6 +326,14 @@ ActiveRecord::Schema.define(version: 2021_05_11_145156) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "resources", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.integer "organization_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "school_districts", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -370,8 +378,8 @@ ActiveRecord::Schema.define(version: 2021_05_11_145156) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end

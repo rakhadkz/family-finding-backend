@@ -72,6 +72,7 @@ Rails.application.routes.draw do
       resources :contacts
       resources :comments
       resources :communications
+      resources :resources
       resources :comment_attachments
       resources :connection_attachments
       resources :connection_comments

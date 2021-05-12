@@ -7,7 +7,7 @@ class SearchVector < ApplicationRecord
 
   include PgSearch::Model
 
-  scope :filter_by_org_id, -> (org_id) { where(organization_id: org_id) }
+  scope :filter_by_org_id, -> (org_id) { where(organization_id: org_id).or(where organization_id: nil)}
 
   pg_search_scope :search,
     against: [
