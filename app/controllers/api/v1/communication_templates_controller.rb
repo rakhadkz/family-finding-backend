@@ -10,7 +10,11 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def create
-    communication_template = CommunicationTemplate.create!(communication_template_params.merge({organization_id: @current_user.organization_id}))
+    if @current_user.role === 'super_admin'
+      communication_template = CommunicationTemplate.create!(communication_template_params)
+    else
+      communication_template = CommunicationTemplate.create!(communication_template_params.merge({organization_id: @current_user.organization_id}))
+    end
     render json: CommunicationTemplateBlueprint.render(communication_template, root: :data)
   end
 
@@ -53,7 +57,11 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
   end
 
   def communication_templates_scope
-    CommunicationTemplate.filter_by_organization_id(@current_user.organization_id)
+    if @current_user.role === 'super_admin'
+      CommunicationTemplate.all
+    else
+      CommunicationTemplate.filter_by_organization_id(@current_user.organization_id)
+    end
   end
 
   def communication_template_params
@@ -61,7 +69,8 @@ class Api::V1::CommunicationTemplatesController < ApplicationController
       .permit(
           :name,
           :content,
-          :template_type
+          :template_type,
+          :organization_id
       )
   end
   def template_send_params

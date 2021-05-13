@@ -19,7 +19,9 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
   end
 
   def create
-    params[:search_vector][:organization_id] = @current_user.organization_id
+    if @current_user.role === 'super_admin'
+      params[:search_vector][:organization_id] = @current_user.organization_id
+    end
     search_vector = SearchVector.create!(search_vector_params)
     render json: SearchVectorBlueprint.render(search_vector, root: :data)
   end
@@ -44,7 +46,11 @@ class Api::V1::Admin::SearchVectorsController < ApplicationController
 
   private
     def search_vector_scope
-      SearchVector.filter_by_org_id @current_user.organization_id
+      if @current_user.role === 'super_admin'
+        SearchVector.all
+      else
+        SearchVector.filter_by_org_id @current_user.organization_id
+      end
     end
 
     def search_vector
