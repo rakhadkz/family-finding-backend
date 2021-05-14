@@ -37,9 +37,7 @@ class Api::V1::SiblingshipsController < ApplicationController
   def siblingship
     siblingship_res ||= Siblingship.where(child_id: params[:id]).or(Siblingship.where(sibling_id: params[:id]))
     wws ||= Siblingship.select(:sibling_id).where(child_id: params[:id])
-    puts('HAAHHAHAHA',wws.map { |id| id["sibling_id"]}, 'wfw')
     wws2 ||= Siblingship.where(child_id: wws.map { |id| id["sibling_id"]})
-    puts('HAAHHAHA 2222',wws2, 'wfw')
     @siblingship = siblingship_res
   end
 
@@ -53,7 +51,8 @@ class Api::V1::SiblingshipsController < ApplicationController
     params.require(:siblingship)
       .permit([
         :child_id,
-        :sibling_id
+        :sibling_id,
+        :sibling_type
       ])
   end
 end

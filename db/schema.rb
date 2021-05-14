@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_124828) do
+ActiveRecord::Schema.define(version: 2021_05_14_110554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -366,6 +366,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_124828) do
     t.bigint "sibling_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "sibling_type"
     t.index ["child_id", "sibling_id"], name: "index_siblingships_on_child_id_and_sibling_id", unique: true
     t.index ["child_id"], name: "index_siblingships_on_child_id"
     t.index ["sibling_id", "child_id"], name: "index_siblingships_on_sibling_id_and_child_id", unique: true
@@ -378,8 +379,8 @@ ActiveRecord::Schema.define(version: 2021_05_12_124828) do
     t.string "opened"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "child_contact_id"
     t.string "sid"
+    t.bigint "child_contact_id"
     t.index ["child_contact_id"], name: "index_templates_sents_on_child_contact_id"
     t.index ["communication_template_id"], name: "index_templates_sents_on_communication_template_id"
   end
