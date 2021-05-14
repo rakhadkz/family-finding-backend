@@ -1,13 +1,14 @@
 class Api::V1::Admin::ReportsController < ApplicationController
     before_action :authenticate_request!
     before_action :require_admin
-    
+    include Filterable
+
     # Total Children in the system by month (last 12 months)
     # Total Placements by month (last 12 months)
     # Total “Linked” Connections found by month (last 12 months) (only Linked connections)
 
     def children
-        children = Child.where('created_at > ?', last_year)
+        children = children_scope.where('children.created_at > ?', last_year)
         children_by_months = group(children)
         chart_data = prepare_data(children_by_months)
         render json: { message: "success", children: chart_data }, status: :ok
@@ -36,6 +37,17 @@ class Api::V1::Admin::ReportsController < ApplicationController
     end
     def prepare_data(data)
         data.map {|month, items| [month, items.count]}
+    end
+    def children_scope
+        if params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "active"
+          children = Child.where(system_status: :active)
+        elsif params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "assigned"
+          children = Child.joins(:user_children)
+        elsif params[:filter].split(",").count === 2
+          children = Child.joins(:user_children).where(system_status: :active)
+        else
+          children = Child.all
+        end
     end
   end
     
