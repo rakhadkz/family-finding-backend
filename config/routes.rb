@@ -96,6 +96,11 @@ Rails.application.routes.draw do
             post 'send_request'
           end
         end
+        namespace :reports do
+          match :children, via: [:get, :post]
+          match :placements, via: [:get, :post]
+          match :linked_connections, via: [:get, :post]
+        end
       end
 
       devise_for :users
