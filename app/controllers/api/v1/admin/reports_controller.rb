@@ -17,14 +17,14 @@ class Api::V1::Admin::ReportsController < ApplicationController
         placed_contacts = ChildContact.where('created_at > ?', last_year).where(:status => 'Placed')
         placed_contacts_by_months = group(placed_contacts)
         chart_data = prepare_data(placed_contacts_by_months)
-        render json: { message: "success", children: chart_data }, status: :ok
+        render json: { message: "success", placements: chart_data }, status: :ok
     end
 
     def linked_connections
         linked_child_contacts = ChildContact.where('created_at > ?', last_year).where(:is_confirmed => true)
         linked_child_contacts_by_months = group(linked_child_contacts)
         chart_data = prepare_data(linked_child_contacts_by_months)
-        render json: { message: "success", children: chart_data }, status: :ok
+        render json: { message: "success", linkedConnections: chart_data }, status: :ok
     end
   
     private
@@ -35,7 +35,7 @@ class Api::V1::Admin::ReportsController < ApplicationController
         records.group_by {|record| record.created_at.strftime("%B")}
     end
     def prepare_data(data)
-        data.map {|month, items| {month => items.count}}
+        data.map {|month, items| [month, items.count]}
     end
   end
     
