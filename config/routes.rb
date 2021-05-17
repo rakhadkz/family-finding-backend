@@ -98,6 +98,7 @@ Rails.application.routes.draw do
         end
         namespace :reports do
           match :children, via: [:get, :post]
+          match :gauge, via: [:get, :post]
           match :placements, via: [:get, :post]
           match :linked_connections, via: [:get, :post]
         end
