@@ -14,6 +14,22 @@ class Api::V1::Admin::ReportsController < ApplicationController
         render json: { message: "success", children: chart_data }, status: :ok
     end
 
+#     <= 30 days = green
+#     31 to 60 days = yellow
+#     61 to 90 days = orange
+#     91 to 120 days = red
+#     120+ = black
+
+    def gauge
+        gauge1 = children_scope.where('created_at > ?', 30.days.ago).count
+        gauge2 = children_scope.where('created_at > ?', 60.days.ago).count - gauge1
+        gauge3 = children_scope.where('created_at > ?', 90.days.ago).count - gauge2
+        gauge4 = children_scope.where('created_at > ?', 120.days.ago).count - gauge3
+        gauge5 = children_scope.where('created_at < ?', 120.days.ago).count
+        chart_data = [gauge1,gauge2,gauge3,gauge4,gauge5]
+        render json: { message: "success", chart_data: chart_data }, status: :ok
+    end
+
     def placements
         placed_contacts = ChildContact.where('created_at > ?', last_year).where(:status => 'Placed')
         placed_contacts_by_months = group(placed_contacts)
@@ -36,6 +52,12 @@ class Api::V1::Admin::ReportsController < ApplicationController
         records.group_by {|record| record.created_at.strftime("%B")}
     end
     def prepare_data(data)
+        data.map {|month, items| [month, items.count]}
+    end
+    def group_gauge(records)
+        records.group_by {|record| record.created_at.strftime("%B")}
+    end
+    def prepare_gauge(data)
         data.map {|month, items| [month, items.count]}
     end
     def children_scope
