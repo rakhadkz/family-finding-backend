@@ -50,14 +50,18 @@ class Api::V1::Admin::ReportsController < ApplicationController
     private
     def children_scope
         if params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "active"
-          children = Child.where(system_status: :active)
+            children = Child.where(system_status: :active)
         elsif params[:filter].split(",").count === 1 && params[:filter].split(",")[0] == "assigned"
-          children = Child.joins(:user_children)
+            children = Child.joins(:user_children)
         elsif params[:filter].split(",").count === 2
-          children = Child.joins(:user_children).where(system_status: :active)
-        else
-          children = Child.all
+            children = Child.joins(:user_children).where(system_status: :active)
+        else 
+            children = Child.all
         end
+        if params[:goal]
+            children = children.where(:permanency_goal => params[:goal])
+        end
+        return children
     end
   end
     

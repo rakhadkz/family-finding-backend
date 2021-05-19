@@ -42,6 +42,9 @@ class Api::V1::ChildrenController < ApplicationController
     else
       children = Child.all
     end
+    if params[:goal]
+      children = children.where(:permanency_goal => params[:goal])
+    end
     case params[:sort]
     when "days_in_system_asc"
       children.order(created_at: :desc)
